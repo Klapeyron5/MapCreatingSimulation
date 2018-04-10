@@ -23,10 +23,10 @@ namespace MapCreation
         private const ushort n_phi = 360;
         private double step = 2 * Math.PI / n_phi;
         private ushort[] rByPhi0 = new ushort[n_phi];
-        private int X0, Y0; //0 scan centre
+        private int X0 = -1, Y0 = -1; //0 scan centre
         private ushort[] rByPhi1 = new ushort[n_phi];
-        private int X1, Y1; //real centre
-        private int X2, Y2; //supposed centre
+        private int X1 = -1, Y1 = -1; //real centre
+        private int X2 = -1, Y2 = -1; //supposed centre
 
         private const ushort r_scan = 70;
         private const ushort d_scan = 2 * r_scan + 1;
@@ -48,51 +48,50 @@ namespace MapCreation
             switch (positionCounter)
             {
                 case 0:
-                    preciseMap[X0, Y0] = new Pixel(indoorColor);
                     X0 = X;
                     Y0 = Y;
-                    preciseMap[X0, Y0] = new Pixel(startColor);
-                    
                     scan0 = new PixelMap(d_scan, d_scan, 0, 0, 0);
-                    rByPhi0 = getScanFromPreciseMap(X, Y, scan0);
-
-                    Bitmap map = preciseMap.GetBitmap();
-                    Pen pen = new Pen(wallColor);
-                    Graphics graphics = Graphics.FromImage(map);
-                    try
-                    {
-                        graphics.DrawEllipse(pen, 0,0,100,100);// X0 - r_scan-1, Y0 - r_scan-1, d_scan, d_scan);
-                        Console.WriteLine("HI");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Exception");
-                    }
-                    map.SetPixel(0,0,startColor);
-
-                    pictureBox1.Image = map;
+                    rByPhi0 = getScanFromPreciseMap(X, Y, scan0);                    
                     pictureBox2.Image = scan0.GetBitmap();
                     positionCounter++;
                     break;
                 case 1:
-                    preciseMap[X1, Y1] = new Pixel(indoorColor);
                     X1 = X;
                     Y1 = Y;
-                    preciseMap[X1, Y1] = new Pixel(finishColor);
                     scan1 = new PixelMap(d_scan, d_scan, 0, 0, 0);
                     rByPhi1 = getScanFromPreciseMap(X, Y, scan1);
                     pictureBox3.Image = scan1.GetBitmap();
                     positionCounter++;
                     break;
                 case 2:
-                    preciseMap[X2, Y2] = new Pixel(indoorColor);
                     X2 = X;
                     Y2 = Y;
-                    preciseMap[X2, Y2] = new Pixel(routeColor);
                     positionCounter = 0;
                     break;
             }
-            pictureBox1.Image = preciseMap.GetBitmap();
+            //отрисовать все три центра
+            //отрисовать радиусы для scan0 и scan1
+            Bitmap map = preciseMap.GetBitmap();
+            Pen pen;
+            Graphics graphics = Graphics.FromImage(map);
+            try
+            {
+                if ((X0 >= 0) && (Y0 >= 0))
+                {
+                    map.SetPixel(X0, Y0, startColor);
+                    pen = new Pen(startColor);
+                    graphics.DrawEllipse(pen, X0 - r_scan1, Y0 - r_scan1, d_scan, d_scan);
+                }
+                if ((X1 >= 0) && (Y1 >= 0))
+                {
+                    map.SetPixel(X1, Y1, finishColor);
+                    pen = new Pen(finishColor);
+                    graphics.DrawEllipse(pen, X1 - r_scan1, Y1 - r_scan1, d_scan, d_scan);
+                }
+                if ((X2 >= 0) && (Y2 >= 0)) map.SetPixel(X2, Y2, routeColor);
+            }
+            catch (Exception ex) { }
+            pictureBox1.Image = map;
         }
 
         private ushort[] getScanFromPreciseMap(int X, int Y, PixelMap scanBmp)
