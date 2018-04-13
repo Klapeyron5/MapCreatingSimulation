@@ -29,7 +29,8 @@ namespace MapCreation
         private const ushort r_scan = 70; //25cm*12=3m; 6px*12=72px ~ 70+1
         private const ushort l_max = 35; //1.5m
         private const ushort sgm_lmax = 1; //3px = 12cm
-        private const int sgm_psi = 2;//in degrees: 2*3.14/180*1.5m=0.05m  //0.046; //3*0.046=0.14rad (~20cm)
+        private const int sgm_psi_deg = 2;//in degrees: 2*3.14/180*1.5m=0.05m  //0.046; //3*0.046=0.14rad (~20cm)
+        private const double sgm_psi_rad = sgm_psi_deg*Math.PI/180;
     //    private const ushort sgm_r = 0; //D = f*h/px
 
         private double step = 2 * Math.PI / n_phi;
@@ -110,19 +111,7 @@ namespace MapCreation
                             rByPhi1 = getScanFromPreciseMap(X, Y, scan1);
                             pictureBox3.Image = scan1.GetBitmap();
                             positionCounter++;
-
-                            //отрисовать зону погрешности, в которую попадает supposed центр
-                            pen = new Pen(routeColor);
-                            //  graphics.DrawEllipse(pen, X0 - l_rl_rounded, Y0 - l_rl_rounded, 2 * l_rl_rounded, 2 * l_rl_rounded);
-                            double sgm_lrl = l_rl * sgm_lmax / l_max; //вычисляем погрешность передвижения, считая зависимость погрешности от пройденного расстояния линейной
-                            l_rlPlus3sgm = l_rl + 3 * sgm_lrl;
-                            l_rlMinus3sgm = l_rl - 3 * sgm_lrl;
-                            int lplus3sgmInt = (int)Math.Round(l_rlPlus3sgm);
-                            int lminus3sgmInt = (int)Math.Round(l_rlMinus3sgm);
-                            brush = new SolidBrush(routeColor);
-                            graphics.FillPie(brush, X0 - lplus3sgmInt - 1, Y0 - lplus3sgmInt - 1, 2 * lplus3sgmInt + 2, 2 * lplus3sgmInt + 2, (float)psi_rl_deg - 3 * sgm_psi, 6 * sgm_psi);
-                            brush = new SolidBrush(indoorColor);
-                            graphics.FillPie(brush, X0 - lminus3sgmInt, Y0 - lminus3sgmInt, 2 * lminus3sgmInt, 2 * lminus3sgmInt, (float)psi_rl_deg - 3 * sgm_psi, 6 * sgm_psi);
+                            drawPieZone(graphics);
                         }
                         break;
                     case 2:
@@ -130,11 +119,31 @@ namespace MapCreation
                         l_sp2 = getSquaredDistance(X0, Y0, X, Y);
                         l_sp = Math.Pow(l_sp2, 0.5);
                         psi_sp_rad = Math.Atan2(Y - Y0, X - X0);
-                        if (((l_sp>=l_rlMinus3sgm)&&(l_sp<=l_rlPlus3sgm)))//&&((psi_sp_rad)&&())) {
-                        {   X2 = X;
+                        bool angleFlag = false; //входит ли по угловой зоне
+                        if ((psi_rl_rad > Math.PI / 2) && (psi_sp_rad < -Math.PI / 2))
+                        {
+                            if ((psi_sp_rad + 2 * Math.PI >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad + 2 * Math.PI <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
+                            else angleFlag = false;
+                        }
+                        else {
+                            if ((psi_rl_rad < -Math.PI / 2) && (psi_sp_rad > Math.PI / 2))
+                            {
+                                if ((psi_sp_rad - 2 * Math.PI >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad - 2 * Math.PI <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
+                                else angleFlag = false;
+                            }
+                            else
+                            {
+                                if ((psi_sp_rad >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
+                            }
+                        }
+                        if (((l_sp>=l_rlMinus3sgm)&&(l_sp<=l_rlPlus3sgm))&& angleFlag)
+                        {
+                            X2 = X;
                             Y2 = Y;
                             positionCounter = 0;
                         }
+                        else
+                            drawPieZone(graphics);
                         break;
                 }
                 //отрисовать все три центра
@@ -241,11 +250,24 @@ namespace MapCreation
         {
             return ((x1-x2)*(x1-x2)+ (y1 - y2) * (y1 - y2));
         }
-
-        private int getSigmaL(int l)
+        
+        /// <summary>
+        /// Рисует зону, в которой может быть supposed положение робота относительно real положения в центре scan1.
+        /// </summary>
+        /// <param name="graphics"></param>
+        private void drawPieZone (Graphics graphics)
         {
-
-            return 0;
+            //отрисовать зону погрешности, в которую попадает supposed центр
+            //  graphics.DrawEllipse(pen, X0 - l_rl_rounded, Y0 - l_rl_rounded, 2 * l_rl_rounded, 2 * l_rl_rounded);
+            double sgm_lrl = l_rl * sgm_lmax / l_max; //вычисляем погрешность передвижения, считая зависимость погрешности от пройденного расстояния линейной
+            l_rlPlus3sgm = l_rl + 3 * sgm_lrl;
+            l_rlMinus3sgm = l_rl - 3 * sgm_lrl;
+            int lplus3sgmInt = (int)Math.Round(l_rlPlus3sgm);
+            int lminus3sgmInt = (int)Math.Round(l_rlMinus3sgm);
+            SolidBrush brush = new SolidBrush(routeColor);
+            graphics.FillPie(brush, X0 - lplus3sgmInt - 1, Y0 - lplus3sgmInt - 1, 2 * lplus3sgmInt + 2, 2 * lplus3sgmInt + 2, (float)psi_rl_deg - 3 * sgm_psi_deg, 6 * sgm_psi_deg);
+            brush = new SolidBrush(indoorColor);
+            graphics.FillPie(brush, X0 - lminus3sgmInt, Y0 - lminus3sgmInt, 2 * lminus3sgmInt, 2 * lminus3sgmInt, (float)psi_rl_deg - 3 * sgm_psi_deg, 6 * sgm_psi_deg);
         }
     }
 }
