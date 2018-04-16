@@ -76,7 +76,7 @@
             this.pictureBox4.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBox4.Location = new System.Drawing.Point(865, 29);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(282, 282);
+            this.pictureBox4.Size = new System.Drawing.Size(211, 211);
             this.pictureBox4.TabIndex = 13;
             this.pictureBox4.TabStop = false;
             // 
@@ -128,6 +128,7 @@
             this.button1.TabIndex = 18;
             this.button1.Text = "Closslink";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 

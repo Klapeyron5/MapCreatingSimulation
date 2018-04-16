@@ -2,11 +2,12 @@
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using System;
+using System.Collections.Generic;
 
 namespace MapCreation
 {
     public partial class Form1 : Form
-    {
+    {//TODO проверка на отсутствие белых пикселей на indoor-карте в зоне supposed пути (от scan0 до scan1) робота (пока что сектор)
         public Form1()
         {
             InitializeComponent();
@@ -28,21 +29,24 @@ namespace MapCreation
         private const ushort r_robot = 5; //5+1 (потому что центральный px еще) = 6px = 25cm
         private const ushort r_scan = 70; //25cm*12=3m; 6px*12=72px ~ 70+1
         private const ushort l_max = 35; //1.5m
-        private const ushort sgm_lmax = 1; //3px = 12cm
-        private const int sgm_psi_deg = 2;//in degrees: 2*3.14/180*1.5m=0.05m  //0.046; //3*0.046=0.14rad (~20cm)
+        private const ushort sgm_lmax = 3;//1; //3px = 12cm
+        private const int sgm_psi_deg = 4;//2;//in degrees: 2*3.14/180*1.5m=0.05m  //0.046; //3*0.046=0.14rad (~20cm)
         private const double sgm_psi_rad = sgm_psi_deg*Math.PI/180;
     //    private const ushort sgm_r = 0; //D = f*h/px
 
         private double step = 2 * Math.PI / n_phi;
         private ushort[] rByPhi0 = new ushort[n_phi];
+        private List<int[]> xyScan0 = new List<int[]>();
         private int X0 = -1, Y0 = -1; //0 scan center
         private ushort[] rByPhi1 = new ushort[n_phi];
+        private List<int[]> xyScan1 = new List<int[]>();
         private int X1 = -1, Y1 = -1; //real 1 scan center
         private int X2 = -1, Y2 = -1; //supposed 1 scan center
 
         private const ushort r_robot1 = r_robot + 1;
         private const ushort d_robot = 2 * r_robot1;
         private const ushort r_scan1 = r_scan + 1;
+        private const int r_scan2 = r_scan*r_scan;
         private const ushort d_scan = 2 * r_scan1;
         private const ushort l_max2 = l_max  * l_max;
 
@@ -51,6 +55,7 @@ namespace MapCreation
         private Color startColor = Color.FromArgb(94, 255, 0);
         private Color routeColor = Color.FromArgb(255, 51, 0);
         private Color finishColor = Color.FromArgb(0, 222, 255);
+        private Color predictionColor = Color.FromArgb(0, 255, 255);
 
         private byte positionCounter = 0;
         private double l_rl = 0; //[0,l_max]
@@ -93,7 +98,7 @@ namespace MapCreation
                         X0 = X;
                         Y0 = Y;
                         scan0 = new PixelMap(d_scan, d_scan, 0, 0, 0);
-                        rByPhi0 = getScanFromPreciseMap(X, Y, scan0);
+                        getScanFromPreciseMap(X, Y, rByPhi0, xyScan0, scan0, startColor);
                         pictureBox2.Image = scan0.GetBitmap();
                         positionCounter++;
                         break;
@@ -103,12 +108,11 @@ namespace MapCreation
                         l_rl_rounded = (int)Math.Round(l_rl);
                         psi_rl_rad = Math.Atan2(Y-Y0,X-X0);
                         psi_rl_deg = psi_rl_rad*180/Math.PI;
-                        Console.WriteLine(psi_rl_deg);
                         if (l_rl2<=l_max2) {
                             X1 = X;
                             Y1 = Y;
                             scan1 = new PixelMap(d_scan, d_scan, 0, 0, 0);
-                            rByPhi1 = getScanFromPreciseMap(X, Y, scan1);
+                            getScanFromPreciseMap(X, Y, rByPhi1, xyScan1, scan1, finishColor);
                             pictureBox3.Image = scan1.GetBitmap();
                             positionCounter++;
                             drawPieZone(graphics);
@@ -174,6 +178,15 @@ namespace MapCreation
             }
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int[] real_coords = getRealCoords();
+            Bitmap bmp = new Bitmap(pictureBox1.Image);
+            bmp.SetPixel(real_coords[0],real_coords[1],predictionColor);
+            pictureBox1.Image = bmp;
+            drawCrosslinkedScans(real_coords[0], real_coords[1]);
+        }
+
         /// <summary>
         /// Возвращает скан с точной карты в заданных координатах. Также рисует этот скан в заданном PixelMap.
         /// </summary>
@@ -181,12 +194,13 @@ namespace MapCreation
         /// <param name="Y">Y координата центра скана на точной карте</param>
         /// <param name="scanBmp">Холст для отрисовки сделанного скана</param>
         /// <returns></returns>
-        private ushort[] getScanFromPreciseMap(int X, int Y, PixelMap scanBmp)
+        private void getScanFromPreciseMap(int X, int Y, ushort[] rByPhi, List<int[]> xyScan, PixelMap scanBmp, Color scanColor)
         {
-            ushort[] rByPhi = new ushort[n_phi];
+            rByPhi = new ushort[n_phi];
             int y = new int();
             int x = new int();
             bool flag;
+            xyScan.Clear();
 
             for (int i = 0; i < n_phi; i++)
             {
@@ -198,7 +212,8 @@ namespace MapCreation
                     if (preciseMap[x, y].Color == wallColor)
                     {
                         rByPhi[i] = r;
-                        scanBmp[x - X + r_scan, y - Y + r_scan] = new Pixel(wallColor);
+                        xyScan.Add(new int[2] { x, y });
+                        scanBmp[x - X + r_scan, y - Y + r_scan] = new Pixel(scanColor);
                         flag = true;
                         break;
                     }
@@ -206,7 +221,6 @@ namespace MapCreation
                 if (!flag)
                     rByPhi[i] = 0;
             }
-            return rByPhi;
         }
 
         /// <summary>
@@ -248,7 +262,7 @@ namespace MapCreation
         /// <returns></returns>
         private int getSquaredDistance(int x1,int y1,int x2,int y2)
         {
-            return ((x1-x2)*(x1-x2)+ (y1 - y2) * (y1 - y2));
+            return ((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
         }
         
         /// <summary>
@@ -268,6 +282,111 @@ namespace MapCreation
             graphics.FillPie(brush, X0 - lplus3sgmInt - 1, Y0 - lplus3sgmInt - 1, 2 * lplus3sgmInt + 2, 2 * lplus3sgmInt + 2, (float)psi_rl_deg - 3 * sgm_psi_deg, 6 * sgm_psi_deg);
             brush = new SolidBrush(indoorColor);
             graphics.FillPie(brush, X0 - lminus3sgmInt, Y0 - lminus3sgmInt, 2 * lminus3sgmInt, 2 * lminus3sgmInt, (float)psi_rl_deg - 3 * sgm_psi_deg, 6 * sgm_psi_deg);
+        }
+
+        /// <summary>
+        /// Думаем, что центр scan1 - это X2,Y2. Нужно вернуть X1,Y1.
+        /// </summary>
+        /// <returns></returns>
+        private int[] getRealCoords()
+        {
+            List<int[]> across0 = new List<int[]>(); //точки из пересечения сканов
+            List<int[]> across1 = new List<int[]>();
+            List<int[]> pointsLess, pointsMore;
+            double minsum = 100000000;
+            int limXY = 10;
+            double summ;
+            double min;
+            int optX = 0, optY = 0;
+            for (int x = -limXY; x < limXY + 1; x++)
+            {
+                for (int y = -limXY; y < limXY + 1; y++)
+                {
+                    computeAcrossingPoints(ref across0, ref across1, X2+x, Y2+y);
+                    if (across0.Count < across1.Count)
+                    {
+                        pointsLess = across0;
+                        pointsMore = across1;
+                    }
+                    else
+                    {
+                        pointsLess = across1;
+                        pointsMore = across0;
+                    }
+                    summ = 0;
+                    for (int k = 0; k < across1.Count; k++)
+                    {
+                        across1[k][0] = across1[k][0] + x;
+                        across1[k][1] = across1[k][1] + y;
+                    }
+                    for (int i = 0; i < pointsLess.Count; i++)
+                    {
+                        min = 1000000;
+                        for (int j = 0; j < pointsMore.Count; j++)
+                        {
+                            if (min > getSquaredDistance(pointsLess[i][0], pointsLess[i][1], pointsMore[j][0], pointsMore[j][1]))
+                                min = getSquaredDistance(pointsLess[i][0], pointsLess[i][1], pointsMore[j][0], pointsMore[j][1]);
+                        }
+                        summ += min;
+                    }
+                    for (int k = 0; k < across1.Count; k++)
+                    {
+                        across1[k][0] = across1[k][0] - x;
+                        across1[k][1] = across1[k][1] - y;
+                    }
+                    if (minsum > summ)
+                    {
+                        minsum = summ;
+                        optX = x;
+                        optY = y;
+                    }
+                }
+            }
+            Console.WriteLine(minsum);
+            Console.WriteLine(optX+" "+optY);
+            return new int[2]{X2+optX,Y2+optY};
+        }
+
+        /// <summary>
+        /// Добавляет в списки точки из пересечения сканов scan0 и scan1, при этом за центр последнего берется задаваемый X_sp и Y_sp.
+        /// </summary>
+        /// <param name="across0"></param>
+        /// <param name="across1"></param>
+        /// <param name="X_sp">Предполагаемый центр scan1</param>
+        /// <param name="Y_sp">Предполагаемый центр scan1</param>
+        private void computeAcrossingPoints(ref List<int[]> across0, ref List<int[]> across1, int X_sp, int Y_sp)
+        {
+            across0.Clear();
+            across1.Clear();
+            int x0, y0, x1, y1;
+            for (int i = 0; i < xyScan0.Count; i++)
+            {
+                x0 = xyScan0[i][0];
+                y0 = xyScan0[i][1];
+                if ((getSquaredDistance(x0, y0, X_sp, Y_sp) <= r_scan2))
+                    across0.Add(new int[2] { x0, y0 });
+            }
+            for (int i = 0; i < xyScan1.Count; i++)
+            {
+                x1 = xyScan1[i][0];
+                y1 = xyScan1[i][1];
+                if ((getSquaredDistance(x1, y1, X0, Y0) <= r_scan2))
+                    across1.Add(new int[2] { x1, y1 });
+            }
+        }
+
+        private void drawCrosslinkedScans(int X1_rl, int Y1_rl)
+        {
+            PixelMap scan01 = new PixelMap(d_scan+r_scan, d_scan + r_scan,0,0,0);
+            for (int i = 0; i < xyScan0.Count; i++)
+            {
+                scan01[xyScan0[i][0]-X0+r_scan1, xyScan0[i][1]-Y0+r_scan1] = new Pixel(startColor);
+            }
+            for (int i = 0; i < xyScan1.Count; i++)
+            {
+                scan01[xyScan1[i][0]- X1_rl + r_scan1, xyScan1[i][1]- Y1_rl + r_scan1] = new Pixel(finishColor);
+            }
+            pictureBox4.Image = scan01.GetBitmap();
         }
     }
 }
