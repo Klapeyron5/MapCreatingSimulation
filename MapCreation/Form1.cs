@@ -13,9 +13,14 @@ namespace MapCreation
             InitializeComponent();
             pictureBox1.MouseDown += pictureBox1_MouseDown;
             
-            preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap1.png");
+        //    preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap1.png");
+            preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap2_1px140_100.png");
             preciseIndoorMap = getIndoorMap(preciseMap);
             pictureBox1.Image = preciseMap.GetBitmap();
+
+            Scan scan = new Scan();
+            scan.n_phi = 200;
+         //   Console.WriteLine(Scan.n_phi);
         }
 
         private PixelMap preciseMap; //точная карта
@@ -196,29 +201,39 @@ namespace MapCreation
         /// <returns></returns>
         private void getScanFromPreciseMap(int X, int Y, ushort[] rByPhi, List<int[]> xyScan, PixelMap scanBmp, Color scanColor)
         {
+            Console.WriteLine("getScanFromPreciseMap, center: "+X+","+Y);
             rByPhi = new ushort[n_phi];
             int y = new int();
             int x = new int();
-            bool flag;
+            bool flagR; //Будет true, если на текущем угле сканирования видно препятствие, иначе false и радиус от текущего угла будет равен нулю
+            bool flagRepeated; //Будет true, если точка уже сохранена в списке скана
             xyScan.Clear();
 
             for (int i = 0; i < n_phi; i++)
             {
-                flag = false;
+                flagR = false;
                 for (ushort r = 1; r < r_scan1; r++)
                 {
                     x = (int)Math.Round(r * Math.Cos(i * step)) + X;
                     y = (int)Math.Round(r * Math.Sin(i * step)) + Y;
-                    if (preciseMap[x, y].Color == wallColor)
+                    if (preciseMap[x+X, y+Y].Color == wallColor)
                     {
                         rByPhi[i] = r;
-                        xyScan.Add(new int[2] { x, y });
+                        flagRepeated = false;
+                        for (int j = 0; j < xyScan.Count; j++)
+                            if ((xyScan[j][0] == x) && (xyScan[j][1] == y))
+                                flagRepeated = true;
+                        if (!flagRepeated)
+                        {
+                            xyScan.Add(new int[2] { x, y });
+                            Console.WriteLine("getScanFromPreciseMap, added: " + x + "," + y);
+                        }
                         scanBmp[x - X + r_scan, y - Y + r_scan] = new Pixel(scanColor);
-                        flag = true;
+                        flagR = true;
                         break;
                     }
                 }
-                if (!flag)
+                if (!flagR)
                     rByPhi[i] = 0;
             }
         }
@@ -294,7 +309,7 @@ namespace MapCreation
             List<int[]> across1 = new List<int[]>();
             List<int[]> pointsLess, pointsMore;
             double minsum = 100000000;
-            int limXY = 10;
+            int limXY = 5;
             double summ;
             double min;
             int optX = 0, optY = 0;
@@ -334,6 +349,7 @@ namespace MapCreation
                         across1[k][0] = across1[k][0] - x;
                         across1[k][1] = across1[k][1] - y;
                     }
+                    Console.WriteLine("(" + x + "," + y + "): " + summ);
                     if (minsum > summ)
                     {
                         minsum = summ;
@@ -342,8 +358,9 @@ namespace MapCreation
                     }
                 }
             }
-            Console.WriteLine(minsum);
-            Console.WriteLine(optX+" "+optY);
+            Console.WriteLine("minsum: "+minsum);
+            Console.WriteLine("opt coords: "+optX+","+optY);
+            Console.WriteLine("center1-center2 error: " + (X1-X2) + "," + (Y1-Y2));
             return new int[2]{X2+optX,Y2+optY};
         }
 
@@ -368,8 +385,8 @@ namespace MapCreation
             }
             for (int i = 0; i < xyScan1.Count; i++)
             {
-                x1 = xyScan1[i][0];
-                y1 = xyScan1[i][1];
+                x1 = xyScan1[i][0] + X_sp - X1;
+                y1 = xyScan1[i][1] + Y_sp - Y1;
                 if ((getSquaredDistance(x1, y1, X0, Y0) <= r_scan2))
                     across1.Add(new int[2] { x1, y1 });
             }
@@ -380,11 +397,11 @@ namespace MapCreation
             PixelMap scan01 = new PixelMap(d_scan+r_scan, d_scan + r_scan,0,0,0);
             for (int i = 0; i < xyScan0.Count; i++)
             {
-                scan01[xyScan0[i][0]-X0+r_scan1, xyScan0[i][1]-Y0+r_scan1] = new Pixel(startColor);
+                scan01[xyScan0[i][0]-X0+r_scan1 + r_scan / 2, xyScan0[i][1]-Y0+r_scan1+r_scan/2] = new Pixel(startColor);
             }
             for (int i = 0; i < xyScan1.Count; i++)
             {
-                scan01[xyScan1[i][0]- X1_rl + r_scan1, xyScan1[i][1]- Y1_rl + r_scan1] = new Pixel(finishColor);
+                scan01[xyScan1[i][0] - X2 + X1_rl - X2 + r_scan1 + r_scan / 2, xyScan1[i][1] - Y2 + Y1_rl - Y2 + r_scan1 + r_scan / 2] = new Pixel(finishColor);
             }
             pictureBox4.Image = scan01.GetBitmap();
         }
