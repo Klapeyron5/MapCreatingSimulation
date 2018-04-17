@@ -8,19 +8,24 @@ namespace MapCreation
 {
     public partial class Form1 : Form
     {//TODO проверка на отсутствие белых пикселей на indoor-карте в зоне supposed пути (от scan0 до scan1) робота (пока что сектор)
+        //Как рисовать мелкую картинку с BPP == 4, а не 3: в PS сохраняем как bmp, а настройки такие: Изображение->Режим->RGB, 8 бит/канал
         public Form1()
         {
             InitializeComponent();
-            pictureBox1.MouseDown += pictureBox1_MouseDown;
             
-        //    preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap1.png");
-            preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap2_1px140_100.png");
-            preciseIndoorMap = getIndoorMap(preciseMap);
-            pictureBox1.Image = preciseMap.GetBitmap();
+            preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap12.bmp");
+            //     preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap2_1px140_100.png");
+            //   preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap3.png");
+            //     pictureBox1.Image = new Bitmap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap3.png");
+            drawBitmapOnPictureBox(pictureBox1, preciseMap.GetBitmap());
+       //     pictureBox1.Image = preciseMap.GetBitmap();
+         //   preciseIndoorMap = getIndoorMap(preciseMap);
+         //    drawBitmapOnPictureBox(pictureBox1, preciseMap.GetBitmap());
+         //    Console.WriteLine(pictureBox1.Image.Size);
+         // pictureBox1.Image = preciseMap.GetBitmap();
 
-            Scan scan = new Scan();
-            scan.n_phi = 200;
-         //   Console.WriteLine(Scan.n_phi);
+            //   Scan scan = new Scan();
+            //   Console.WriteLine(Scan.n_phi);
         }
 
         private PixelMap preciseMap; //точная карта
@@ -30,13 +35,13 @@ namespace MapCreation
         private PixelMap preciseIndoorMap; //точная карта indoor-среды: с отступами от препятствий точной карты
 
         //Simulation parameters
-        private const ushort n_phi = 250;
-        private const ushort r_robot = 5; //5+1 (потому что центральный px еще) = 6px = 25cm
-        private const ushort r_scan = 70; //25cm*12=3m; 6px*12=72px ~ 70+1
-        private const ushort l_max = 35; //1.5m
-        private const ushort sgm_lmax = 3;//1; //3px = 12cm
-        private const int sgm_psi_deg = 4;//2;//in degrees: 2*3.14/180*1.5m=0.05m  //0.046; //3*0.046=0.14rad (~20cm)
-        private const double sgm_psi_rad = sgm_psi_deg*Math.PI/180;
+        public const ushort n_phi = 250;
+        public const ushort r_robot = 5; //5+1 (потому что центральный px еще) = 6px = 25cm
+        public const ushort r_scan = 70; //25cm*12=3m; 6px*12=72px ~ 70+1
+        public const ushort l_max = 35; //1.5m
+        public const ushort sgm_lmax = 3;//1; //3px = 12cm
+        public const int sgm_psi_deg = 4;//2;//in degrees: 2*3.14/180*1.5m=0.05m  //0.046; //3*0.046=0.14rad (~20cm)
+        public const double sgm_psi_rad = sgm_psi_deg*Math.PI/180;
     //    private const ushort sgm_r = 0; //D = f*h/px
 
         private double step = 2 * Math.PI / n_phi;
@@ -48,12 +53,12 @@ namespace MapCreation
         private int X1 = -1, Y1 = -1; //real 1 scan center
         private int X2 = -1, Y2 = -1; //supposed 1 scan center
 
-        private const ushort r_robot1 = r_robot + 1;
-        private const ushort d_robot = 2 * r_robot1;
-        private const ushort r_scan1 = r_scan + 1;
-        private const int r_scan2 = r_scan*r_scan;
-        private const ushort d_scan = 2 * r_scan1;
-        private const ushort l_max2 = l_max  * l_max;
+        public const ushort r_robot1 = r_robot + 1;
+        public const ushort d_robot = 2 * r_robot1;
+        public const ushort r_scan1 = r_scan + 1;
+        public const int r_scan2 = r_scan*r_scan;
+        public const ushort d_scan = 2 * r_scan1;
+        public const ushort l_max2 = l_max  * l_max;
 
         private Color wallColor = Color.FromArgb(255, 255, 255);
         private Color indoorColor = Color.FromArgb(0, 0, 0);
@@ -89,7 +94,7 @@ namespace MapCreation
         /// <param name="e"></param>
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            int X = e.X * preciseMap.Width / pictureBox1.Width;
+         /*   int X = e.X * preciseMap.Width / pictureBox1.Width;
             int Y = e.Y * preciseMap.Height / pictureBox1.Height;
             if (preciseIndoorMap[X, Y].Color == indoorColor)
             {
@@ -179,17 +184,27 @@ namespace MapCreation
                     }
                 }
                 catch (Exception ex) { }
-                pictureBox1.Image = preciseMapBmp;
-            }
+                drawBitmapOnPictureBox(pictureBox1, preciseMapBmp);
+               // pictureBox1.Image = preciseMapBmp;
+            }*/
+        }
+
+        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            int X = e.X * preciseMap.Width / pictureBox1.Width;
+            int Y = e.Y * preciseMap.Height / pictureBox1.Height;
+            Bitmap bmp = preciseMap.GetBitmap();
+            bmp.SetPixel(X,Y, Color.FromArgb(134, 244, 120));
+            drawBitmapOnPictureBox(pictureBox1,bmp);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            int[] real_coords = getRealCoords();
+      /*      int[] real_coords = getRealCoords();
             Bitmap bmp = new Bitmap(pictureBox1.Image);
             bmp.SetPixel(real_coords[0],real_coords[1],predictionColor);
             pictureBox1.Image = bmp;
-            drawCrosslinkedScans(real_coords[0], real_coords[1]);
+            drawCrosslinkedScans(real_coords[0], real_coords[1]);*/
         }
 
         /// <summary>
@@ -404,6 +419,25 @@ namespace MapCreation
                 scan01[xyScan1[i][0] - X2 + X1_rl - X2 + r_scan1 + r_scan / 2, xyScan1[i][1] - Y2 + Y1_rl - Y2 + r_scan1 + r_scan / 2] = new Pixel(finishColor);
             }
             pictureBox4.Image = scan01.GetBitmap();
+        }
+        
+        private void drawBitmapOnPictureBox(PictureBox pictureBox, Bitmap bmp)
+        {
+            if (pictureBox.Size != bmp.Size)
+            {
+                float zoom = 60.0f;
+                Bitmap zoomed = new Bitmap((int)(bmp.Width * zoom), (int)(bmp.Height * zoom));
+
+                using (Graphics g = Graphics.FromImage(zoomed))
+                {
+                    g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                    g.PixelOffsetMode = PixelOffsetMode.Half;
+                    g.DrawImage(bmp, new Rectangle(Point.Empty, zoomed.Size));
+                }
+                pictureBox.Image = zoomed;
+            }
+            else
+                pictureBox.Image = bmp;
         }
     }
 }

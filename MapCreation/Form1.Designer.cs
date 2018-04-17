@@ -52,6 +52,7 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 10;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
             // 
             // pictureBox2
             // 
@@ -132,6 +133,7 @@
             // 
             // Form1
             // 
+            this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(1454, 873);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label4);
