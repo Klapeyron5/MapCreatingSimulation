@@ -93,7 +93,7 @@ namespace MapCreation
 				default:
 					throw new FormatException("PixelFormat cannot be loaded. Try PixelMap.SlowLoad instead.");
 			}
-
+            Console.WriteLine("PielMap Bitmap encoding BPP: "+BPP);
 
 			int bytes = Math.Abs(data.Stride) * b.Height;
 

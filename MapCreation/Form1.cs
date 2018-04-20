@@ -13,7 +13,8 @@ namespace MapCreation
         {
             InitializeComponent();
             
-            preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap12.bmp");
+            preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap13.png");
+            mouseMoveMap = new PixelMap(preciseMap);
             //     preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap2_1px140_100.png");
             //   preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap3.png");
             //     pictureBox1.Image = new Bitmap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap3.png");
@@ -34,10 +35,14 @@ namespace MapCreation
 
         private PixelMap preciseIndoorMap; //точная карта indoor-среды: с отступами от препятствий точной карты
 
+        private PixelMap mouseMoveMap; //DEBUG для отображения пикселя мышки
+
         //Simulation parameters
+        //Все расстояния - это от центра пикселя до центра пикселя
+        //Т.е. между ближайшими краями двух пикселей лежит (расстояние между этими пикселями-1) пикселей
         public const ushort n_phi = 250;
-        public const ushort r_robot = 5; //5+1 (потому что центральный px еще) = 6px = 25cm
-        public const ushort r_scan = 70; //25cm*12=3m; 6px*12=72px ~ 70+1
+        public const ushort r_robot = 6;//5; //5+1 (потому что центральный px еще) = 6px = 25cm
+        public const ushort r_scan = 0;//70; //25cm*12=3m; 6px*12=72px ~ 70+1
         public const ushort l_max = 35; //1.5m
         public const ushort sgm_lmax = 3;//1; //3px = 12cm
         public const int sgm_psi_deg = 4;//2;//in degrees: 2*3.14/180*1.5m=0.05m  //0.046; //3*0.046=0.14rad (~20cm)
@@ -54,7 +59,7 @@ namespace MapCreation
         private int X2 = -1, Y2 = -1; //supposed 1 scan center
 
         public const ushort r_robot1 = r_robot + 1;
-        public const ushort d_robot = 2 * r_robot1;
+        public const ushort d_robot = 2 * r_robot;
         public const ushort r_scan1 = r_scan + 1;
         public const int r_scan2 = r_scan*r_scan;
         public const ushort d_scan = 2 * r_scan1;
@@ -66,6 +71,7 @@ namespace MapCreation
         private Color routeColor = Color.FromArgb(255, 51, 0);
         private Color finishColor = Color.FromArgb(0, 222, 255);
         private Color predictionColor = Color.FromArgb(0, 255, 255);
+        private Color mouseMoveColor = Color.FromArgb(255, 255, 0);
 
         private byte positionCounter = 0;
         private double l_rl = 0; //[0,l_max]
@@ -94,117 +100,134 @@ namespace MapCreation
         /// <param name="e"></param>
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-         /*   int X = e.X * preciseMap.Width / pictureBox1.Width;
+            int X = e.X * preciseMap.Width / pictureBox1.Width;
             int Y = e.Y * preciseMap.Height / pictureBox1.Height;
-            if (preciseIndoorMap[X, Y].Color == indoorColor)
-            {
-                Bitmap preciseMapBmp = preciseMap.GetBitmap();
-                Pen pen;
-                SolidBrush brush;
-                Graphics graphics = Graphics.FromImage(preciseMapBmp);
-                switch (positionCounter)
-                {
-                    case 0:
-                        X0 = X;
-                        Y0 = Y;
-                        scan0 = new PixelMap(d_scan, d_scan, 0, 0, 0);
-                        getScanFromPreciseMap(X, Y, rByPhi0, xyScan0, scan0, startColor);
-                        pictureBox2.Image = scan0.GetBitmap();
-                        positionCounter++;
-                        break;
-                    case 1:
-                        l_rl2 = getSquaredDistance(X0, Y0, X, Y);
-                        l_rl = Math.Pow(l_rl2,0.5);
-                        l_rl_rounded = (int)Math.Round(l_rl);
-                        psi_rl_rad = Math.Atan2(Y-Y0,X-X0);
-                        psi_rl_deg = psi_rl_rad*180/Math.PI;
-                        if (l_rl2<=l_max2) {
-                            X1 = X;
-                            Y1 = Y;
-                            scan1 = new PixelMap(d_scan, d_scan, 0, 0, 0);
-                            getScanFromPreciseMap(X, Y, rByPhi1, xyScan1, scan1, finishColor);
-                            pictureBox3.Image = scan1.GetBitmap();
-                            positionCounter++;
-                            drawPieZone(graphics);
-                        }
-                        break;
-                    case 2:
-                        //пока простая проверка: ровный разброс по углу и по длине
-                        l_sp2 = getSquaredDistance(X0, Y0, X, Y);
-                        l_sp = Math.Pow(l_sp2, 0.5);
-                        psi_sp_rad = Math.Atan2(Y - Y0, X - X0);
-                        bool angleFlag = false; //входит ли по угловой зоне
-                        if ((psi_rl_rad > Math.PI / 2) && (psi_sp_rad < -Math.PI / 2))
-                        {
-                            if ((psi_sp_rad + 2 * Math.PI >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad + 2 * Math.PI <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
-                            else angleFlag = false;
-                        }
-                        else {
-                            if ((psi_rl_rad < -Math.PI / 2) && (psi_sp_rad > Math.PI / 2))
-                            {
-                                if ((psi_sp_rad - 2 * Math.PI >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad - 2 * Math.PI <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
-                                else angleFlag = false;
-                            }
-                            else
-                            {
-                                if ((psi_sp_rad >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
-                            }
-                        }
-                        if (((l_sp>=l_rlMinus3sgm)&&(l_sp<=l_rlPlus3sgm))&& angleFlag)
-                        {
-                            X2 = X;
-                            Y2 = Y;
-                            positionCounter = 0;
-                        }
-                        else
-                            drawPieZone(graphics);
-                        break;
-                }
-                //отрисовать все три центра
-                //отрисовать радиусы для scan0 и scan1
-                try
-                {
-                    if ((X0 >= 0) && (Y0 >= 0))
-                    {
-                        preciseMapBmp.SetPixel(X0, Y0, startColor);
-                        pen = new Pen(startColor);
-                        graphics.DrawEllipse(pen, X0 - r_scan1, Y0 - r_scan1, d_scan, d_scan);
-                        graphics.DrawEllipse(pen, X0 - r_robot1, Y0 - r_robot1, d_robot, d_robot);
-                    }
-                    if ((X1 >= 0) && (Y1 >= 0))
-                    {
-                        preciseMapBmp.SetPixel(X1, Y1, finishColor);
-                        pen = new Pen(finishColor);
-                        graphics.DrawEllipse(pen, X1 - r_scan1, Y1 - r_scan1, d_scan, d_scan);
-                        graphics.DrawEllipse(pen, X1 - r_robot1, Y1 - r_robot1, d_robot, d_robot);
-                    }
-                    if ((X2 >= 0) && (Y2 >= 0))
-                    {
-                        preciseMapBmp.SetPixel(X2, Y2, routeColor);
-                    }
-                }
-                catch (Exception ex) { }
-                drawBitmapOnPictureBox(pictureBox1, preciseMapBmp);
-               // pictureBox1.Image = preciseMapBmp;
-            }*/
+
+            Bitmap preciseMapBmp = preciseMap.GetBitmap();
+            Pen pen;
+            SolidBrush brush;
+            Graphics graphics = Graphics.FromImage(preciseMapBmp);
+            preciseMapBmp.SetPixel(X, Y, startColor);
+            pen = new Pen(startColor);
+         //   graphics.DrawEllipse(pen, X - r_scan1, Y - r_scan1, d_scan, d_scan);
+            graphics.DrawEllipse(pen, X - r_robot, Y - r_robot, 2*r_robot, 2*r_robot);
+            brush = new SolidBrush(routeColor);
+            graphics.FillPie(brush, X - r_robot - 1, Y - r_robot - 1, 2 * r_robot + 2, 2 * r_robot + 2, 0, 90);
+            brush = new SolidBrush(finishColor);
+            graphics.FillPie(brush, X - r_robot, Y - r_robot, d_robot, d_robot, 0, 90); //работает странновато, область не совсем точная относительно рисованного круга, ну и пох
+
+            /*   if (preciseIndoorMap[X, Y].Color == indoorColor)
+               {
+                   Bitmap preciseMapBmp = preciseMap.GetBitmap();
+                   Pen pen;
+                   SolidBrush brush;
+                   Graphics graphics = Graphics.FromImage(preciseMapBmp);
+                   switch (positionCounter)
+                   {
+                       case 0:
+                           X0 = X;
+                           Y0 = Y;
+                           scan0 = new PixelMap(d_scan, d_scan, 0, 0, 0);
+                           getScanFromPreciseMap(X, Y, rByPhi0, xyScan0, scan0, startColor);
+                           pictureBox2.Image = scan0.GetBitmap();
+                           positionCounter++;
+                           break;
+                       case 1:
+                           l_rl2 = getSquaredDistance(X0, Y0, X, Y);
+                           l_rl = Math.Pow(l_rl2,0.5);
+                           l_rl_rounded = (int)Math.Round(l_rl);
+                           psi_rl_rad = Math.Atan2(Y-Y0,X-X0);
+                           psi_rl_deg = psi_rl_rad*180/Math.PI;
+                           if (l_rl2<=l_max2) {
+                               X1 = X;
+                               Y1 = Y;
+                               scan1 = new PixelMap(d_scan, d_scan, 0, 0, 0);
+                               getScanFromPreciseMap(X, Y, rByPhi1, xyScan1, scan1, finishColor);
+                               pictureBox3.Image = scan1.GetBitmap();
+                               positionCounter++;
+                               drawPieZone(graphics);
+                           }
+                           break;
+                       case 2:
+                           //пока простая проверка: ровный разброс по углу и по длине
+                           l_sp2 = getSquaredDistance(X0, Y0, X, Y);
+                           l_sp = Math.Pow(l_sp2, 0.5);
+                           psi_sp_rad = Math.Atan2(Y - Y0, X - X0);
+                           bool angleFlag = false; //входит ли по угловой зоне
+                           if ((psi_rl_rad > Math.PI / 2) && (psi_sp_rad < -Math.PI / 2))
+                           {
+                               if ((psi_sp_rad + 2 * Math.PI >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad + 2 * Math.PI <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
+                               else angleFlag = false;
+                           }
+                           else {
+                               if ((psi_rl_rad < -Math.PI / 2) && (psi_sp_rad > Math.PI / 2))
+                               {
+                                   if ((psi_sp_rad - 2 * Math.PI >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad - 2 * Math.PI <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
+                                   else angleFlag = false;
+                               }
+                               else
+                               {
+                                   if ((psi_sp_rad >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
+                               }
+                           }
+                           if (((l_sp>=l_rlMinus3sgm)&&(l_sp<=l_rlPlus3sgm))&& angleFlag)
+                           {
+                               X2 = X;
+                               Y2 = Y;
+                               positionCounter = 0;
+                           }
+                           else
+                               drawPieZone(graphics);
+                           break;
+                   }
+                   //отрисовать все три центра
+                   //отрисовать радиусы для scan0 и scan1
+                   try
+                   {
+                       if ((X0 >= 0) && (Y0 >= 0))
+                       {
+                           preciseMapBmp.SetPixel(X0, Y0, startColor);
+                           pen = new Pen(startColor);
+                           graphics.DrawEllipse(pen, X0 - r_scan1, Y0 - r_scan1, d_scan, d_scan);
+                           graphics.DrawEllipse(pen, X0 - r_robot1, Y0 - r_robot1, d_robot, d_robot);
+                       }
+                       if ((X1 >= 0) && (Y1 >= 0))
+                       {
+                           preciseMapBmp.SetPixel(X1, Y1, finishColor);
+                           pen = new Pen(finishColor);
+                           graphics.DrawEllipse(pen, X1 - r_scan1, Y1 - r_scan1, d_scan, d_scan);
+                           graphics.DrawEllipse(pen, X1 - r_robot1, Y1 - r_robot1, d_robot, d_robot);
+                       }
+                       if ((X2 >= 0) && (Y2 >= 0))
+                       {
+                           preciseMapBmp.SetPixel(X2, Y2, routeColor);
+                       }
+                   }
+                   catch (Exception ex) { }
+                   drawBitmapOnPictureBox(pictureBox1, preciseMapBmp);
+                  // pictureBox1.Image = preciseMapBmp;
+               }*/
+            mouseMoveMap = new PixelMap(preciseMapBmp);
+            drawBitmapOnPictureBox(pictureBox1, preciseMapBmp);
         }
 
+        //For mouseMove pixel:
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             int X = e.X * preciseMap.Width / pictureBox1.Width;
             int Y = e.Y * preciseMap.Height / pictureBox1.Height;
-            Bitmap bmp = preciseMap.GetBitmap();
-            bmp.SetPixel(X,Y, Color.FromArgb(134, 244, 120));
+            Bitmap bmp = new Bitmap(mouseMoveMap.GetBitmap());
+            bmp.SetPixel(X,Y,mouseMoveColor);
             drawBitmapOnPictureBox(pictureBox1,bmp);
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-      /*      int[] real_coords = getRealCoords();
-            Bitmap bmp = new Bitmap(pictureBox1.Image);
-            bmp.SetPixel(real_coords[0],real_coords[1],predictionColor);
-            pictureBox1.Image = bmp;
-            drawCrosslinkedScans(real_coords[0], real_coords[1]);*/
+           private void button1_Click(object sender, EventArgs e)
+           {
+         /*      int[] real_coords = getRealCoords();
+               Bitmap bmp = new Bitmap(pictureBox1.Image);
+               bmp.SetPixel(real_coords[0],real_coords[1],predictionColor);
+               pictureBox1.Image = bmp;
+               drawCrosslinkedScans(real_coords[0], real_coords[1]);*/
         }
 
         /// <summary>
