@@ -42,7 +42,7 @@ namespace MapCreation
         //Т.е. между ближайшими краями двух пикселей лежит (расстояние между этими пикселями-1) пикселей
         public const ushort n_phi = 250;
         public const ushort r_robot = 0;//5; //5+1 (потому что центральный px еще) = 6px = 25cm
-        public const ushort r_scan = 7;//70; //25cm*12=3m; 6px*12=72px ~ 70+1
+        public const ushort r_scan = 8;//70; //25cm*12=3m; 6px*12=72px ~ 70+1
         public const ushort l_max = 35; //1.5m
         public const ushort sgm_lmax = 3;//1; //3px = 12cm
         public const int sgm_psi_deg = 4;//2;//in degrees: 2*3.14/180*1.5m=0.05m  //0.046; //3*0.046=0.14rad (~20cm)
@@ -51,7 +51,7 @@ namespace MapCreation
 
         private double step = 2 * Math.PI / n_phi;
         private ushort[] rByPhi0 = new ushort[n_phi];
-        private List<int[]> xyScan0 = new List<int[]>();
+        private List<int[]> xyScan0 = new List<int[]>(); //xyScan - это точки относительно (0,0) в верхнем левом углу.
         private int X0 = -1, Y0 = -1; //0 scan center
         private ushort[] rByPhi1 = new ushort[n_phi];
         private List<int[]> xyScan1 = new List<int[]>();
@@ -252,21 +252,21 @@ namespace MapCreation
                 flagR = false;
                 for (ushort r = 1; r < r_scan+1; r++)
                 {
-                    x = (int)Math.Round(r * Math.Cos(i * step)) + X;
-                    y = (int)Math.Round(r * Math.Sin(i * step)) + Y;
-                    if (preciseMap[x, y].Color == wallColor)
+                    x = (int)Math.Round(r * Math.Cos(i * step));
+                    y = (int)Math.Round(r * Math.Sin(i * step));
+                    if (preciseMap[x+X, y+Y].Color == wallColor)
                     {
                         rByPhi[i] = r;
                         flagRepeated = false;
                         for (int j = 0; j < xyScan.Count; j++)
-                            if ((xyScan[j][0] == x) && (xyScan[j][1] == y))
+                            if ((xyScan[j][0] == x + r_scan) && (xyScan[j][1] == y + r_scan))
                                 flagRepeated = true;
                         if (!flagRepeated)
                         {
-                            xyScan.Add(new int[2] { x, y });
-                            Console.WriteLine("getScanFromPreciseMap, added: " + x + "," + y);
+                            xyScan.Add(new int[2] { x + r_scan, y + r_scan });
+                            Console.WriteLine("getScanFromPreciseMap, added: " + (x+X) + "," + (y+Y));
                         }
-                        scanBmp[x - X + r_scan, y - Y + r_scan] = new Pixel(scanColor);
+                        scanBmp[x + r_scan, y + r_scan] = new Pixel(scanColor);
                         flagR = true;
                         break;
                     }
@@ -352,10 +352,20 @@ namespace MapCreation
             List<int[]> across1 = new List<int[]>();
             List<int[]> pointsLess, pointsMore;
             double minsum = 100000000;
-            int limXY = 5;
+            int limXY = 3;
             double summ;
             double min;
             int optX = 0, optY = 0;
+
+          /*  int x = 0;
+            int y = 0;
+            computeAcrossingPoints(ref across0, ref across1, X2 + x, Y2 + y);
+            x = -1;
+            y = -1;
+            computeAcrossingPoints(ref across0, ref across1, X2 + x, Y2 + y);
+            x = -3;
+            y = -3;
+            computeAcrossingPoints(ref across0, ref across1, X2 + x, Y2 + y);*/
             for (int x = -limXY; x < limXY + 1; x++)
             {
                 for (int y = -limXY; y < limXY + 1; y++)
@@ -374,8 +384,8 @@ namespace MapCreation
                     summ = 0;
                     for (int k = 0; k < across1.Count; k++)
                     {
-                        across1[k][0] = across1[k][0] + x;
-                        across1[k][1] = across1[k][1] + y;
+                        across1[k][0] = across1[k][0] + (X2 - X0) + x;
+                        across1[k][1] = across1[k][1] + (Y2 - Y0) + y;
                     }
                     for (int i = 0; i < pointsLess.Count; i++)
                     {
@@ -389,8 +399,8 @@ namespace MapCreation
                     }
                     for (int k = 0; k < across1.Count; k++)
                     {
-                        across1[k][0] = across1[k][0] - x;
-                        across1[k][1] = across1[k][1] - y;
+                        across1[k][0] = across1[k][0] - (X2 - X0) - x;
+                        across1[k][1] = across1[k][1] - (Y2 - Y0) - y;
                     }
                     Console.WriteLine("(" + x + "," + y + "): " + summ);
                     if (minsum > summ)
@@ -416,6 +426,7 @@ namespace MapCreation
         /// <param name="Y_sp">Предполагаемый центр scan1</param>
         private void computeAcrossingPoints(ref List<int[]> across0, ref List<int[]> across1, int X_sp, int Y_sp)
         {
+            Console.WriteLine("computeAcrossingPoints");
             across0.Clear();
             across1.Clear();
             int x0, y0, x1, y1;
@@ -423,15 +434,23 @@ namespace MapCreation
             {
                 x0 = xyScan0[i][0];
                 y0 = xyScan0[i][1];
-                if ((getSquaredDistance(x0, y0, X_sp, Y_sp) <= r_scan2))
+                Console.WriteLine("across0 " + x0 + "," + y0);
+                if ((getSquaredDistance(x0+X0-r_scan, y0+Y0-r_scan, X_sp, Y_sp) <= r_scan2))
+                {
                     across0.Add(new int[2] { x0, y0 });
+                    Console.WriteLine("across0 added "+x0+","+y0);
+                }
             }
             for (int i = 0; i < xyScan1.Count; i++)
             {
-                x1 = xyScan1[i][0] + X_sp - X1;
-                y1 = xyScan1[i][1] + Y_sp - Y1;
-                if ((getSquaredDistance(x1, y1, X0, Y0) <= r_scan2))
+                x1 = xyScan1[i][0];
+                y1 = xyScan1[i][1];
+                Console.WriteLine("across1 " + x1 + "," + y1);
+                if ((getSquaredDistance(x1+X_sp-r_scan, y1+Y_sp-r_scan, X0, Y0) <= r_scan2))
+                {
                     across1.Add(new int[2] { x1, y1 });
+                    Console.WriteLine("across1 added " + x1 + "," + y1);
+                }
             }
         }
 
