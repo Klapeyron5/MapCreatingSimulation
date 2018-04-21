@@ -20,10 +20,10 @@ namespace MapCreation
             mouseMoveMap = new PixelMap(preciseMap);
             preciseIndoorMap = getIndoorMap(preciseMap);
             drawBitmapOnPictureBox(pictureBox1, preciseMap.GetBitmap());
-       //     pictureBox1.Image = preciseMap.GetBitmap();
-         //    drawBitmapOnPictureBox(pictureBox1, preciseMap.GetBitmap());
-         //    Console.WriteLine(pictureBox1.Image.Size);
-         // pictureBox1.Image = preciseMap.GetBitmap();
+            //     pictureBox1.Image = preciseMap.GetBitmap();
+            //    drawBitmapOnPictureBox(pictureBox1, preciseMap.GetBitmap());
+            //    Console.WriteLine(pictureBox1.Image.Size);
+            // pictureBox1.Image = preciseMap.GetBitmap();
 
             //   Scan scan = new Scan();
             //   Console.WriteLine(Scan.n_phi);
@@ -61,6 +61,7 @@ namespace MapCreation
         public const ushort d_robot = 2 * r_robot;
         public const int r_scan2 = r_scan*r_scan;
         public const ushort d_scan = 2 * r_scan;
+        public const ushort d_scan1 = d_scan + 1;
         public const ushort l_max2 = l_max  * l_max;
 
         private Color wallColor = Color.FromArgb(255, 255, 255);
@@ -68,7 +69,7 @@ namespace MapCreation
         private Color startColor = Color.FromArgb(94, 255, 0);
         private Color routeColor = Color.FromArgb(255, 51, 0);
         private Color finishColor = Color.FromArgb(0, 222, 255);
-        private Color predictionColor = Color.FromArgb(0, 255, 255);
+        private Color predictionColor = Color.FromArgb(0, 26, 255);
         private Color mouseMoveColor = Color.FromArgb(255, 255, 0);
 
         private byte positionCounter = 0;
@@ -127,7 +128,7 @@ namespace MapCreation
                     case 0:
                         X0 = X;
                         Y0 = Y;
-                        scan0 = new PixelMap(d_scan, d_scan, 0, 0, 0);
+                        scan0 = new PixelMap(d_scan1, d_scan1, 0, 0, 0);
                         getScanFromPreciseMap(X, Y, rByPhi0, xyScan0, scan0, startColor);
                         drawBitmapOnPictureBox(pictureBox2,scan0.GetBitmap());
                         positionCounter++;
@@ -141,7 +142,7 @@ namespace MapCreation
                         if (l_rl2<=l_max2) {
                             X1 = X;
                             Y1 = Y;
-                            scan1 = new PixelMap(d_scan, d_scan, 0, 0, 0);
+                            scan1 = new PixelMap(d_scan1, d_scan1, 0, 0, 0);
                             getScanFromPreciseMap(X, Y, rByPhi1, xyScan1, scan1, finishColor);
                             drawBitmapOnPictureBox(pictureBox3, scan1.GetBitmap());
                             positionCounter++;
@@ -159,7 +160,8 @@ namespace MapCreation
                             if ((psi_sp_rad + 2 * Math.PI >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad + 2 * Math.PI <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
                             else angleFlag = false;
                         }
-                        else {
+                        else
+                        {
                             if ((psi_rl_rad < -Math.PI / 2) && (psi_sp_rad > Math.PI / 2))
                             {
                                 if ((psi_sp_rad - 2 * Math.PI >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad - 2 * Math.PI <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
@@ -170,7 +172,7 @@ namespace MapCreation
                                 if ((psi_sp_rad >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
                             }
                         }
-                        if (((l_sp>=l_rlMinus3sgm)&&(l_sp<=l_rlPlus3sgm))&& angleFlag)
+                        if (((l_sp >= l_rlMinus3sgm) && (l_sp <= l_rlPlus3sgm)) && angleFlag)
                         {
                             X2 = X;
                             Y2 = Y;
@@ -221,11 +223,11 @@ namespace MapCreation
 
            private void button1_Click(object sender, EventArgs e)
            {
-         /*      int[] real_coords = getRealCoords();
+               int[] real_coords = getRealCoords();
                Bitmap bmp = new Bitmap(pictureBox1.Image);
                bmp.SetPixel(real_coords[0],real_coords[1],predictionColor);
                pictureBox1.Image = bmp;
-               drawCrosslinkedScans(real_coords[0], real_coords[1]);*/
+               drawCrosslinkedScans(real_coords[0], real_coords[1]);
         }
 
         /// <summary>
@@ -252,7 +254,7 @@ namespace MapCreation
                 {
                     x = (int)Math.Round(r * Math.Cos(i * step)) + X;
                     y = (int)Math.Round(r * Math.Sin(i * step)) + Y;
-                    if (preciseMap[x+X, y+Y].Color == wallColor)
+                    if (preciseMap[x, y].Color == wallColor)
                     {
                         rByPhi[i] = r;
                         flagRepeated = false;
@@ -444,7 +446,7 @@ namespace MapCreation
             {
             //    scan01[xyScan1[i][0] - X2 + X1_rl - X2 + r_scan1 + r_scan / 2, xyScan1[i][1] - Y2 + Y1_rl - Y2 + r_scan1 + r_scan / 2] = new Pixel(finishColor);
             }
-            pictureBox4.Image = scan01.GetBitmap();
+            drawBitmapOnPictureBox(pictureBox4,scan01.GetBitmap());
         }
         
         private void drawBitmapOnPictureBox(PictureBox pictureBox, Bitmap bmp)
