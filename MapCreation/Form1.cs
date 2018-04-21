@@ -13,7 +13,7 @@ namespace MapCreation
         {
             InitializeComponent();
             
-            preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap14.png");
+            preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap1.png");
             //     preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap2_1px140_100.png");
             //   preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap3.png");
             //     pictureBox1.Image = new Bitmap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap3.png");
@@ -41,8 +41,8 @@ namespace MapCreation
         //Все расстояния - это от центра пикселя до центра пикселя
         //Т.е. между ближайшими краями двух пикселей лежит (расстояние между этими пикселями-1) пикселей
         public const ushort n_phi = 250;
-        public const ushort r_robot = 0;//5; //5+1 (потому что центральный px еще) = 6px = 25cm
-        public const ushort r_scan = 8;//70; //25cm*12=3m; 6px*12=72px ~ 70+1
+        public const ushort r_robot = 6;//5; //5+1 (потому что центральный px еще) = 6px = 25cm
+        public const ushort r_scan = 70;//70; //25cm*12=3m; 6px*12=72px ~ 70+1
         public const ushort l_max = 35; //1.5m
         public const ushort sgm_lmax = 3;//1; //3px = 12cm
         public const int sgm_psi_deg = 4;//2;//in degrees: 2*3.14/180*1.5m=0.05m  //0.046; //3*0.046=0.14rad (~20cm)
@@ -239,7 +239,7 @@ namespace MapCreation
         /// <returns></returns>
         private void getScanFromPreciseMap(int X, int Y, ushort[] rByPhi, List<int[]> xyScan, PixelMap scanBmp, Color scanColor)
         {
-            Console.WriteLine("getScanFromPreciseMap, center: "+X+","+Y);
+         //   Console.WriteLine("getScanFromPreciseMap, center: "+X+","+Y);
             rByPhi = new ushort[n_phi];
             int y = new int();
             int x = new int();
@@ -264,7 +264,7 @@ namespace MapCreation
                         if (!flagRepeated)
                         {
                             xyScan.Add(new int[2] { x + r_scan, y + r_scan });
-                            Console.WriteLine("getScanFromPreciseMap, added: " + (x+X) + "," + (y+Y));
+                 //           Console.WriteLine("getScanFromPreciseMap, added: " + (x+X) + "," + (y+Y));
                         }
                         scanBmp[x + r_scan, y + r_scan] = new Pixel(scanColor);
                         flagR = true;
@@ -352,7 +352,7 @@ namespace MapCreation
             List<int[]> across1 = new List<int[]>();
             List<int[]> pointsLess, pointsMore;
             double minsum = 100000000;
-            int limXY = 3;
+            int limXY = 10;
             double summ;
             double min;
             int optX = 0, optY = 0;
@@ -426,7 +426,7 @@ namespace MapCreation
         /// <param name="Y_sp">Предполагаемый центр scan1</param>
         private void computeAcrossingPoints(ref List<int[]> across0, ref List<int[]> across1, int X_sp, int Y_sp)
         {
-            Console.WriteLine("computeAcrossingPoints");
+        //    Console.WriteLine("computeAcrossingPoints");
             across0.Clear();
             across1.Clear();
             int x0, y0, x1, y1;
@@ -434,22 +434,22 @@ namespace MapCreation
             {
                 x0 = xyScan0[i][0];
                 y0 = xyScan0[i][1];
-                Console.WriteLine("across0 " + x0 + "," + y0);
+            //    Console.WriteLine("across0 " + x0 + "," + y0);
                 if ((getSquaredDistance(x0+X0-r_scan, y0+Y0-r_scan, X_sp, Y_sp) <= r_scan2))
                 {
                     across0.Add(new int[2] { x0, y0 });
-                    Console.WriteLine("across0 added "+x0+","+y0);
+                 //   Console.WriteLine("across0 added "+x0+","+y0);
                 }
             }
             for (int i = 0; i < xyScan1.Count; i++)
             {
                 x1 = xyScan1[i][0];
                 y1 = xyScan1[i][1];
-                Console.WriteLine("across1 " + x1 + "," + y1);
+             //   Console.WriteLine("across1 " + x1 + "," + y1);
                 if ((getSquaredDistance(x1+X_sp-r_scan, y1+Y_sp-r_scan, X0, Y0) <= r_scan2))
                 {
                     across1.Add(new int[2] { x1, y1 });
-                    Console.WriteLine("across1 added " + x1 + "," + y1);
+                 //   Console.WriteLine("across1 added " + x1 + "," + y1);
                 }
             }
         }
