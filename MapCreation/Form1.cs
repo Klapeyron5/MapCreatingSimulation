@@ -35,7 +35,7 @@ namespace MapCreation
         //Все расстояния - это от центра пикселя до центра пикселя
         //Т.е. между ближайшими краями двух пикселей лежит (расстояние между этими пикселями-1) пикселей
         public const ushort n_phi = 250;
-        public const ushort r_robot = 6;//5; //5+1 (потому что центральный px еще) = 6px = 25cm
+        public const ushort r_robot = 6;//6px = 25cm
         public const ushort r_scan = 70;//70; //25cm*12=3m; 6px*12=72px ~ 70+1
         public const ushort l_max = 35; //1.5m
         public const ushort sgm_lmax = 3;//1; //3px = 12cm
@@ -112,7 +112,7 @@ namespace MapCreation
                         l_rl2 = getSquaredDistance(X0, Y0, X, Y);
                         l_rl = Math.Pow(l_rl2,0.5);
                         l_rl_rounded = (int)Math.Round(l_rl);
-                        psi_rl_rad = Math.Atan2(Y-Y0,X-X0);
+                        psi_rl_rad = getAngleRadian(X0, Y0, X, Y);
                         psi_rl_deg = psi_rl_rad*180/Math.PI;
                         if (l_rl2<=l_max2) {
                             X1 = X;
@@ -128,7 +128,7 @@ namespace MapCreation
                         //пока простая проверка: ровный разброс по углу и по длине
                         l_sp2 = getSquaredDistance(X0, Y0, X, Y);
                         l_sp = Math.Pow(l_sp2, 0.5);
-                        psi_sp_rad = Math.Atan2(Y - Y0, X - X0);
+                        psi_sp_rad = getAngleRadian(X0,Y0,X,Y);
                         bool angleFlag = false; //входит ли по угловой зоне
                         if ((psi_rl_rad > Math.PI / 2) && (psi_sp_rad < -Math.PI / 2))
                         {
@@ -196,13 +196,16 @@ namespace MapCreation
             drawBitmapOnPictureBox(pictureBox1,bmp);
         }
 
-           private void button1_Click(object sender, EventArgs e)
-           {
-               int[] real_coords = getRealCoords();
-               Bitmap bmp = new Bitmap(pictureBox1.Image);
-               bmp.SetPixel(real_coords[0],real_coords[1],predictionColor);
-               pictureBox1.Image = bmp;
-               drawCrosslinkedScans(real_coords[0], real_coords[1]);
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if ((positionCounter==0)&&(X2>=0))
+            {
+                int[] real_coords = getRealCoords();
+                Bitmap bmp = new Bitmap(pictureBox1.Image);
+                bmp.SetPixel(real_coords[0], real_coords[1], predictionColor);
+                pictureBox1.Image = bmp; //TODO
+                drawCrosslinkedScans(real_coords[0], real_coords[1]);
+            }
         }
 
         /// <summary>
@@ -214,13 +217,11 @@ namespace MapCreation
         /// <returns></returns>
         private void getScanFromPreciseMap(int X, int Y, Scan scan, Color scanColor)
         {
-         //   Console.WriteLine("getScanFromPreciseMap, center: "+X+","+Y);
-        //    rByPhi = new ushort[n_phi];
+        //    Console.WriteLine("getScanFromPreciseMap, center: "+X+","+Y);
             int y = new int();
             int x = new int();
             bool flagR; //Будет true, если на текущем угле сканирования видно препятствие, иначе false и радиус от текущего угла будет равен нулю
             bool flagRepeated; //Будет true, если точка уже сохранена в списке скана
-        //    xyScan.Clear();
 
             for (int i = 0; i < n_phi; i++)
             {
@@ -234,12 +235,12 @@ namespace MapCreation
                         scan.rByPhi[i] = r;
                         flagRepeated = false;
                         for (int j = 0; j < scan.xyScan.Count; j++)
-                            if ((scan.xyScan[j][0] == x + r_scan) && (scan.xyScan[j][1] == y + r_scan))
+                            if ((scan.xyScan[j][0] == x) && (scan.xyScan[j][1] == y))
                                 flagRepeated = true;
                         if (!flagRepeated)
                         {
                             scan.xyScan.Add(new int[2] { x, y });
-                 //           Console.WriteLine("getScanFromPreciseMap, added: " + (x+X) + "," + (y+Y));
+                //            Console.WriteLine("getScanFromPreciseMap, added: " + (x+X) + "," + (y+Y));
                         }
                         scan.scanBmp[x + r_scan, y + r_scan] = new Pixel(scanColor);
                         flagR = true;
@@ -248,6 +249,7 @@ namespace MapCreation
                 }
                 if (!flagR)
                     scan.rByPhi[i] = 0;
+               //     Console.WriteLine("0 r: "+"("+x+","+y+") "+ (int)Math.Round(i * step/Math.PI*180));
             }
         }
 
@@ -294,6 +296,34 @@ namespace MapCreation
             return ((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
         }
         
+        /// <summary>
+        /// 00 ====>x
+        /// ||
+        /// ||
+        /// \/
+        /// y
+        /// Угол в диапазоне [-pi,pi]. Направление 0 по оси x.
+        /// </summary>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        /// <returns></returns>
+        private double getAngleRadian(int x1, int y1, int x2, int y2)
+        {
+            return Math.Atan2(y2 - y1, x2 - x1);
+        }
+
+        /// <summary>
+        /// Dычисляем погрешность передвижения, считая зависимость погрешности от пройденного расстояния линейной.
+        /// </summary>
+        /// <param name="l">Пройденное расстояние.</param>
+        /// <returns></returns>
+        private double getSgm_l(double l)
+        {
+            return l * sgm_lmax / l_max;
+        }
+
         /// <summary>
         /// Рисует зону, в которой может быть supposed положение робота относительно real положения в центре scan1.
         /// Зона рисуется примерная, к сожалению.
@@ -377,6 +407,7 @@ namespace MapCreation
                     }
                 }
             }
+            scan1.setCenter(X2+optX,Y2+optY);
             Console.WriteLine("minsum: "+minsum);
             Console.WriteLine("opt coords: "+optX+","+optY);
             Console.WriteLine("center1-center2 error: " + (X1-X2) + "," + (Y1-Y2));
@@ -473,6 +504,47 @@ namespace MapCreation
         {
             graphics.DrawEllipse(pen, X - r, Y - r, d, d);
             graphics.FillEllipse(brush, X - r, Y - r, d, d);
+        }
+
+        private List<int[]> pieErrorZoneSearch(int X1, int Y1, int X2, int Y2)
+        {
+            List<int[]> pieErrorZone = new List<int[]>();
+            double l2 = getSquaredDistance(X1,Y1,X2,Y2);
+            double l = Math.Pow(l2,0.5);
+            double lminus3sgm = l - 3 * getSgm_l(l);
+            double lplus3sgm = l + 3*getSgm_l(l);
+            double psi_rad = getAngleRadian(X1,Y1,X2,Y2);
+            int discreteness = (int)(2 * Math.PI * lplus3sgm)+1; //значение дискретности, гарантирующее учет каждого пикселя в секторе на всех радиусах pieErrorZone
+            double sectorStep = 2*Math.PI/discreteness; //in radians
+            double startAngle = psi_rad - 3 * sgm_psi_rad;
+            double finishAngle = psi_rad + 3 * sgm_psi_rad;
+            //6 *sgm_psi_rad / (2*Math.PI) * discreteness
+
+            int y = new int();
+            int x = new int();
+            bool flagRepeated; //Будет true, если точка уже сохранена в списке скана
+
+            for (double i = startAngle; i <= finishAngle; i += sectorStep)
+            {
+                for (int r = (int)Math.Ceiling(lminus3sgm); r <= (int)lplus3sgm; r++)
+                {
+                   /* x = (int)Math.Round(r * Math.Cos(i));
+                    y = (int)Math.Round(r * Math.Sin(i));
+                    scan.rByPhi[i] = r;
+                    flagRepeated = false;
+                    for (int j = 0; j < pieErrorZone.Count; j++)
+                        if ((pieErrorZone[j][0] == x + r_scan) && (pieErrorZone[j][1] == y + r_scan))
+                            flagRepeated = true;
+                    if (!flagRepeated)
+                    {
+                        scan.xyScan.Add(new int[2] { x, y });
+                        //           Console.WriteLine("getScanFromPreciseMap, added: " + (x+X) + "," + (y+Y));
+                    }
+                    scan.scanBmp[x + r_scan, y + r_scan] = new Pixel(scanColor);
+                    break;*/
+                }
+            }
+            return pieErrorZone;
         }
     }
 }

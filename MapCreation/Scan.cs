@@ -46,6 +46,7 @@ namespace MapCreation
         public Scan()
         {
             scanBmp = new PixelMap(d_scan1, d_scan1, 0, 0, 0);
+            setCenter(-1,-1);
         }
 
         public Scan(int X, int Y):this()
