@@ -20,22 +20,16 @@ namespace MapCreation
             mouseMoveMap = new PixelMap(preciseMap);
             preciseIndoorMap = getIndoorMap(preciseMap);
             drawBitmapOnPictureBox(pictureBox1, preciseMap.GetBitmap());
-            //     pictureBox1.Image = preciseMap.GetBitmap();
-            //    drawBitmapOnPictureBox(pictureBox1, preciseMap.GetBitmap());
-            //    Console.WriteLine(pictureBox1.Image.Size);
-            // pictureBox1.Image = preciseMap.GetBitmap();
-
-            //   Scan scan = new Scan();
-            //   Console.WriteLine(Scan.n_phi);
         }
 
         private PixelMap preciseMap; //точная карта
-        private PixelMap scan0; //холст для scan0
-        private PixelMap scan1; //холст для scan1
 
         private PixelMap preciseIndoorMap; //точная карта indoor-среды: с отступами от препятствий точной карты
 
         private PixelMap mouseMoveMap; //DEBUG для отображения пикселя мышки
+
+        private Scan scan0;
+        private Scan scan1;
 
         //Simulation parameters
         //Все расстояния - это от центра пикселя до центра пикселя
@@ -50,11 +44,7 @@ namespace MapCreation
     //    private const ushort sgm_r = 0; //D = f*h/px
 
         private double step = 2 * Math.PI / n_phi;
-        private ushort[] rByPhi0 = new ushort[n_phi];
-        private List<int[]> xyScan0 = new List<int[]>(); //xyScan - это точки относительно (0,0) в верхнем левом углу.
         private int X0 = -1, Y0 = -1; //0 scan center
-        private ushort[] rByPhi1 = new ushort[n_phi];
-        private List<int[]> xyScan1 = new List<int[]>();
         private int X1 = -1, Y1 = -1; //real 1 scan center
         private int X2 = -1, Y2 = -1; //supposed 1 scan center
         
@@ -102,21 +92,6 @@ namespace MapCreation
             int X = e.X * preciseMap.Width / pictureBox1.Width;
             int Y = e.Y * preciseMap.Height / pictureBox1.Height;
 
-         //   Bitmap preciseMapBmp = preciseMap.GetBitmap();
-         //   Pen pen;
-        //    SolidBrush brush;
-        //    Graphics graphics = Graphics.FromImage(preciseMapBmp);
-       //     preciseMapBmp.SetPixel(X, Y, startColor);
-         //   pen = new Pen(startColor);
-         //   graphics.DrawEllipse(pen, X - r_scan1, Y - r_scan1, d_scan, d_scan);
-         //   graphics.DrawEllipse(pen, X - r_robot, Y - r_robot, 2*r_robot, 2*r_robot);
-         //   brush = new SolidBrush(startColor);
-         //   graphics.FillEllipse(brush, X - r_robot, Y - r_robot, 2 * r_robot, 2 * r_robot);
-        //    fillCircle(ref graphics,ref pen,ref brush,r_robot,d_robot,ref X,ref Y);
-         //   graphics.FillPie(brush, X - r_robot - 1, Y - r_robot - 1, 2 * r_robot + 2, 2 * r_robot + 2, 0, 90);
-       //     brush = new SolidBrush(finishColor);
-         //   graphics.FillPie(brush, X - r_robot, Y - r_robot, d_robot, d_robot, 0, 90); //работает странновато, область не совсем точная относительно рисованного круга, ну и пох
-
             if (preciseIndoorMap[X, Y].Color == indoorColor)
             {
                 Bitmap preciseMapBmp = preciseMap.GetBitmap();
@@ -128,9 +103,9 @@ namespace MapCreation
                     case 0:
                         X0 = X;
                         Y0 = Y;
-                        scan0 = new PixelMap(d_scan1, d_scan1, 0, 0, 0);
-                        getScanFromPreciseMap(X, Y, rByPhi0, xyScan0, scan0, startColor);
-                        drawBitmapOnPictureBox(pictureBox2,scan0.GetBitmap());
+                        scan0 = new Scan();
+                        getScanFromPreciseMap(X, Y, scan0, startColor);
+                        drawBitmapOnPictureBox(pictureBox2,scan0.getBitmap());
                         positionCounter++;
                         break;
                     case 1:
@@ -142,9 +117,9 @@ namespace MapCreation
                         if (l_rl2<=l_max2) {
                             X1 = X;
                             Y1 = Y;
-                            scan1 = new PixelMap(d_scan1, d_scan1, 0, 0, 0);
-                            getScanFromPreciseMap(X, Y, rByPhi1, xyScan1, scan1, finishColor);
-                            drawBitmapOnPictureBox(pictureBox3, scan1.GetBitmap());
+                            scan1 = new Scan();
+                            getScanFromPreciseMap(X, Y, scan1, finishColor);
+                            drawBitmapOnPictureBox(pictureBox3, scan1.getBitmap());
                             positionCounter++;
                             drawPieZone(graphics);
                         }
@@ -237,15 +212,15 @@ namespace MapCreation
         /// <param name="Y">Y координата центра скана на точной карте</param>
         /// <param name="scanBmp">Холст для отрисовки сделанного скана</param>
         /// <returns></returns>
-        private void getScanFromPreciseMap(int X, int Y, ushort[] rByPhi, List<int[]> xyScan, PixelMap scanBmp, Color scanColor)
+        private void getScanFromPreciseMap(int X, int Y, Scan scan, Color scanColor)
         {
          //   Console.WriteLine("getScanFromPreciseMap, center: "+X+","+Y);
-            rByPhi = new ushort[n_phi];
+        //    rByPhi = new ushort[n_phi];
             int y = new int();
             int x = new int();
             bool flagR; //Будет true, если на текущем угле сканирования видно препятствие, иначе false и радиус от текущего угла будет равен нулю
             bool flagRepeated; //Будет true, если точка уже сохранена в списке скана
-            xyScan.Clear();
+        //    xyScan.Clear();
 
             for (int i = 0; i < n_phi; i++)
             {
@@ -256,23 +231,23 @@ namespace MapCreation
                     y = (int)Math.Round(r * Math.Sin(i * step));
                     if (preciseMap[x+X, y+Y].Color == wallColor)
                     {
-                        rByPhi[i] = r;
+                        scan.rByPhi[i] = r;
                         flagRepeated = false;
-                        for (int j = 0; j < xyScan.Count; j++)
-                            if ((xyScan[j][0] == x + r_scan) && (xyScan[j][1] == y + r_scan))
+                        for (int j = 0; j < scan.xyScan.Count; j++)
+                            if ((scan.xyScan[j][0] == x + r_scan) && (scan.xyScan[j][1] == y + r_scan))
                                 flagRepeated = true;
                         if (!flagRepeated)
                         {
-                            xyScan.Add(new int[2] { x + r_scan, y + r_scan });
+                            scan.xyScan.Add(new int[2] { x, y });
                  //           Console.WriteLine("getScanFromPreciseMap, added: " + (x+X) + "," + (y+Y));
                         }
-                        scanBmp[x + r_scan, y + r_scan] = new Pixel(scanColor);
+                        scan.scanBmp[x + r_scan, y + r_scan] = new Pixel(scanColor);
                         flagR = true;
                         break;
                     }
                 }
                 if (!flagR)
-                    rByPhi[i] = 0;
+                    scan.rByPhi[i] = 0;
             }
         }
 
@@ -356,16 +331,7 @@ namespace MapCreation
             double summ;
             double min;
             int optX = 0, optY = 0;
-
-          /*  int x = 0;
-            int y = 0;
-            computeAcrossingPoints(ref across0, ref across1, X2 + x, Y2 + y);
-            x = -1;
-            y = -1;
-            computeAcrossingPoints(ref across0, ref across1, X2 + x, Y2 + y);
-            x = -3;
-            y = -3;
-            computeAcrossingPoints(ref across0, ref across1, X2 + x, Y2 + y);*/
+            
             for (int x = -limXY; x < limXY + 1; x++)
             {
                 for (int y = -limXY; y < limXY + 1; y++)
@@ -430,23 +396,23 @@ namespace MapCreation
             across0.Clear();
             across1.Clear();
             int x0, y0, x1, y1;
-            for (int i = 0; i < xyScan0.Count; i++)
+            for (int i = 0; i < scan0.xyScan.Count; i++)
             {
-                x0 = xyScan0[i][0];
-                y0 = xyScan0[i][1];
+                x0 = scan0.xyScan[i][0];
+                y0 = scan0.xyScan[i][1];
             //    Console.WriteLine("across0 " + x0 + "," + y0);
-                if ((getSquaredDistance(x0+X0-r_scan, y0+Y0-r_scan, X_sp, Y_sp) <= r_scan2))
+                if ((getSquaredDistance(x0+X0, y0+Y0, X_sp, Y_sp) <= r_scan2))
                 {
                     across0.Add(new int[2] { x0, y0 });
                  //   Console.WriteLine("across0 added "+x0+","+y0);
                 }
             }
-            for (int i = 0; i < xyScan1.Count; i++)
+            for (int i = 0; i < scan1.xyScan.Count; i++)
             {
-                x1 = xyScan1[i][0];
-                y1 = xyScan1[i][1];
+                x1 = scan1.xyScan[i][0];
+                y1 = scan1.xyScan[i][1];
              //   Console.WriteLine("across1 " + x1 + "," + y1);
-                if ((getSquaredDistance(x1+X_sp-r_scan, y1+Y_sp-r_scan, X0, Y0) <= r_scan2))
+                if ((getSquaredDistance(x1+X_sp, y1+Y_sp, X0, Y0) <= r_scan2))
                 {
                     across1.Add(new int[2] { x1, y1 });
                  //   Console.WriteLine("across1 added " + x1 + "," + y1);
@@ -454,16 +420,21 @@ namespace MapCreation
             }
         }
 
+        /// <summary>
+        /// Рисует сшитые сканы на одном холсте.
+        /// </summary>
+        /// <param name="X1_rl"></param>
+        /// <param name="Y1_rl"></param>
         private void drawCrosslinkedScans(int X1_rl, int Y1_rl)
         {
-            PixelMap scan01 = new PixelMap(d_scan+r_scan, d_scan + r_scan,0,0,0);
-            for (int i = 0; i < xyScan0.Count; i++)
+            PixelMap scan01 = new PixelMap(d_scan1+r_scan, d_scan1 + r_scan,0,0,0);
+            for (int i = 0; i < scan0.xyScan.Count; i++)
             {
-            //    scan01[xyScan0[i][0]-X0+r_scan1 + r_scan / 2, xyScan0[i][1]-Y0+r_scan1+r_scan/2] = new Pixel(startColor);
+                scan01[scan0.xyScan[i][0] + (d_scan + r_scan) / 2, scan0.xyScan[i][1]+(d_scan + r_scan) / 2] = new Pixel(startColor);
             }
-            for (int i = 0; i < xyScan1.Count; i++)
+            for (int i = 0; i < scan1.xyScan.Count; i++)
             {
-            //    scan01[xyScan1[i][0] - X2 + X1_rl - X2 + r_scan1 + r_scan / 2, xyScan1[i][1] - Y2 + Y1_rl - Y2 + r_scan1 + r_scan / 2] = new Pixel(finishColor);
+                scan01[scan1.xyScan[i][0] + X1_rl - X0 + (d_scan + r_scan) / 2, scan1.xyScan[i][1] + Y1_rl - Y0 + (d_scan + r_scan) / 2] = new Pixel(finishColor);
             }
             drawBitmapOnPictureBox(pictureBox4,scan01.GetBitmap());
         }

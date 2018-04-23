@@ -87,13 +87,13 @@ namespace MapCreation
 				case PixelFormat.Format32bppRgb:
 					BPP = 4;
 					break;
-				case PixelFormat.Format24bppRgb:
-					BPP = 3;
-					break;
+			//	case PixelFormat.Format24bppRgb:
+			//		BPP = 3;
+			//		break;
 				default:
 					throw new FormatException("PixelFormat cannot be loaded. Try PixelMap.SlowLoad instead.");
 			}
-            Console.WriteLine("PielMap Bitmap encoding BPP: "+BPP);
+           // Console.WriteLine("PixelMap Bitmap encoding BPP: "+BPP);
 
 			int bytes = Math.Abs(data.Stride) * b.Height;
 
