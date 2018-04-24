@@ -200,7 +200,7 @@ namespace MapCreation
         {
             if ((positionCounter==0)&&(X2>=0))
             {
-                int[] real_coords = getRealCoords();
+                int[] real_coords = getRealCoords4();
                 Bitmap bmp = new Bitmap(pictureBox1.Image);
                 bmp.SetPixel(real_coords[0], real_coords[1], predictionColor);
                 pictureBox1.Image = bmp; //TODO
@@ -351,7 +351,7 @@ namespace MapCreation
         /// Думаем, что центр scan1 - это X2,Y2. Нужно вернуть X1,Y1.
         /// </summary>
         /// <returns></returns>
-        private int[] getRealCoords()
+        private int[] getRealCoords3()
         {
             List<int[]> across0 = new List<int[]>(); //точки из пересечения сканов
             List<int[]> across1 = new List<int[]>();
@@ -449,6 +449,124 @@ namespace MapCreation
                  //   Console.WriteLine("across1 added " + x1 + "," + y1);
                 }
             }
+        }
+
+
+        private int[] getRealCoords4()
+        {
+            double minsum = 100000000;
+            int limXY = 10;
+            double summ;
+            double min;
+            int optX = 0, optY = 0;
+            int C = (d_scan + r_scan) / 2;
+            for (int x = -limXY; x < limXY + 1; x++)
+            {
+                for (int y = -limXY; y < limXY + 1; y++)
+                {
+                    PixelMap map01 = new PixelMap(d_scan1 + r_scan, d_scan1 + r_scan, 0, 0, 0);
+                    List<int[]> irrelevantPoints0 = new List<int[]>();
+                    List<int[]> irrelevantPoints1 = new List<int[]>();
+                    int X = X2 - X0 + x;
+                    int Y = Y2 - Y0 + y;
+                    for (int i = 0; i < scan0.xyScan.Count; i++)
+                    {
+                        map01[scan0.xyScan[i][0] + C, scan0.xyScan[i][1] + C] = new Pixel(wallColor);
+                    }
+                    for (int i = 0; i < scan1.xyScan.Count; i++)
+                    {
+                        map01[scan1.xyScan[i][0] + X + C, scan1.xyScan[i][1] + Y + C] = new Pixel(wallColor);
+                    }
+                    int y1 = new int();
+                    int x1 = new int();
+                    bool flagR; //Будет true, если на текущем угле сканирования видно препятствие, иначе false и радиус от текущего угла будет равен нулю
+                    bool flagRepeated; //Будет true, если точка уже сохранена в списке скана
+                    int rPhi = -1;
+
+                    for (int i = 0; i < n_phi; i++)
+                    {
+                        //---------------------------------------scan1
+                        flagR = false;
+                        for (ushort r = 1; r < r_scan + 1; r++)
+                        {
+                            x1 = (int)Math.Round(r * Math.Cos(i * step));
+                            y1 = (int)Math.Round(r * Math.Sin(i * step));
+                            if (map01[x1 + X + C, y1 + Y + C].Color == wallColor)
+                            {
+                                rPhi = r;
+                                flagR = true;
+                                break;
+                            }
+                        }
+                        if (!flagR)
+                            rPhi = 0;
+                        if (rPhi == -1) Console.WriteLine("Scanning problems r == -1 on scan1, angle: " + i * step / Math.PI * 180);
+                        if (scan1.rByPhi[i] != rPhi)
+                        {
+                            flagRepeated = false;
+                            for (int j = 0; j < irrelevantPoints1.Count; j++)
+                                if ((irrelevantPoints1[j][0] == x1) && (irrelevantPoints1[j][1] == y1))
+                                    flagRepeated = true;
+                            if (!flagRepeated)
+                                irrelevantPoints1.Add(new int[2] { x1, y1 });
+                        }
+                        //---------------------------------------scan0
+                        flagR = false;
+                        for (ushort r = 1; r < r_scan + 1; r++)
+                        {
+                            x1 = (int)Math.Round(r * Math.Cos(i * step));
+                            y1 = (int)Math.Round(r * Math.Sin(i * step));
+                            if (map01[x1 + C, y1 + C].Color == wallColor)
+                            {
+                                rPhi = r;
+                                flagR = true;
+                                break;
+                            }
+                        }
+                        if (!flagR)
+                            rPhi = 0;
+                        if (rPhi == -1) Console.WriteLine("Scanning problems r == -1 on scan0, angle: " + i * step / Math.PI * 180);
+                        if (scan0.rByPhi[i] != rPhi)
+                        {
+                            flagRepeated = false;
+                            for (int j = 0; j < irrelevantPoints0.Count; j++)
+                                if ((irrelevantPoints0[j][0] == x1) && (irrelevantPoints0[j][1] == y1))
+                                    flagRepeated = true;
+                            if (!flagRepeated)
+                                irrelevantPoints0.Add(new int[2] { x1, y1 });
+                        }
+                    }
+
+                    summ = 0;
+                    for (int i = 0; i < irrelevantPoints1.Count; i++)
+                    {
+                        min = 1000000;
+                        for (int j = 0; j < scan1.xyScan.Count; j++)
+                        {
+                            if (min > getSquaredDistance(irrelevantPoints1[i][0], irrelevantPoints1[i][1], scan1.xyScan[j][0], scan1.xyScan[j][1]))
+                                min = getSquaredDistance(irrelevantPoints1[i][0], irrelevantPoints1[i][1], scan1.xyScan[j][0], scan1.xyScan[j][1]);
+                        }
+                        summ += min;
+                    }
+                    for (int i = 0; i < irrelevantPoints0.Count; i++)
+                    {
+                        min = 1000000;
+                        for (int j = 0; j < scan0.xyScan.Count; j++)
+                        {
+                            if (min > getSquaredDistance(irrelevantPoints0[i][0], irrelevantPoints0[i][1], scan0.xyScan[j][0], scan0.xyScan[j][1]))
+                                min = getSquaredDistance(irrelevantPoints0[i][0], irrelevantPoints0[i][1], scan0.xyScan[j][0], scan0.xyScan[j][1]);
+                        }
+                        summ += min;
+                    }
+                    if (minsum > summ)
+                    {
+                        minsum = summ;
+                        optX = x;
+                        optY = y;
+                    }
+                }
+            }
+            return new int[2] { X2 + optX, Y2 + optY };
         }
 
         /// <summary>
