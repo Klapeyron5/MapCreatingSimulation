@@ -13,7 +13,7 @@ namespace MapCreation
         {
             InitializeComponent();
             
-            preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap1.png");
+            preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap14.png");
             //     preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap2_1px140_100.png");
             //   preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap3.png");
             //     pictureBox1.Image = new Bitmap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap3.png");
@@ -35,7 +35,7 @@ namespace MapCreation
         //Все расстояния - это от центра пикселя до центра пикселя
         //Т.е. между ближайшими краями двух пикселей лежит (расстояние между этими пикселями-1) пикселей
         public const ushort n_phi = 250;
-        public const ushort r_robot = 6;//6px = 25cm
+        public const ushort r_robot = 0;//6px = 25cm
         public const ushort r_scan = 70;//70; //25cm*12=3m; 6px*12=72px ~ 70+1
         public const ushort l_max = 35; //1.5m
         public const ushort sgm_lmax = 3;//1; //3px = 12cm
@@ -121,7 +121,11 @@ namespace MapCreation
                             getScanFromPreciseMap(X, Y, scan1, finishColor);
                             drawBitmapOnPictureBox(pictureBox3, scan1.getBitmap());
                             positionCounter++;
-                            drawPieZone(graphics);
+                            double sgm_lrl = l_rl * sgm_lmax / l_max;
+                            l_rlPlus3sgm = l_rl + 3 * sgm_lrl;
+                            l_rlMinus3sgm = l_rl - 3 * sgm_lrl;
+                            drawPieZone(preciseMapBmp, X0, Y0, X1, Y1);
+                            //drawPieZone(graphics);
                         }
                         break;
                     case 2:
@@ -152,9 +156,15 @@ namespace MapCreation
                             X2 = X;
                             Y2 = Y;
                             positionCounter = 0;
+                            Console.WriteLine("TRUE");
                         }
                         else
-                            drawPieZone(graphics);
+                        {
+                            Console.WriteLine("FALSE");
+                            drawPieZone(preciseMapBmp, X0, Y0, X1, Y1);
+                            //drawPieZone(graphics);
+                        }
+                //        isPointInPieZone(X0,Y0,X,Y);
                         break;
                 }
                 //отрисовать все три центра
@@ -347,6 +357,15 @@ namespace MapCreation
             }
         }
 
+        private void drawPieZone(Bitmap bmp, int X1, int Y1, int X2, int Y2)
+        {
+            List<int[]> pieZone = pieErrorZoneSearch(X1, Y1, X2, Y2);
+            for (int i = 0; i < pieZone.Count; i++)
+            {
+                bmp.SetPixel(pieZone[i][0], pieZone[i][1], routeColor);
+            }
+        }
+
         /// <summary>
         /// Думаем, что центр scan1 - это X2,Y2. Нужно вернуть X1,Y1.
         /// </summary>
@@ -455,7 +474,7 @@ namespace MapCreation
         private int[] getRealCoords4()
         {
             double minsum = 100000000;
-            int limXY = 10;
+            int limXY = 20;
             double summ;
             double min;
             int optX = 0, optY = 0;
@@ -632,37 +651,93 @@ namespace MapCreation
             double lminus3sgm = l - 3 * getSgm_l(l);
             double lplus3sgm = l + 3*getSgm_l(l);
             double psi_rad = getAngleRadian(X1,Y1,X2,Y2);
-            int discreteness = (int)(2 * Math.PI * lplus3sgm)+1; //значение дискретности, гарантирующее учет каждого пикселя в секторе на всех радиусах pieErrorZone
+            int discreteness = 2*((int)(2 * Math.PI * lplus3sgm)+1); //значение дискретности, гарантирующее учет каждого пикселя в секторе на всех радиусах pieErrorZone
             double sectorStep = 2*Math.PI/discreteness; //in radians
             double startAngle = psi_rad - 3 * sgm_psi_rad;
             double finishAngle = psi_rad + 3 * sgm_psi_rad;
             //6 *sgm_psi_rad / (2*Math.PI) * discreteness
-
+/*
             int y = new int();
             int x = new int();
             bool flagRepeated; //Будет true, если точка уже сохранена в списке скана
 
+          //  Console.WriteLine("l " + l);
+          //  Console.WriteLine("l+3sgm " + lplus3sgm);
+          //  Console.WriteLine("l-3sgm " + lminus3sgm);
+
             for (double i = startAngle; i <= finishAngle; i += sectorStep)
             {
-                for (int r = (int)Math.Ceiling(lminus3sgm); r <= (int)lplus3sgm; r++)
+                for (double r = lminus3sgm; r <= lplus3sgm; r++)
                 {
-                   /* x = (int)Math.Round(r * Math.Cos(i));
+                 //   Console.WriteLine("pie "+r);
+
+                    x = (int)Math.Round(r * Math.Cos(i));
                     y = (int)Math.Round(r * Math.Sin(i));
-                    scan.rByPhi[i] = r;
+                    
                     flagRepeated = false;
                     for (int j = 0; j < pieErrorZone.Count; j++)
-                        if ((pieErrorZone[j][0] == x + r_scan) && (pieErrorZone[j][1] == y + r_scan))
+                        if ((pieErrorZone[j][0] == x + X1) && (pieErrorZone[j][1] == y + Y1))
                             flagRepeated = true;
                     if (!flagRepeated)
                     {
-                        scan.xyScan.Add(new int[2] { x, y });
+                        pieErrorZone.Add(new int[2] { x + X1, y + Y1 });
                         //           Console.WriteLine("getScanFromPreciseMap, added: " + (x+X) + "," + (y+Y));
                     }
-                    scan.scanBmp[x + r_scan, y + r_scan] = new Pixel(scanColor);
-                    break;*/
+                }
+             //   Console.WriteLine("");
+            }*/
+
+            int searchingSquareHalfSide = (int)Math.Ceiling(Math.Pow(Math.Pow(lplus3sgm*3*sgm_psi_rad,2)+ Math.Pow(3*getSgm_l(l), 2), 0.5));
+            Console.WriteLine("searchingSquareHalfSide " + searchingSquareHalfSide);
+
+            for (int x = -searchingSquareHalfSide; x <= searchingSquareHalfSide; x++)
+            {
+                for (int y = -searchingSquareHalfSide; y <= searchingSquareHalfSide; y++)
+                {
+                    if (isPointInPieZone(X0, Y0, X2 + x, Y2 + y))
+                    {
+                        pieErrorZone.Add(new int[2] { X2 + x, Y2 + y });
+                      //  Console.WriteLine("isPointInPieZone "+true);
+                    }
                 }
             }
+
             return pieErrorZone;
+        }
+
+        private bool isPointInPieZone(int X1, int Y1, int X2, int Y2)
+        {
+            l_sp2 = getSquaredDistance(X1, Y1, X2, Y2);
+            l_sp = Math.Pow(l_sp2, 0.5);
+            psi_sp_rad = getAngleRadian(X1, Y1, X2, Y2);
+            bool angleFlag = false; //входит ли по угловой зоне
+            if ((psi_rl_rad > Math.PI / 2) && (psi_sp_rad < -Math.PI / 2))
+            {
+                if ((psi_sp_rad + 2 * Math.PI >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad + 2 * Math.PI <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
+                else angleFlag = false;
+            }
+            else
+            {
+                if ((psi_rl_rad < -Math.PI / 2) && (psi_sp_rad > Math.PI / 2))
+                {
+                    if ((psi_sp_rad - 2 * Math.PI >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad - 2 * Math.PI <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
+                    else angleFlag = false;
+                }
+                else
+                {
+                    if ((psi_sp_rad >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
+                }
+            }
+            if (((l_sp >= l_rlMinus3sgm) && (l_sp <= l_rlPlus3sgm)) && angleFlag)
+            {
+            //    Console.WriteLine("isPointInPieZone true "+X1+","+Y1+";"+X2+","+Y2);
+                return true;
+            }
+            else
+            {
+            //    Console.WriteLine("isPointInPieZone fals " + X1 + "," + Y1 + ";" + X2 + "," + Y2);
+                return false;
+            }
         }
     }
 }
