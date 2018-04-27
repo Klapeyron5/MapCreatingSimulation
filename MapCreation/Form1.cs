@@ -13,10 +13,7 @@ namespace MapCreation
         {
             InitializeComponent();
             
-            preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap14.png");
-            //     preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap2_1px140_100.png");
-            //   preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap3.png");
-            //     pictureBox1.Image = new Bitmap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap3.png");
+            preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap1.png");
             mouseMoveMap = new PixelMap(preciseMap);
             preciseIndoorMap = getIndoorMap(preciseMap);
             drawBitmapOnPictureBox(pictureBox1, preciseMap.GetBitmap());
@@ -35,7 +32,7 @@ namespace MapCreation
         //Все расстояния - это от центра пикселя до центра пикселя
         //Т.е. между ближайшими краями двух пикселей лежит (расстояние между этими пикселями-1) пикселей
         public const ushort n_phi = 250;
-        public const ushort r_robot = 0;//6px = 25cm
+        public const ushort r_robot = 6;//6px = 25cm
         public const ushort r_scan = 70;//70; //25cm*12=3m; 6px*12=72px ~ 70+1
         public const ushort l_max = 35; //1.5m
         public const ushort sgm_lmax = 3;//1; //3px = 12cm
@@ -43,7 +40,8 @@ namespace MapCreation
         public const double sgm_psi_rad = sgm_psi_deg*Math.PI/180;
     //    private const ushort sgm_r = 0; //D = f*h/px
 
-        private double step = 2 * Math.PI / n_phi;
+        private double step = 2 * Math.PI / n_phi; //для скана
+
         private int X0 = -1, Y0 = -1; //0 scan center
         private int X1 = -1, Y1 = -1; //real 1 scan center
         private int X2 = -1, Y2 = -1; //supposed 1 scan center
@@ -80,10 +78,10 @@ namespace MapCreation
 
         /// <summary>
         /// Обработчик кликов на pictureBox1 (где отрисована preciseMap).
+        /// Клик обрабатывается только в случае попадания его в indoor-среду.
         /// Первый клик устанавливает центр нулевого скана
         /// Второй клик устанавливает центр первого скана: расстояние от центра scan1 до центра scan0 должно быть меньше l_max
         /// Третий клик устанавливает supposed центр скана 1: может быть установлен только в зоне погрешности скана 1
-        /// Все эти центры могут находиться только в indoor-среде.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -125,7 +123,6 @@ namespace MapCreation
                             l_rlPlus3sgm = l_rl + 3 * sgm_lrl;
                             l_rlMinus3sgm = l_rl - 3 * sgm_lrl;
                             drawPieZone(preciseMapBmp, X0, Y0, X1, Y1);
-                            //drawPieZone(graphics);
                         }
                         break;
                     case 2:
@@ -156,15 +153,9 @@ namespace MapCreation
                             X2 = X;
                             Y2 = Y;
                             positionCounter = 0;
-                            Console.WriteLine("TRUE");
                         }
                         else
-                        {
-                            Console.WriteLine("FALSE");
                             drawPieZone(preciseMapBmp, X0, Y0, X1, Y1);
-                            //drawPieZone(graphics);
-                        }
-                //        isPointInPieZone(X0,Y0,X,Y);
                         break;
                 }
                 //отрисовать все три центра
@@ -227,7 +218,6 @@ namespace MapCreation
         /// <returns></returns>
         private void getScanFromPreciseMap(int X, int Y, Scan scan, Color scanColor)
         {
-        //    Console.WriteLine("getScanFromPreciseMap, center: "+X+","+Y);
             int y = new int();
             int x = new int();
             bool flagR; //Будет true, если на текущем угле сканирования видно препятствие, иначе false и радиус от текущего угла будет равен нулю
@@ -248,10 +238,7 @@ namespace MapCreation
                             if ((scan.xyScan[j][0] == x) && (scan.xyScan[j][1] == y))
                                 flagRepeated = true;
                         if (!flagRepeated)
-                        {
                             scan.xyScan.Add(new int[2] { x, y });
-                //            Console.WriteLine("getScanFromPreciseMap, added: " + (x+X) + "," + (y+Y));
-                        }
                         scan.scanBmp[x + r_scan, y + r_scan] = new Pixel(scanColor);
                         flagR = true;
                         break;
@@ -259,7 +246,6 @@ namespace MapCreation
                 }
                 if (!flagR)
                     scan.rByPhi[i] = 0;
-               //     Console.WriteLine("0 r: "+"("+x+","+y+") "+ (int)Math.Round(i * step/Math.PI*180));
             }
         }
 
@@ -442,7 +428,6 @@ namespace MapCreation
         /// <param name="Y_sp">Предполагаемый центр scan1</param>
         private void computeAcrossingPoints(ref List<int[]> across0, ref List<int[]> across1, int X_sp, int Y_sp)
         {
-        //    Console.WriteLine("computeAcrossingPoints");
             across0.Clear();
             across1.Clear();
             int x0, y0, x1, y1;
@@ -450,23 +435,15 @@ namespace MapCreation
             {
                 x0 = scan0.xyScan[i][0];
                 y0 = scan0.xyScan[i][1];
-            //    Console.WriteLine("across0 " + x0 + "," + y0);
                 if ((getSquaredDistance(x0+X0, y0+Y0, X_sp, Y_sp) <= r_scan2))
-                {
                     across0.Add(new int[2] { x0, y0 });
-                 //   Console.WriteLine("across0 added "+x0+","+y0);
-                }
             }
             for (int i = 0; i < scan1.xyScan.Count; i++)
             {
                 x1 = scan1.xyScan[i][0];
                 y1 = scan1.xyScan[i][1];
-             //   Console.WriteLine("across1 " + x1 + "," + y1);
                 if ((getSquaredDistance(x1+X_sp, y1+Y_sp, X0, Y0) <= r_scan2))
-                {
                     across1.Add(new int[2] { x1, y1 });
-                 //   Console.WriteLine("across1 added " + x1 + "," + y1);
-                }
             }
         }
 
@@ -650,57 +627,14 @@ namespace MapCreation
             double l = Math.Pow(l2,0.5);
             double lminus3sgm = l - 3 * getSgm_l(l);
             double lplus3sgm = l + 3*getSgm_l(l);
-            double psi_rad = getAngleRadian(X1,Y1,X2,Y2);
-            int discreteness = 2*((int)(2 * Math.PI * lplus3sgm)+1); //значение дискретности, гарантирующее учет каждого пикселя в секторе на всех радиусах pieErrorZone
-            double sectorStep = 2*Math.PI/discreteness; //in radians
-            double startAngle = psi_rad - 3 * sgm_psi_rad;
-            double finishAngle = psi_rad + 3 * sgm_psi_rad;
-            //6 *sgm_psi_rad / (2*Math.PI) * discreteness
-/*
-            int y = new int();
-            int x = new int();
-            bool flagRepeated; //Будет true, если точка уже сохранена в списке скана
-
-          //  Console.WriteLine("l " + l);
-          //  Console.WriteLine("l+3sgm " + lplus3sgm);
-          //  Console.WriteLine("l-3sgm " + lminus3sgm);
-
-            for (double i = startAngle; i <= finishAngle; i += sectorStep)
-            {
-                for (double r = lminus3sgm; r <= lplus3sgm; r++)
-                {
-                 //   Console.WriteLine("pie "+r);
-
-                    x = (int)Math.Round(r * Math.Cos(i));
-                    y = (int)Math.Round(r * Math.Sin(i));
-                    
-                    flagRepeated = false;
-                    for (int j = 0; j < pieErrorZone.Count; j++)
-                        if ((pieErrorZone[j][0] == x + X1) && (pieErrorZone[j][1] == y + Y1))
-                            flagRepeated = true;
-                    if (!flagRepeated)
-                    {
-                        pieErrorZone.Add(new int[2] { x + X1, y + Y1 });
-                        //           Console.WriteLine("getScanFromPreciseMap, added: " + (x+X) + "," + (y+Y));
-                    }
-                }
-             //   Console.WriteLine("");
-            }*/
 
             int searchingSquareHalfSide = (int)Math.Ceiling(Math.Pow(Math.Pow(lplus3sgm*3*sgm_psi_rad,2)+ Math.Pow(3*getSgm_l(l), 2), 0.5));
             Console.WriteLine("searchingSquareHalfSide " + searchingSquareHalfSide);
 
             for (int x = -searchingSquareHalfSide; x <= searchingSquareHalfSide; x++)
-            {
                 for (int y = -searchingSquareHalfSide; y <= searchingSquareHalfSide; y++)
-                {
                     if (isPointInPieZone(X0, Y0, X2 + x, Y2 + y))
-                    {
                         pieErrorZone.Add(new int[2] { X2 + x, Y2 + y });
-                      //  Console.WriteLine("isPointInPieZone "+true);
-                    }
-                }
-            }
 
             return pieErrorZone;
         }
@@ -729,15 +663,9 @@ namespace MapCreation
                 }
             }
             if (((l_sp >= l_rlMinus3sgm) && (l_sp <= l_rlPlus3sgm)) && angleFlag)
-            {
-            //    Console.WriteLine("isPointInPieZone true "+X1+","+Y1+";"+X2+","+Y2);
                 return true;
-            }
             else
-            {
-            //    Console.WriteLine("isPointInPieZone fals " + X1 + "," + Y1 + ";" + X2 + "," + Y2);
                 return false;
-            }
         }
     }
 }
