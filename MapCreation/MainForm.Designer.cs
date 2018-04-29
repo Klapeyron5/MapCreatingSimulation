@@ -33,13 +33,13 @@ namespace MapCreation
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -57,6 +57,15 @@ namespace MapCreation
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(711, 759);
             this.panel1.TabIndex = 1;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(84, 8);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 15;
+            this.label1.Text = "label1";
             // 
             // pictureBox1
             // 
@@ -114,19 +123,10 @@ namespace MapCreation
             // 
             // panel2
             // 
-            this.panel2.Location = new System.Drawing.Point(799, 15);
+            this.panel2.Location = new System.Drawing.Point(729, 12);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(529, 849);
+            this.panel2.Size = new System.Drawing.Size(713, 849);
             this.panel2.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(84, 8);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 15;
-            this.label1.Text = "label1";
             // 
             // MainForm
             // 

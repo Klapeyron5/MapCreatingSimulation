@@ -50,6 +50,9 @@ namespace MapCreation
 
         private Mode1ManualCrosslinking mode1ManualCrosslinking;
 
+
+
+        
         /*     private PixelMap preciseMap; //точная карта
 
              private PixelMap preciseIndoorMap; //точная карта indoor-среды: с отступами от препятствий точной карты
@@ -198,78 +201,6 @@ namespace MapCreation
                      bmp.SetPixel(real_coords[0], real_coords[1], predictionColor);
                      pictureBox1.Image = bmp; //TODO
                      drawCrosslinkedScans(real_coords[0], real_coords[1]);
-                 }
-             }
-
-             /// <summary>
-             /// Возвращает скан с точной карты в заданных координатах. Также рисует этот скан в заданном PixelMap.
-             /// </summary>
-             /// <param name="X">X координата центра скана на точной карте</param>
-             /// <param name="Y">Y координата центра скана на точной карте</param>
-             /// <param name="scanBmp">Холст для отрисовки сделанного скана</param>
-             /// <returns></returns>
-             private void getScanFromPreciseMap(int X, int Y, Scan scan, Color scanColor)
-             {
-                 int y = new int();
-                 int x = new int();
-                 bool flagR; //Будет true, если на текущем угле сканирования видно препятствие, иначе false и радиус от текущего угла будет равен нулю
-                 bool flagRepeated; //Будет true, если точка уже сохранена в списке скана
-
-                 for (int i = 0; i < n_phi; i++)
-                 {
-                     flagR = false;
-                     for (ushort r = 1; r < r_scan+1; r++)
-                     {
-                         x = (int)Math.Round(r * Math.Cos(i * step));
-                         y = (int)Math.Round(r * Math.Sin(i * step));
-                         if (preciseMap[x+X, y+Y].Color == wallColor)
-                         {
-                             scan.rByPhi[i] = r;
-                             flagRepeated = false;
-                             for (int j = 0; j < scan.xyScan.Count; j++)
-                                 if ((scan.xyScan[j][0] == x) && (scan.xyScan[j][1] == y))
-                                     flagRepeated = true;
-                             if (!flagRepeated)
-                                 scan.xyScan.Add(new int[2] { x, y });
-                             scan.scanBmp[x + r_scan, y + r_scan] = new Pixel(scanColor);
-                             flagR = true;
-                             break;
-                         }
-                     }
-                     if (!flagR)
-                         scan.rByPhi[i] = 0;
-                 }
-             }
-
-             /// <summary>
-             /// Рисует зону, в которой может быть supposed положение робота относительно real положения в центре scan1.
-             /// Зона рисуется примерная, к сожалению.
-             /// </summary>
-             /// <param name="graphics"></param>
-             private void drawPieZone (Graphics graphics)
-             {
-                 if (l_rl > 0)
-                 {
-                     //отрисовать зону погрешности, в которую попадает supposed центр
-                     double sgm_lrl = l_rl * sgm_lmax / l_max; //вычисляем погрешность передвижения, считая зависимость погрешности от пройденного расстояния линейной
-                     l_rlPlus3sgm = l_rl + 3 * sgm_lrl;
-                     l_rlMinus3sgm = l_rl - 3 * sgm_lrl;
-                     int lplus3sgmInt = (int)Math.Round(l_rlPlus3sgm);
-                     int lminus3sgmInt = (int)Math.Round(l_rlMinus3sgm);
-                     SolidBrush brush = new SolidBrush(routeColor);
-                     Pen pen = new Pen(routeColor);
-                     graphics.FillPie(brush, X0 - lplus3sgmInt, Y0 - lplus3sgmInt, 2 * lplus3sgmInt, 2 * lplus3sgmInt, (float)psi_rl_deg - 3 * sgm_psi_deg, 6 * sgm_psi_deg);
-                     brush = new SolidBrush(indoorColor);
-                     graphics.FillPie(brush, X0 - lminus3sgmInt, Y0 - lminus3sgmInt, 2 * lminus3sgmInt, 2 * lminus3sgmInt, (float)psi_rl_deg - 3 * sgm_psi_deg, 6 * sgm_psi_deg);
-                 }
-             }
-
-             private void drawPieZone(Bitmap bmp, int X1, int Y1, int X2, int Y2)
-             {
-                 List<int[]> pieZone = pieErrorZoneSearch(X1, Y1, X2, Y2);
-                 for (int i = 0; i < pieZone.Count; i++)
-                 {
-                     bmp.SetPixel(pieZone[i][0], pieZone[i][1], routeColor);
                  }
              }
 
@@ -505,52 +436,6 @@ namespace MapCreation
                  drawBitmapOnPictureBox(pictureBox4,scan01.GetBitmap());
              }
 
-             private List<int[]> pieErrorZoneSearch(int X1, int Y1, int X2, int Y2)
-             {
-                 List<int[]> pieErrorZone = new List<int[]>();
-                 double l2 = getSquaredDistance(X1,Y1,X2,Y2);
-                 double l = Math.Pow(l2,0.5);
-                 double lminus3sgm = l - 3 * getSgm_l(l);
-                 double lplus3sgm = l + 3*getSgm_l(l);
-
-                 int searchingSquareHalfSide = (int)Math.Ceiling(Math.Pow(Math.Pow(lplus3sgm*3*sgm_psi_rad,2)+ Math.Pow(3*getSgm_l(l), 2), 0.5));
-                 Console.WriteLine("searchingSquareHalfSide " + searchingSquareHalfSide);
-
-                 for (int x = -searchingSquareHalfSide; x <= searchingSquareHalfSide; x++)
-                     for (int y = -searchingSquareHalfSide; y <= searchingSquareHalfSide; y++)
-                         if (isPointInPieZone(X0, Y0, X2 + x, Y2 + y))
-                             pieErrorZone.Add(new int[2] { X2 + x, Y2 + y });
-
-                 return pieErrorZone;
-             }
-
-             private bool isPointInPieZone(int X1, int Y1, int X2, int Y2)
-             {
-                 l_sp2 = getSquaredDistance(X1, Y1, X2, Y2);
-                 l_sp = Math.Pow(l_sp2, 0.5);
-                 psi_sp_rad = getAngleRadian(X1, Y1, X2, Y2);
-                 bool angleFlag = false; //входит ли по угловой зоне
-                 if ((psi_rl_rad > Math.PI / 2) && (psi_sp_rad < -Math.PI / 2))
-                 {
-                     if ((psi_sp_rad + 2 * Math.PI >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad + 2 * Math.PI <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
-                     else angleFlag = false;
-                 }
-                 else
-                 {
-                     if ((psi_rl_rad < -Math.PI / 2) && (psi_sp_rad > Math.PI / 2))
-                     {
-                         if ((psi_sp_rad - 2 * Math.PI >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad - 2 * Math.PI <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
-                         else angleFlag = false;
-                     }
-                     else
-                     {
-                         if ((psi_sp_rad >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
-                     }
-                 }
-                 if (((l_sp >= l_rlMinus3sgm) && (l_sp <= l_rlPlus3sgm)) && angleFlag)
-                     return true;
-                 else
-                     return false;
-             }*/
+             */
     }
 }

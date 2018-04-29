@@ -48,9 +48,19 @@ namespace MapCreation
         /// <param name="x2"></param>
         /// <param name="y2"></param>
         /// <returns></returns>
-        private static int getSquaredDistance(int x1, int y1, int x2, int y2)
+        public static int getSquaredDistance(int x1, int y1, int x2, int y2)
         {
             return ((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+        }
+        
+        public static int getSquaredDistance(int[] xy1, int x2, int y2)
+        {
+            return ((xy1[0] - x2) * (xy1[0] - x2) + (xy1[1] - y2) * (xy1[1] - y2));
+        }
+
+        public static int getSquaredDistance(int[] xy1, int[] xy2)
+        {
+            return ((xy1[0] - xy2[0]) * (xy1[0] - xy2[0]) + (xy1[1] - xy2[1]) * (xy1[1] - xy2[1]));
         }
 
         /// <summary>
@@ -66,9 +76,19 @@ namespace MapCreation
         /// <param name="x2"></param>
         /// <param name="y2"></param>
         /// <returns></returns>
-        private static double getAngleRadian(int x1, int y1, int x2, int y2)
+        public static double getAngleRadian(int x1, int y1, int x2, int y2)
         {
             return Math.Atan2(y2 - y1, x2 - x1);
+        }
+
+        public static double getAngleRadian(int[] xy1, int x2, int y2)
+        {
+            return Math.Atan2(y2 - xy1[1], x2 - xy1[0]);
+        }
+
+        public static double getAngleRadian(int[] xy1, int[] xy2)
+        {
+            return Math.Atan2(xy2[1] - xy1[1], xy2[0] - xy1[0]);
         }
 
         /// <summary>
@@ -76,7 +96,7 @@ namespace MapCreation
         /// </summary>
         /// <param name="l">Пройденное расстояние.</param>
         /// <returns></returns>
-        private static double getSgm_l(double l)
+        public static double getSgm_l(double l)
         {
             return l * sgm_lmax / l_max;
         }

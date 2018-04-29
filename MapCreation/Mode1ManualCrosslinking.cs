@@ -43,7 +43,7 @@ namespace MapCreation
             // pictureBox2
             // 
             this.pictureBox2.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.pictureBox2.Location = new System.Drawing.Point(0, 29);
+            this.pictureBox2.Location = new System.Drawing.Point(0, 32);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(141, 141);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -53,7 +53,7 @@ namespace MapCreation
             // pictureBox3
             // 
             this.pictureBox3.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.pictureBox3.Location = new System.Drawing.Point(718, 189);
+            this.pictureBox3.Location = new System.Drawing.Point(0, 192);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(141, 141);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -63,7 +63,7 @@ namespace MapCreation
             // pictureBox4
             // 
             this.pictureBox4.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.pictureBox4.Location = new System.Drawing.Point(865, 29);
+            this.pictureBox4.Location = new System.Drawing.Point(141+5, 32);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(211, 211);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -74,7 +74,7 @@ namespace MapCreation
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label2.Location = new System.Drawing.Point(818, 9);
+            this.label2.Location = new System.Drawing.Point(0, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(41, 13);
             this.label2.TabIndex = 15;
@@ -84,7 +84,7 @@ namespace MapCreation
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label3.Location = new System.Drawing.Point(818, 173);
+            this.label3.Location = new System.Drawing.Point(0, 173+3);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(41, 13);
             this.label3.TabIndex = 16;
@@ -94,7 +94,7 @@ namespace MapCreation
             // 
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label4.Location = new System.Drawing.Point(1015, 9);
+            this.label4.Location = new System.Drawing.Point(141 + 5, 9);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(61, 13);
             this.label4.TabIndex = 17;
@@ -102,7 +102,7 @@ namespace MapCreation
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(784, 336);
+            this.button1.Location = new System.Drawing.Point(141 + 5 - button1.Size.Width, 336);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 18;
@@ -167,88 +167,101 @@ namespace MapCreation
                 switch (positionCounter)
                 {
                     case 0:
-                        crosslinker.setCenter0(X,Y);
-                        crosslinker.scan0 = mainForm.environment.getScan(X, Y, Parameters.startColor);
-                        MainForm.drawBitmapOnPictureBox(pictureBox2, crosslinker.scan0.getBitmap());
-                        positionCounter++;
-                        break;
-                   /* case 1:
-                        l_rl2 = getSquaredDistance(X0, Y0, X, Y);
-                        l_rl = Math.Pow(l_rl2, 0.5);
-                        l_rl_rounded = (int)Math.Round(l_rl);
-                        psi_rl_rad = getAngleRadian(X0, Y0, X, Y);
-                        psi_rl_deg = psi_rl_rad * 180 / Math.PI;
-                        if (l_rl2 <= l_max2)
                         {
-                            X1 = X;
-                            Y1 = Y;
-                            scan1 = new Scan();
-                            getScanFromPreciseMap(X, Y, scan1, finishColor);
-                            drawBitmapOnPictureBox(pictureBox3, scan1.getBitmap());
+                            crosslinker.setCenter0(X, Y);
+                            crosslinker.scan0 = mainForm.environment.getScan(X, Y, Parameters.startColor);
+                            MainForm.drawBitmapOnPictureBox(pictureBox2, crosslinker.scan0.getBitmap());
                             positionCounter++;
-                            double sgm_lrl = l_rl * sgm_lmax / l_max;
-                            l_rlPlus3sgm = l_rl + 3 * sgm_lrl;
-                            l_rlMinus3sgm = l_rl - 3 * sgm_lrl;
-                            drawPieZone(preciseMapBmp, X0, Y0, X1, Y1);
+                        }
+                        break;
+                    case 1:
+                        {
+                            double l_rl2 = Parameters.getSquaredDistance(crosslinker.getXY0(), X, Y);
+                            double l_rl = Math.Pow(l_rl2, 0.5);
+                            int l_rl_rounded = (int)Math.Round(l_rl);
+                            double psi_rl_rad = Parameters.getAngleRadian(crosslinker.getXY0(), X, Y);
+                            //    psi_rl_deg = psi_rl_rad * 180 / Math.PI;
+                            if (l_rl2 <= Parameters.l_max2)
+                            {
+                                crosslinker.setCenter1(X, Y);
+                                crosslinker.scan1 = mainForm.environment.getScan(X, Y, Parameters.finishColor);
+                                MainForm.drawBitmapOnPictureBox(pictureBox3, crosslinker.scan1.getBitmap());
+                                positionCounter++;
+                                drawPieZone(preciseMapBmp, crosslinker.getXY0(), crosslinker.getXY1());
+                            }
                         }
                         break;
                     case 2:
-                        //пока простая проверка: ровный разброс по углу и по длине
-                        l_sp2 = getSquaredDistance(X0, Y0, X, Y);
-                        l_sp = Math.Pow(l_sp2, 0.5);
-                        psi_sp_rad = getAngleRadian(X0, Y0, X, Y);
-                        bool angleFlag = false; //входит ли по угловой зоне
-                        if ((psi_rl_rad > Math.PI / 2) && (psi_sp_rad < -Math.PI / 2))
                         {
-                            if ((psi_sp_rad + 2 * Math.PI >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad + 2 * Math.PI <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
-                            else angleFlag = false;
-                        }
-                        else
-                        {
-                            if ((psi_rl_rad < -Math.PI / 2) && (psi_sp_rad > Math.PI / 2))
+                            //пока простая проверка: ровный разброс по углу и по длине
+                            double l_sp2 = Parameters.getSquaredDistance(crosslinker.getXY0(), X, Y);
+                            double l_sp = Math.Pow(l_sp2, 0.5);
+                            double psi_rl_rad = Parameters.getAngleRadian(crosslinker.getXY0(), crosslinker.getXY1());
+                            double psi_sp_rad = Parameters.getAngleRadian(crosslinker.getXY0(), X, Y);
+                            bool angleFlag = false; //входит ли по угловой зоне
+
+                            double l_rl2 = Parameters.getSquaredDistance(crosslinker.getXY0(), crosslinker.getXY1());
+                            double l_rl = Math.Pow(l_rl2, 0.5);
+                            double sgm_lrl = Parameters.getSgm_l(l_rl);
+                            double l_rlPlus3sgm = l_rl + 3 * sgm_lrl;
+                            double l_rlMinus3sgm = l_rl - 3 * sgm_lrl;
+                            if ((psi_rl_rad > Math.PI / 2) && (psi_sp_rad < -Math.PI / 2))
                             {
-                                if ((psi_sp_rad - 2 * Math.PI >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad - 2 * Math.PI <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
+                                if ((psi_sp_rad + 2 * Math.PI >= psi_rl_rad - 3 * Parameters.sgm_psi_rad) && (psi_sp_rad + 2 * Math.PI <= psi_rl_rad + 3 * Parameters.sgm_psi_rad)) angleFlag = true;
                                 else angleFlag = false;
                             }
                             else
                             {
-                                if ((psi_sp_rad >= psi_rl_rad - 3 * sgm_psi_rad) && (psi_sp_rad <= psi_rl_rad + 3 * sgm_psi_rad)) angleFlag = true;
+                                if ((psi_rl_rad < -Math.PI / 2) && (psi_sp_rad > Math.PI / 2))
+                                {
+                                    if ((psi_sp_rad - 2 * Math.PI >= psi_rl_rad - 3 * Parameters.sgm_psi_rad) && (psi_sp_rad - 2 * Math.PI <= psi_rl_rad + 3 * Parameters.sgm_psi_rad)) angleFlag = true;
+                                    else angleFlag = false;
+                                }
+                                else
+                                {
+                                    if ((psi_sp_rad >= psi_rl_rad - 3 * Parameters.sgm_psi_rad) && (psi_sp_rad <= psi_rl_rad + 3 * Parameters.sgm_psi_rad)) angleFlag = true;
+                                }
                             }
+                            if (((l_sp >= l_rlMinus3sgm) && (l_sp <= l_rlPlus3sgm)) && angleFlag)
+                            {
+                                crosslinker.setCenter2(X, Y);
+                                positionCounter = 0;
+                            }
+                            else
+                                drawPieZone(preciseMapBmp, crosslinker.getXY0(), crosslinker.getXY1());
                         }
-                        if (((l_sp >= l_rlMinus3sgm) && (l_sp <= l_rlPlus3sgm)) && angleFlag)
-                        {
-                            X2 = X;
-                            Y2 = Y;
-                            positionCounter = 0;
-                        }
-                        else
-                            drawPieZone(preciseMapBmp, X0, Y0, X1, Y1);
-                        break;*/
+                        break;
                 }
                 //отрисовать все три центра
                 //отрисовать радиусы для scan0 и scan1
-               /* try
+                try
                 {
+                    int X0 = crosslinker.getXY0()[0];
+                    int Y0 = crosslinker.getXY0()[1];
+                    int X1 = crosslinker.getXY1()[0];
+                    int Y1 = crosslinker.getXY1()[1];
+                    int X2 = crosslinker.getXY2()[0];
+                    int Y2 = crosslinker.getXY2()[1];
                     if ((X0 >= 0) && (Y0 >= 0))
                     {
-                        preciseMapBmp.SetPixel(X0, Y0, startColor);
-                        pen = new Pen(startColor);
-                        graphics.DrawEllipse(pen, X0 - r_scan, Y0 - r_scan, d_scan, d_scan);
-                        graphics.DrawEllipse(pen, X0 - r_robot, Y0 - r_robot, d_robot, d_robot);
+                        preciseMapBmp.SetPixel(X0, Y0, Parameters.startColor);
+                        pen = new Pen(Parameters.startColor);
+                        graphics.DrawEllipse(pen, X0 - Parameters.r_scan, Y0 - Parameters.r_scan, Parameters.d_scan, Parameters.d_scan);
+                        graphics.DrawEllipse(pen, X0 - Parameters.r_robot, Y0 - Parameters.r_robot, Parameters.d_robot, Parameters.d_robot);
                     }
                     if ((X1 >= 0) && (Y1 >= 0))
                     {
-                        preciseMapBmp.SetPixel(X1, Y1, finishColor);
-                        pen = new Pen(finishColor);
-                        graphics.DrawEllipse(pen, X1 - r_scan, Y1 - r_scan, d_scan, d_scan);
-                        graphics.DrawEllipse(pen, X1 - r_robot, Y1 - r_robot, d_robot, d_robot);
+                        preciseMapBmp.SetPixel(X1, Y1, Parameters.finishColor);
+                        pen = new Pen(Parameters.finishColor);
+                        graphics.DrawEllipse(pen, X1 - Parameters.r_scan, Y1 - Parameters.r_scan, Parameters.d_scan, Parameters.d_scan);
+                        graphics.DrawEllipse(pen, X1 - Parameters.r_robot, Y1 - Parameters.r_robot, Parameters.d_robot, Parameters.d_robot);
                     }
                     if ((X2 >= 0) && (Y2 >= 0))
                     {
-                        preciseMapBmp.SetPixel(X2, Y2, routeColor);
+                        preciseMapBmp.SetPixel(X2, Y2, Parameters.routeColor);
                     }
                 }
-                catch (Exception ex) { }*/
+                catch (Exception ex) { }
                 mouseMoveMap = new PixelMap(preciseMapBmp);
                 mainForm.drawBitmapOnPictureBox1(preciseMapBmp);
             }
@@ -289,5 +302,32 @@ namespace MapCreation
         private byte positionCounter = 0;
 
         private Crosslinker crosslinker = new Crosslinker();
+
+        /// <summary>
+        /// Рисует зону, в которой может быть supposed положение робота относительно real положения в центре scan1.
+        /// Зона рисуется примерная, к сожалению.
+        /// </summary>
+        /// <param name="bmp"></param>
+        /// <param name="X1"></param>
+        /// <param name="Y1"></param>
+        /// <param name="X2"></param>
+        /// <param name="Y2"></param>
+        private void drawPieZone(Bitmap bmp, int X1, int Y1, int X2, int Y2)
+        {
+            List<int[]> pieZone = crosslinker.pieErrorZoneSearch(X1, Y1, X2, Y2);
+            for (int i = 0; i < pieZone.Count; i++)
+            {
+                bmp.SetPixel(pieZone[i][0], pieZone[i][1], Parameters.routeColor);
+            }
+        }
+
+        private void drawPieZone(Bitmap bmp, int[] xy1, int[] xy2)
+        {
+            List<int[]> pieZone = crosslinker.pieErrorZoneSearch(xy1[0], xy1[1], xy2[0], xy2[1]);
+            for (int i = 0; i < pieZone.Count; i++)
+            {
+                bmp.SetPixel(pieZone[i][0], pieZone[i][1], Parameters.routeColor);
+            }
+        }
     }
 }
