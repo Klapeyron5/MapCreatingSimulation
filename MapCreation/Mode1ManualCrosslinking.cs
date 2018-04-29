@@ -1,32 +1,25 @@
-﻿namespace MapCreation
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace MapCreation
 {
-    partial class Form1
+    class Mode1ManualCrosslinking:Mode
     {
         /// <summary>
-        /// Обязательная переменная конструктора.
+        /// Сразу загружает необходимый UI интерфейс для данного режима
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
-
-        /// <summary>
-        /// Освободить все используемые ресурсы.
-        /// </summary>
-        /// <param name="disposing">истинно, если управляемый ресурс должен быть удален; иначе ложно.</param>
-        protected override void Dispose(bool disposing)
+        /// <param name="mainForm"></param>
+        public Mode1ManualCrosslinking(MainForm mainForm):base(mainForm)
         {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
+            if (this.mainForm != null)
+                initialize();
         }
 
-        #region Код, автоматически созданный конструктором форм Windows
-
-        /// <summary>
-        /// Требуемый метод для поддержки конструктора — не изменяйте 
-        /// содержимое этого метода с помощью редактора кода.
-        /// </summary>
-        private void InitializeComponent()
+        public void initialize()
         {
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -41,7 +34,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
-            this.SuspendLayout();
+            mainForm.panel1.SuspendLayout();
             // 
             // pictureBox1
             // 
@@ -52,8 +45,8 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 10;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
-            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
+        //    this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
+        //    this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
             // 
             // pictureBox2
             // 
@@ -133,33 +126,33 @@
             this.button1.TabIndex = 18;
             this.button1.Text = "Closslink";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            //    this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
-            this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.ClientSize = new System.Drawing.Size(1454, 873);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.pictureBox4);
-            this.Controls.Add(this.pictureBox3);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.pictureBox1);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            mainForm.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            mainForm.ClientSize = new System.Drawing.Size(1454, 873);
+            mainForm.panel1.Controls.Add(this.button1);
+            mainForm.panel1.Controls.Add(this.label4);
+            mainForm.panel1.Controls.Add(this.label3);
+            mainForm.panel1.Controls.Add(this.label2);
+            mainForm.panel1.Controls.Add(this.label1);
+            mainForm.panel1.Controls.Add(this.pictureBox4);
+            mainForm.panel1.Controls.Add(this.pictureBox3);
+            mainForm.panel1.Controls.Add(this.pictureBox2);
+            mainForm.panel1.Controls.Add(this.pictureBox1);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            mainForm.panel1.ResumeLayout(false);
+            mainForm.panel1.PerformLayout();
         }
 
-        #endregion
+        public void destroy()
+        {
+
+        }
 
         public System.Windows.Forms.PictureBox pictureBox1;
         public System.Windows.Forms.PictureBox pictureBox2;
@@ -172,4 +165,3 @@
         private System.Windows.Forms.Button button1;
     }
 }
-
