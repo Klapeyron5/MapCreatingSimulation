@@ -13,24 +13,40 @@ namespace MapCreation
         {
             InitializeComponent();
             Mode1ManualCrosslinking mode1ManualCrosslinking = new Mode1ManualCrosslinking(this);
-            
-        /*    preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap1.png");
-            mouseMoveMap = new PixelMap(preciseMap);
-            preciseIndoorMap = getIndoorMap(preciseMap);
-            drawBitmapOnPictureBox(pictureBox1, preciseMap.GetBitmap());*/
+            button1.MouseClick += button1_MouseClick;
+            environment = new Environment(@"./Maps/PreciseMap1.png"); //default map
+            updateLabel1Log();
+
+            /*    preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap1.png");
+                mouseMoveMap = new PixelMap(preciseMap);
+                preciseIndoorMap = getIndoorMap(preciseMap);
+                drawBitmapOnPictureBox(pictureBox1, preciseMap.GetBitmap());*/
         }
 
-       /* private void InitializeComponent()
+        /// <summary>
+        /// Загружаем новую карту для environment
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button1_MouseClick(object sender, MouseEventArgs e)
         {
-            this.SuspendLayout();
-            // 
-            // MainForm
-            // 
-            this.ClientSize = new System.Drawing.Size(284, 261);
-            this.Name = "MainForm";
-            this.ResumeLayout(false);
+            using (OpenFileDialog dlg = new OpenFileDialog())
+            {
+                dlg.RestoreDirectory = true;
+                dlg.Title = "Open Image";
+                dlg.Filter = "images (*.png;*.jpg;*bmp)|*.png;*.jpg;*bmp";
 
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    String s = dlg.FileName;
+                    environment = new Environment(s);
+                    updateLabel1Log();
+                }
+                else { }
+            }
         }
+
+        public Environment environment;
 
         /*     private PixelMap preciseMap; //точная карта
 

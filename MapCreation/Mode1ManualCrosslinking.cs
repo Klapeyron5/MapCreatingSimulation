@@ -21,7 +21,6 @@ namespace MapCreation
 
         public void initialize()
         {
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
@@ -30,28 +29,17 @@ namespace MapCreation
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
-            mainForm.panel1.SuspendLayout();
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 29);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(700, 700);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 10;
-            this.pictureBox1.TabStop = false;
-        //    this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
-        //    this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
+            mainForm.panel1SuspendLayout();
+            mainForm.getPictureBox1().MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
+            mainForm.getPictureBox1().MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
             // 
             // pictureBox2
             // 
             this.pictureBox2.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.pictureBox2.Location = new System.Drawing.Point(718, 29);
+            this.pictureBox2.Location = new System.Drawing.Point(0, 29);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(141, 141);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -77,16 +65,6 @@ namespace MapCreation
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox4.TabIndex = 13;
             this.pictureBox4.TabStop = false;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(65, 13);
-            this.label1.TabIndex = 14;
-            this.label1.Text = "Precise map";
             // 
             // label2
             // 
@@ -126,42 +104,61 @@ namespace MapCreation
             this.button1.TabIndex = 18;
             this.button1.Text = "Closslink";
             this.button1.UseVisualStyleBackColor = true;
-            //    this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
             mainForm.BackColor = System.Drawing.SystemColors.ActiveCaption;
             mainForm.ClientSize = new System.Drawing.Size(1454, 873);
-            mainForm.panel1.Controls.Add(this.button1);
-            mainForm.panel1.Controls.Add(this.label4);
-            mainForm.panel1.Controls.Add(this.label3);
-            mainForm.panel1.Controls.Add(this.label2);
-            mainForm.panel1.Controls.Add(this.label1);
-            mainForm.panel1.Controls.Add(this.pictureBox4);
-            mainForm.panel1.Controls.Add(this.pictureBox3);
-            mainForm.panel1.Controls.Add(this.pictureBox2);
-            mainForm.panel1.Controls.Add(this.pictureBox1);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            mainForm.addComponentToPanel1(button1);
+            mainForm.addComponentToPanel1(this.label4);
+            mainForm.addComponentToPanel1(this.label3);
+            mainForm.addComponentToPanel1(this.label2);
+            mainForm.addComponentToPanel1(this.label1);
+            mainForm.addComponentToPanel1(this.pictureBox4);
+            mainForm.addComponentToPanel1(this.pictureBox3);
+            mainForm.addComponentToPanel1(this.pictureBox2);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
-            mainForm.panel1.ResumeLayout(false);
-            mainForm.panel1.PerformLayout();
+            mainForm.panel1ReleaseLayout();
         }
 
         public void destroy()
         {
-
+            mainForm.getPictureBox1().MouseDown -= pictureBox1_MouseDown;
+            mainForm.getPictureBox1().MouseMove -= pictureBox1_MouseMove;
+            mainForm.clearPanel1();
         }
 
-        public System.Windows.Forms.PictureBox pictureBox1;
-        public System.Windows.Forms.PictureBox pictureBox2;
-        public System.Windows.Forms.PictureBox pictureBox3;
-        public System.Windows.Forms.PictureBox pictureBox4;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.PictureBox pictureBox3;
+        private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button1;
+
+        
+        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        /// <summary>
+        /// Подсветка пикселя, на который наведена мышка (для дебага на мелких картах)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

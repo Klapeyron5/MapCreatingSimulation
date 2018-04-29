@@ -6,8 +6,33 @@ using System.Threading.Tasks;
 
 namespace MapCreation
 {
-    class Environment
+    /// <summary>
+    /// Карта помещения - общая для всех режимов приложения
+    /// </summary>
+    public class Environment
     {
+        public Environment(String s)
+        {
+            if (s != null)
+            {
+                try
+                {
+                    preciseMap = new PixelMap(s);
+                    loaded = 1;
+                }
+                catch (System.IO.FileNotFoundException e)
+                {
+                    loaded = 0;
+                }
+                catch (FormatException e)
+                {
+                    loaded = 2;
+                }
+            }
+            else
+                loaded = 0;
+        }
+
         /// <summary>
         /// Точная карта
         /// </summary>
@@ -23,6 +48,11 @@ namespace MapCreation
         /// </summary>
         private PixelMap predictedMap;
 
+        /// <summary>
+        /// Если файл оригинальной карты существует по указанному в конструкторе пути, то true.
+        /// Иначе карта не загружена и false.
+        /// </summary>
+        private byte loaded;
 
         public void getScan()
         {
@@ -32,6 +62,15 @@ namespace MapCreation
         public void canRobotStayOnThisPoint()
         {
 
+        }
+
+        /// <summary>
+        /// Если файл оригинальной карты существует по указанному в конструкторе пути, то true.
+        /// Иначе карта не загружена и false.
+        /// </summary>
+        public byte isMapLoaded()
+        {
+            return loaded;
         }
     }
 }
