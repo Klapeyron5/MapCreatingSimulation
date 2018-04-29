@@ -1,4 +1,8 @@
-﻿namespace MapCreation
+﻿using System.Drawing;
+using System.Windows.Forms;
+using System.Drawing.Drawing2D;
+
+namespace MapCreation
 {
     partial class MainForm
     {
@@ -188,20 +192,45 @@
             panel1ReleaseLayout();
         }
 
-        public System.Windows.Forms.PictureBox getPictureBox1()
+        public Size getPictureBox1Size()
         {
-            return pictureBox1;
+            return pictureBox1.Size;
+        }
+        
+        public void setPictureBox1MouseDownHandler(MouseEventHandler handler)
+        {
+            pictureBox1.MouseDown += handler;
+        }
+        
+        public void setPictureBox1MouseMoveHandler(MouseEventHandler handler)
+        {
+            pictureBox1.MouseMove += handler;
+        }
+
+        public void removePictureBox1MouseDownHandler(MouseEventHandler handler)
+        {
+            pictureBox1.MouseDown -= handler;
+        }
+
+        public void removePictureBox1MouseMoveHandler(MouseEventHandler handler)
+        {
+            pictureBox1.MouseMove -= handler;
         }
 
         /// <summary>
-        /// Обновляет значение лога label1
+        /// Обновляет значение лога label1 и изображение точной карты
         /// </summary>
-        public void updateLabel1Log()
+        public void updateEnvironmentProjection()
         {
             switch(environment.isMapLoaded())
             {
                 case 0:
                     label1.Text = "map has not loaded";
+                    if (mode1ManualCrosslinking != null)
+                    {
+                        mode1ManualCrosslinking.destroy();
+                        mode1ManualCrosslinking = null;
+                    }
                     break;
                 case 1:
                     label1.Text = "map has loaded";
@@ -210,6 +239,40 @@
                     label1.Text = "map has not loaded, format exception";
                     break;
             }
+            drawBitmapOnPictureBox1(environment.getPreciseBmp());
+        }
+
+        /// <summary>
+        /// Рисует битман на pictureBox1 (который левые на форме, где precise map), при этом не размывает, если битмап меньше реальных размеров pictureBox'а
+        /// </summary>
+        /// <param name="bmp">битмап, который надо отрисовать</param>
+        public void drawBitmapOnPictureBox1(Bitmap bmp)
+        {
+            drawBitmapOnPictureBox(pictureBox1,bmp);
+        }
+
+        /// <summary>
+        /// Рисует битман на данном pictureBox, при этом не размывает, если битмап меньше реальных размеров pictureBox'а
+        /// </summary>
+        /// <param name="pictureBox">на нем будет нарисован битмап</param>
+        /// <param name="bmp">битмап, который надо отрисовать</param>
+        public static void drawBitmapOnPictureBox(PictureBox pictureBox, Bitmap bmp)
+        {
+            if (pictureBox.Size != bmp.Size)
+            {
+                float zoom = 60.0f;
+                Bitmap zoomed = new Bitmap((int)(bmp.Width * zoom), (int)(bmp.Height * zoom));
+
+                using (Graphics g = Graphics.FromImage(zoomed))
+                {
+                    g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                    g.PixelOffsetMode = PixelOffsetMode.Half;
+                    g.DrawImage(bmp, new Rectangle(Point.Empty, zoomed.Size));
+                }
+                pictureBox.Image = zoomed;
+            }
+            else
+                pictureBox.Image = bmp;
         }
     }
 }

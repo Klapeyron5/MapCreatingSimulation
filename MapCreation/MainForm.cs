@@ -12,10 +12,11 @@ namespace MapCreation
         public MainForm()
         {
             InitializeComponent();
-            Mode1ManualCrosslinking mode1ManualCrosslinking = new Mode1ManualCrosslinking(this);
             button1.MouseClick += button1_MouseClick;
             environment = new Environment(@"./Maps/PreciseMap1.png"); //default map
-            updateLabel1Log();
+            updateEnvironmentProjection();
+            if (environment.isMapLoaded() == 1)
+                mode1ManualCrosslinking = new Mode1ManualCrosslinking(this);
 
             /*    preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap1.png");
                 mouseMoveMap = new PixelMap(preciseMap);
@@ -40,13 +41,14 @@ namespace MapCreation
                 {
                     String s = dlg.FileName;
                     environment = new Environment(s);
-                    updateLabel1Log();
+                    updateEnvironmentProjection();
                 }
-                else { }
             }
         }
 
         public Environment environment;
+
+        private Mode1ManualCrosslinking mode1ManualCrosslinking;
 
         /*     private PixelMap preciseMap; //точная карта
 
@@ -187,16 +189,6 @@ namespace MapCreation
                  }
              }
 
-             //For mouseMove pixel:
-             private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
-             {
-                 int X = e.X * preciseMap.Width / pictureBox1.Width;
-                 int Y = e.Y * preciseMap.Height / pictureBox1.Height;
-                 Bitmap bmp = new Bitmap(mouseMoveMap.GetBitmap());
-                 bmp.SetPixel(X,Y,mouseMoveColor);
-                 drawBitmapOnPictureBox(pictureBox1,bmp);
-             }
-
              private void button1_Click(object sender, EventArgs e)
              {
                  if ((positionCounter==0)&&(X2>=0))
@@ -247,36 +239,6 @@ namespace MapCreation
                      if (!flagR)
                          scan.rByPhi[i] = 0;
                  }
-             }
-
-             /// <summary>
-             /// Возвращает карту indoor-среды для заданной карты.
-             /// </summary>
-             /// <param name="map"></param>
-             /// <returns></returns>
-             private PixelMap getIndoorMap(PixelMap map)
-             {
-                 Bitmap preciseIndoorMapBmp = map.GetBitmap();
-                 Pen pen = new Pen(wallColor);
-                 SolidBrush brush = new SolidBrush(wallColor);
-                 Graphics graphics = Graphics.FromImage(preciseIndoorMapBmp);
-                 for (int i = 0; i < map.Width; i++)
-                 {
-                     for (int j = 0; j < map.Height; j++)
-                     {
-                         if (map[i,j].Color == wallColor)
-                         {
-                             try
-                             {
-                                 FillCircle(ref graphics,ref pen,ref brush, r_robot, d_robot,ref i,ref j);
-                             }
-                             catch (Exception ex) { }
-                         }
-                     }
-                 }
-             //    preciseIndoorMapBmp.Save("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseIndoorMap13.png");
-                 PixelMap preciseIndoorMap = new PixelMap(preciseIndoorMapBmp);
-                 return preciseIndoorMap;
              }
 
              /// <summary>
@@ -541,42 +503,6 @@ namespace MapCreation
                      scan01[scan1.xyScan[i][0] + X1_rl - X0 + (d_scan + r_scan) / 2, scan1.xyScan[i][1] + Y1_rl - Y0 + (d_scan + r_scan) / 2] = new Pixel(finishColor);
                  }
                  drawBitmapOnPictureBox(pictureBox4,scan01.GetBitmap());
-             }
-
-             private void drawBitmapOnPictureBox(PictureBox pictureBox, Bitmap bmp)
-             {
-                 if (pictureBox.Size != bmp.Size)
-                 {
-                     float zoom = 60.0f;
-                     Bitmap zoomed = new Bitmap((int)(bmp.Width * zoom), (int)(bmp.Height * zoom));
-
-                     using (Graphics g = Graphics.FromImage(zoomed))
-                     {
-                         g.InterpolationMode = InterpolationMode.NearestNeighbor;
-                         g.PixelOffsetMode = PixelOffsetMode.Half;
-                         g.DrawImage(bmp, new Rectangle(Point.Empty, zoomed.Size));
-                     }
-                     pictureBox.Image = zoomed;
-                 }
-                 else
-                     pictureBox.Image = bmp;
-             }
-
-             /// <summary>
-             /// Заполняет круг радиуса r, работает правильно. d должно быть равно 2r (для скорости).
-             /// pen и brush должны быть одного цвета.
-             /// Метод скоростной.
-             /// </summary>
-             /// <param name="graphics"></param>
-             /// <param name="r">радиус круга</param>
-             /// <param name="d">2r</param>
-             /// <param name="X">центр круга</param>
-             /// <param name="Y">центр круга</param>
-             /// <param name="color">заливка и граница круга</param>
-             private static void FillCircle(ref Graphics graphics, ref Pen pen, ref SolidBrush brush, int r, int d, ref int X, ref int Y)
-             {
-                 graphics.DrawEllipse(pen, X - r, Y - r, d, d);
-                 graphics.FillEllipse(brush, X - r, Y - r, d, d);
              }
 
              private List<int[]> pieErrorZoneSearch(int X1, int Y1, int X2, int Y2)
