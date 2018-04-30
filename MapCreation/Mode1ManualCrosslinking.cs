@@ -177,10 +177,6 @@ namespace MapCreation
                     case 1:
                         {
                             double l_rl2 = Parameters.getSquaredDistance(crosslinker.getXY0(), X, Y);
-                            double l_rl = Math.Pow(l_rl2, 0.5);
-                            int l_rl_rounded = (int)Math.Round(l_rl);
-                            double psi_rl_rad = Parameters.getAngleRadian(crosslinker.getXY0(), X, Y);
-                            //    psi_rl_deg = psi_rl_rad * 180 / Math.PI;
                             if (l_rl2 <= Parameters.l_max2)
                             {
                                 crosslinker.setCenter1(X, Y);
@@ -259,7 +255,14 @@ namespace MapCreation
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-
+            if ((positionCounter == 0) && (crosslinker.getXY2()[0] >= 0))
+            {
+                int[] real_coords = crosslinker.getRealCoords4();
+            //    Bitmap bmp = new Bitmap(pictureBox1.Image);
+            //    bmp.SetPixel(real_coords[0], real_coords[1], predictionColor);
+            //    pictureBox1.Image = bmp; //TODO
+                drawCrosslinkedScans(real_coords[0], real_coords[1]);
+            }
         }
 
         /// <summary>
@@ -286,6 +289,28 @@ namespace MapCreation
             {
                 bmp.SetPixel(pieZone[i][0], pieZone[i][1], Parameters.routeColor);
             }
+        }
+        
+        /// <summary>
+        /// Рисует сшитые сканы на одном холсте.
+        /// </summary>
+        /// <param name="X1_rl"></param>
+        /// <param name="Y1_rl"></param>
+        private void drawCrosslinkedScans(int X1_rl, int Y1_rl)
+        {
+            int X0 = crosslinker.getXY0()[0];
+            int Y0 = crosslinker.getXY0()[1];
+            PixelMap scan01 = new PixelMap(Parameters.d_scan1 + Parameters.r_scan, Parameters.d_scan1 + Parameters.r_scan, 0, 0, 0);
+            int C = (Parameters.d_scan + Parameters.r_scan) / 2;
+            for (int i = 0; i < crosslinker.scan0.xyScan.Count; i++)
+            {
+                scan01[crosslinker.scan0.xyScan[i][0] + C, crosslinker.scan0.xyScan[i][1] + C] = new Pixel(Parameters.startColor);
+            }
+            for (int i = 0; i < crosslinker.scan1.xyScan.Count; i++)
+            {
+                scan01[crosslinker.scan1.xyScan[i][0] + X1_rl - X0 + C, crosslinker.scan1.xyScan[i][1] + Y1_rl - Y0 + C] = new Pixel(Parameters.finishColor);
+            }
+            MainForm.drawBitmapOnPictureBox(pictureBox4, scan01.GetBitmap());
         }
     }
 }
