@@ -303,13 +303,9 @@ namespace MapCreation
             PixelMap scan01 = new PixelMap(Parameters.d_scan1 + Parameters.r_scan, Parameters.d_scan1 + Parameters.r_scan, 0, 0, 0);
             int C = (Parameters.d_scan + Parameters.r_scan) / 2;
             for (int i = 0; i < crosslinker.scan0.xyScan.Count; i++)
-            {
                 scan01[crosslinker.scan0.xyScan[i][0] + C, crosslinker.scan0.xyScan[i][1] + C] = new Pixel(Parameters.startColor);
-            }
             for (int i = 0; i < crosslinker.scan1.xyScan.Count; i++)
-            {
                 scan01[crosslinker.scan1.xyScan[i][0] + X1_rl - X0 + C, crosslinker.scan1.xyScan[i][1] + Y1_rl - Y0 + C] = new Pixel(Parameters.finishColor);
-            }
             MainForm.drawBitmapOnPictureBox(pictureBox4, scan01.GetBitmap());
         }
     }

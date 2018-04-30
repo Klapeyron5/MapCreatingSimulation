@@ -215,15 +215,14 @@ namespace MapCreation
             double min;
             int optX = 0, optY = 0;
             int C = (Parameters.d_scan + Parameters.r_scan) / 2;
-            for (int x = -limXY; x < limXY + 1; x++)
+            List<int[]> errorZone = pieErrorZoneSearch(0,0,X2-X0,Y2-Y0);
+            for(int k = 0; k < errorZone.Count; k++)
             {
-                for (int y = -limXY; y < limXY + 1; y++)
-                {
                     PixelMap map01 = new PixelMap(Parameters.d_scan1 + Parameters.r_scan, Parameters.d_scan1 + Parameters.r_scan, 0, 0, 0);
                     List<int[]> irrelevantPoints0 = new List<int[]>();
                     List<int[]> irrelevantPoints1 = new List<int[]>();
-                    int X = X2 - X0 + x;
-                    int Y = Y2 - Y0 + y;
+                    int X = errorZone[k][0];
+                    int Y = errorZone[k][1];
                     for (int i = 0; i < scan0.xyScan.Count; i++)
                     {
                         map01[scan0.xyScan[i][0] + C, scan0.xyScan[i][1] + C] = new Pixel(Parameters.wallColor);
@@ -316,12 +315,11 @@ namespace MapCreation
                     if (minsum > summ)
                     {
                         minsum = summ;
-                        optX = x;
-                        optY = y;
+                        optX = X;
+                        optY = Y;
                     }
-                }
             }
-            return new int[2] { X2 + optX, Y2 + optY };
+            return new int[2] { X0 + optX, Y0 + optY };
         }
     }
 }
