@@ -32,6 +32,7 @@ namespace MapCreation
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -53,7 +54,7 @@ namespace MapCreation
             // pictureBox3
             // 
             this.pictureBox3.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.pictureBox3.Location = new System.Drawing.Point(0, 192);
+            this.pictureBox3.Location = new System.Drawing.Point(0, 192+1);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(141, 141);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -84,7 +85,7 @@ namespace MapCreation
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label3.Location = new System.Drawing.Point(0, 173+3);
+            this.label3.Location = new System.Drawing.Point(0, 173+4);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(41, 13);
             this.label3.TabIndex = 16;
@@ -100,9 +101,19 @@ namespace MapCreation
             this.label4.TabIndex = 17;
             this.label4.Text = "Crosslinked";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label5.Location = new System.Drawing.Point(pictureBox4.Location.X, pictureBox4.Location.Y + pictureBox4.Height + 3);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(61, 13);
+            this.label5.TabIndex = 17;
+            this.label5.Text = "error: ";
+            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(141 + 5 - button1.Size.Width, 336);
+            this.button1.Location = new System.Drawing.Point(pictureBox2.Location.X + pictureBox2.Width - button1.Size.Width, 336);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 18;
@@ -115,6 +126,7 @@ namespace MapCreation
             mainForm.BackColor = System.Drawing.SystemColors.ActiveCaption;
             mainForm.ClientSize = new System.Drawing.Size(1454, 873);
             mainForm.addComponentToPanel1(button1);
+            mainForm.addComponentToPanel1(this.label5);
             mainForm.addComponentToPanel1(this.label4);
             mainForm.addComponentToPanel1(this.label3);
             mainForm.addComponentToPanel1(this.label2);
@@ -142,6 +154,7 @@ namespace MapCreation
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button button1;
         
         /// <summary>
@@ -262,6 +275,7 @@ namespace MapCreation
             //    bmp.SetPixel(real_coords[0], real_coords[1], predictionColor);
             //    pictureBox1.Image = bmp; //TODO
                 drawCrosslinkedScans(real_coords[0], real_coords[1]);
+                label5.Text = "error: "+real_coords[2];
             }
         }
 

@@ -57,6 +57,7 @@ namespace MapCreation
         /// <summary>
         /// Возвращает зону, в которой статистически может находиться supposed центр.
         /// Эта зона - кусок сектора с центром в real центре скана scan1. 
+        /// Зона в абсолютных координатах preciseMap
         /// </summary>
         /// <returns></returns>
         public List<int[]> getPieSupposedZone()
@@ -67,6 +68,7 @@ namespace MapCreation
         /// <summary>
         /// Возвращает зону, в которой статистически должен находиться real центр скана scan1.
         /// Эта зона - кусок сектора с центром в supposed центре скана scan1. 
+        /// Зона в абсолютных координатах preciseMap
         /// </summary>
         /// <returns></returns>
         public List<int[]> getPieRealZone()
@@ -207,6 +209,10 @@ namespace MapCreation
                 return false;
         }
 
+        /// <summary>
+        /// Думаем, что центр scan1 - это X2,Y2. Нужно вернуть X1,Y1.
+        /// </summary>
+        /// <returns>Возвращает массив int[3]: X,Y,error: координаты настоящего центра scan1 и квадрат расстояния от него до реального симуляционного центра scan1</returns>
         public int[] getRealCoords4()
         {
             double minsum = 100000000;
@@ -319,7 +325,8 @@ namespace MapCreation
                         optY = Y;
                     }
             }
-            return new int[2] { X0 + optX, Y0 + optY };
+            int error = Parameters.getSquaredDistance(X1,Y1,X0+optX,Y0+optY);
+            return new int[3] { X0 + optX, Y0 + optY, error };
         }
     }
 }

@@ -17,7 +17,9 @@ namespace MapCreation
             updateEnvironmentProjection();
             if (environment.isMapLoaded() == 1)
                 mode1ManualCrosslinking = new Mode1ManualCrosslinking(this);
-
+            Console.WriteLine(System.DateTime.Now.Millisecond);
+            Random rand = new Random(System.DateTime.Now.Millisecond);
+            Console.WriteLine(rand.Next(0, 1));
             /*    preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap1.png");
                 mouseMoveMap = new PixelMap(preciseMap);
                 preciseIndoorMap = getIndoorMap(preciseMap);
