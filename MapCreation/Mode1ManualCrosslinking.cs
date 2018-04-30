@@ -187,48 +187,19 @@ namespace MapCreation
                                 crosslinker.scan1 = mainForm.environment.getScan(X, Y, Parameters.finishColor);
                                 MainForm.drawBitmapOnPictureBox(pictureBox3, crosslinker.scan1.getBitmap());
                                 positionCounter++;
-                                drawPieZone(preciseMapBmp, crosslinker.getXY0(), crosslinker.getXY1());
+                                drawPieSupposedZone(preciseMapBmp);
                             }
                         }
                         break;
                     case 2:
                         {
-                            //пока простая проверка: ровный разброс по углу и по длине
-                            double l_sp2 = Parameters.getSquaredDistance(crosslinker.getXY0(), X, Y);
-                            double l_sp = Math.Pow(l_sp2, 0.5);
-                            double psi_rl_rad = Parameters.getAngleRadian(crosslinker.getXY0(), crosslinker.getXY1());
-                            double psi_sp_rad = Parameters.getAngleRadian(crosslinker.getXY0(), X, Y);
-                            bool angleFlag = false; //входит ли по угловой зоне
-
-                            double l_rl2 = Parameters.getSquaredDistance(crosslinker.getXY0(), crosslinker.getXY1());
-                            double l_rl = Math.Pow(l_rl2, 0.5);
-                            double sgm_lrl = Parameters.getSgm_l(l_rl);
-                            double l_rlPlus3sgm = l_rl + 3 * sgm_lrl;
-                            double l_rlMinus3sgm = l_rl - 3 * sgm_lrl;
-                            if ((psi_rl_rad > Math.PI / 2) && (psi_sp_rad < -Math.PI / 2))
-                            {
-                                if ((psi_sp_rad + 2 * Math.PI >= psi_rl_rad - 3 * Parameters.sgm_psi_rad) && (psi_sp_rad + 2 * Math.PI <= psi_rl_rad + 3 * Parameters.sgm_psi_rad)) angleFlag = true;
-                                else angleFlag = false;
-                            }
-                            else
-                            {
-                                if ((psi_rl_rad < -Math.PI / 2) && (psi_sp_rad > Math.PI / 2))
-                                {
-                                    if ((psi_sp_rad - 2 * Math.PI >= psi_rl_rad - 3 * Parameters.sgm_psi_rad) && (psi_sp_rad - 2 * Math.PI <= psi_rl_rad + 3 * Parameters.sgm_psi_rad)) angleFlag = true;
-                                    else angleFlag = false;
-                                }
-                                else
-                                {
-                                    if ((psi_sp_rad >= psi_rl_rad - 3 * Parameters.sgm_psi_rad) && (psi_sp_rad <= psi_rl_rad + 3 * Parameters.sgm_psi_rad)) angleFlag = true;
-                                }
-                            }
-                            if (((l_sp >= l_rlMinus3sgm) && (l_sp <= l_rlPlus3sgm)) && angleFlag)
+                            if (crosslinker.isPointInSupposedZone(X,Y))
                             {
                                 crosslinker.setCenter2(X, Y);
                                 positionCounter = 0;
                             }
                             else
-                                drawPieZone(preciseMapBmp, crosslinker.getXY0(), crosslinker.getXY1());
+                                drawPieSupposedZone(preciseMapBmp);
                         }
                         break;
                 }
@@ -304,26 +275,13 @@ namespace MapCreation
         private Crosslinker crosslinker = new Crosslinker();
 
         /// <summary>
-        /// Рисует зону, в которой может быть supposed положение робота относительно real положения в центре scan1.
-        /// Зона рисуется примерная, к сожалению.
+        /// Рисует зону на данном битмапе в абсолютных координатах, в которой может быть
+        /// supposed положение робота относительно real положения в центре scan1
         /// </summary>
         /// <param name="bmp"></param>
-        /// <param name="X1"></param>
-        /// <param name="Y1"></param>
-        /// <param name="X2"></param>
-        /// <param name="Y2"></param>
-        private void drawPieZone(Bitmap bmp, int X1, int Y1, int X2, int Y2)
+        private void drawPieSupposedZone(Bitmap bmp)
         {
-            List<int[]> pieZone = crosslinker.pieErrorZoneSearch(X1, Y1, X2, Y2);
-            for (int i = 0; i < pieZone.Count; i++)
-            {
-                bmp.SetPixel(pieZone[i][0], pieZone[i][1], Parameters.routeColor);
-            }
-        }
-
-        private void drawPieZone(Bitmap bmp, int[] xy1, int[] xy2)
-        {
-            List<int[]> pieZone = crosslinker.pieErrorZoneSearch(xy1[0], xy1[1], xy2[0], xy2[1]);
+            List<int[]> pieZone = crosslinker.getPieSupposedZone();
             for (int i = 0; i < pieZone.Count; i++)
             {
                 bmp.SetPixel(pieZone[i][0], pieZone[i][1], Parameters.routeColor);
