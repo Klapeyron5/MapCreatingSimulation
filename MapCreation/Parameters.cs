@@ -12,6 +12,7 @@ namespace MapCreation
     /// </summary>
     static class Parameters
     {
+
         //Simulation parameters
         //Все расстояния - это от центра пикселя до центра пикселя
         //Т.е. между ближайшими краями двух пикселей лежит (расстояние между этими пикселями-1) пикселей
@@ -99,6 +100,11 @@ namespace MapCreation
         public static double getSgm_l(double l)
         {
             return l * sgm_lmax / l_max;
+        }
+
+        public static void changeParameter()
+        {
+            //mainForm recreate current Mode
         }
 
     }

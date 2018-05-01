@@ -28,12 +28,15 @@ namespace MapCreation
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.button2Scan0Center = new System.Windows.Forms.Button();
+            this.button3Scan1Center = new System.Windows.Forms.Button();
+            this.button4SupposedScan1Center = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.textBox1Scan0Center = new System.Windows.Forms.TextBox();
+            this.textBox2Scan1Center = new System.Windows.Forms.TextBox();
+            this.textBox3SupposedScan1Center = new System.Windows.Forms.TextBox();
+            this.button1Crosslink = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -54,7 +57,7 @@ namespace MapCreation
             // pictureBox3
             // 
             this.pictureBox3.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.pictureBox3.Location = new System.Drawing.Point(0, 192+1);
+            this.pictureBox3.Location = new System.Drawing.Point(0, 192+10);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(141, 141);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -71,25 +74,38 @@ namespace MapCreation
             this.pictureBox4.TabIndex = 13;
             this.pictureBox4.TabStop = false;
             // 
-            // label2
+            // button2Scan0Center
             // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label2.Location = new System.Drawing.Point(0, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(41, 13);
-            this.label2.TabIndex = 15;
-            this.label2.Text = "Scan 0";
+            this.button2Scan0Center.AutoSize = true;
+            this.button2Scan0Center.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.button2Scan0Center.Location = new System.Drawing.Point(0, 6);
+            this.button2Scan0Center.Name = "button2";
+            this.button2Scan0Center.Size = new System.Drawing.Size(41, 13);
+            this.button2Scan0Center.TabIndex = 15;
+            this.button2Scan0Center.Text = "Scan 0";
+            button2Scan0Center.MouseClick += button2Scan0Center_Click;
             // 
-            // label3
+            // button3Scan1Center
             // 
-            this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label3.Location = new System.Drawing.Point(0, 173+4);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(41, 13);
-            this.label3.TabIndex = 16;
-            this.label3.Text = "Scan 1";
+            this.button3Scan1Center.AutoSize = true;
+            this.button3Scan1Center.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.button3Scan1Center.Location = new System.Drawing.Point(0, 173+4);
+            this.button3Scan1Center.Name = "button3";
+            this.button3Scan1Center.Size = new System.Drawing.Size(41, 13);
+            this.button3Scan1Center.TabIndex = 16;
+            this.button3Scan1Center.Text = "Scan 1";
+            button3Scan1Center.MouseClick += button3Scan1Center_Click;
+            // 
+            // button4SupposedScan1Center
+            // 
+            this.button4SupposedScan1Center.AutoSize = true;
+            this.button4SupposedScan1Center.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.button4SupposedScan1Center.Location = new System.Drawing.Point(0, 203 + pictureBox3.Height);
+            this.button4SupposedScan1Center.Name = "button4";
+            this.button4SupposedScan1Center.Size = new System.Drawing.Size(41, 13);
+            this.button4SupposedScan1Center.TabIndex = 16;
+            this.button4SupposedScan1Center.Text = "Supposed";
+            button4SupposedScan1Center.MouseClick += button4SupposedScan1Center_Click;
             // 
             // label4
             // 
@@ -105,32 +121,59 @@ namespace MapCreation
             // 
             this.label5.AutoSize = true;
             this.label5.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label5.Location = new System.Drawing.Point(pictureBox4.Location.X, pictureBox4.Location.Y + pictureBox4.Height + 3);
+            this.label5.Location = new System.Drawing.Point(pictureBox4.Location.X, pictureBox4.Location.Y + pictureBox4.Height + 4);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(61, 13);
             this.label5.TabIndex = 17;
             this.label5.Text = "error: ";
             // 
+            // textBox1
+            // 
+            this.textBox1Scan0Center.Size = new System.Drawing.Size(50, 13);
+            this.textBox1Scan0Center.Location = new System.Drawing.Point(pictureBox2.Location.X+pictureBox2.Width-textBox1Scan0Center.Width, button2Scan0Center.Location.Y+1);
+            this.textBox1Scan0Center.Name = "textBox1";
+            this.textBox1Scan0Center.TabIndex = 17;
+            this.textBox1Scan0Center.Text = "x,y";
+            // 
+            // textBox2
+            // 
+            this.textBox2Scan1Center.Size = new System.Drawing.Size(50, 13);
+            this.textBox2Scan1Center.Location = new System.Drawing.Point(pictureBox2.Location.X + pictureBox2.Width - textBox2Scan1Center.Width, button3Scan1Center.Location.Y + 1);
+            this.textBox2Scan1Center.Name = "textBox2";
+            this.textBox2Scan1Center.TabIndex = 17;
+            this.textBox2Scan1Center.Text = "x,y";
+            // 
+            // textBox3
+            // 
+            this.textBox3SupposedScan1Center.Size = new System.Drawing.Size(50, 13);
+            this.textBox3SupposedScan1Center.Location = new System.Drawing.Point(pictureBox2.Location.X + pictureBox2.Width - textBox3SupposedScan1Center.Width, pictureBox3.Location.Y + pictureBox3.Height + 3);
+            this.textBox3SupposedScan1Center.Name = "textBox2";
+            this.textBox3SupposedScan1Center.TabIndex = 17;
+            this.textBox3SupposedScan1Center.Text = "x,y";
+            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(pictureBox2.Location.X + pictureBox2.Width - button1.Size.Width, 336);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 18;
-            this.button1.Text = "Closslink";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1Crosslink.Location = new System.Drawing.Point(pictureBox4.Location.X + pictureBox4.Width - button1Crosslink.Size.Width, pictureBox4.Location.Y + pictureBox4.Height);
+            this.button1Crosslink.Name = "button1";
+            this.button1Crosslink.Size = new System.Drawing.Size(75, 23);
+            this.button1Crosslink.TabIndex = 18;
+            this.button1Crosslink.Text = "Closslink";
+            this.button1Crosslink.UseVisualStyleBackColor = true;
+            this.button1Crosslink.Click += new System.EventHandler(this.button1Crosslink_Click);
             // 
             // Form1
             // 
             mainForm.BackColor = System.Drawing.SystemColors.ActiveCaption;
             mainForm.ClientSize = new System.Drawing.Size(1454, 873);
-            mainForm.addComponentToPanel1(button1);
+            mainForm.addComponentToPanel1(button1Crosslink);
             mainForm.addComponentToPanel1(this.label5);
             mainForm.addComponentToPanel1(this.label4);
-            mainForm.addComponentToPanel1(this.label3);
-            mainForm.addComponentToPanel1(this.label2);
-            mainForm.addComponentToPanel1(this.label1);
+            mainForm.addComponentToPanel1(this.button4SupposedScan1Center);
+            mainForm.addComponentToPanel1(this.button3Scan1Center);
+            mainForm.addComponentToPanel1(this.button2Scan0Center);
+            mainForm.addComponentToPanel1(this.textBox3SupposedScan1Center);
+            mainForm.addComponentToPanel1(this.textBox2Scan1Center);
+            mainForm.addComponentToPanel1(this.textBox1Scan0Center);
             mainForm.addComponentToPanel1(this.pictureBox4);
             mainForm.addComponentToPanel1(this.pictureBox3);
             mainForm.addComponentToPanel1(this.pictureBox2);
@@ -150,12 +193,15 @@ namespace MapCreation
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.PictureBox pictureBox4;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button button2Scan0Center;
+        private System.Windows.Forms.Button button3Scan1Center;
+        private System.Windows.Forms.Button button4SupposedScan1Center;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox textBox1Scan0Center;
+        private System.Windows.Forms.TextBox textBox2Scan1Center;
+        private System.Windows.Forms.TextBox textBox3SupposedScan1Center;
+        private System.Windows.Forms.Button button1Crosslink;
         
         /// <summary>
         /// Обработчик кликов на pictureBox1 (где отрисована preciseMap).
@@ -174,8 +220,6 @@ namespace MapCreation
             if (mainForm.environment.canRobotStayOnThisPoint(X,Y))
             {
                 Bitmap preciseMapBmp = mainForm.environment.preciseMap.GetBitmap();
-                Pen pen;
-                SolidBrush brush;
                 Graphics graphics = Graphics.FromImage(preciseMapBmp);
                 switch (positionCounter)
                 {
@@ -184,7 +228,9 @@ namespace MapCreation
                             crosslinker.setCenter0(X, Y);
                             crosslinker.scan0 = mainForm.environment.getScan(X, Y, Parameters.startColor);
                             MainForm.drawBitmapOnPictureBox(pictureBox2, crosslinker.scan0.getBitmap());
+                            interfaceDrawing(preciseMapBmp,graphics);
                             positionCounter++;
+                            textBox1Scan0Center.Text = X + "," + Y;
                         }
                         break;
                     case 1:
@@ -197,54 +243,70 @@ namespace MapCreation
                                 MainForm.drawBitmapOnPictureBox(pictureBox3, crosslinker.scan1.getBitmap());
                                 positionCounter++;
                                 drawPieSupposedZone(preciseMapBmp);
+                                interfaceDrawing(preciseMapBmp, graphics);
+                                textBox2Scan1Center.Text = X + "," + Y;
                             }
                         }
                         break;
                     case 2:
                         {
-                            if (crosslinker.isPointInSupposedZone(X,Y))
+                            if (crosslinker.isPointInSupposedZone(X, Y))
                             {
                                 crosslinker.setCenter2(X, Y);
+                                interfaceDrawing(preciseMapBmp, graphics);
                                 positionCounter = 0;
+                                textBox3SupposedScan1Center.Text = X + "," + Y;
                             }
                             else
+                            {
                                 drawPieSupposedZone(preciseMapBmp);
+                                interfaceDrawing(preciseMapBmp, graphics);
+                            }
                         }
                         break;
                 }
-                //отрисовать все три центра
-                //отрисовать радиусы для scan0 и scan1
-                try
-                {
-                    int X0 = crosslinker.getXY0()[0];
-                    int Y0 = crosslinker.getXY0()[1];
-                    int X1 = crosslinker.getXY1()[0];
-                    int Y1 = crosslinker.getXY1()[1];
-                    int X2 = crosslinker.getXY2()[0];
-                    int Y2 = crosslinker.getXY2()[1];
-                    if ((X0 >= 0) && (Y0 >= 0))
-                    {
-                        preciseMapBmp.SetPixel(X0, Y0, Parameters.startColor);
-                        pen = new Pen(Parameters.startColor);
-                        graphics.DrawEllipse(pen, X0 - Parameters.r_scan, Y0 - Parameters.r_scan, Parameters.d_scan, Parameters.d_scan);
-                        graphics.DrawEllipse(pen, X0 - Parameters.r_robot, Y0 - Parameters.r_robot, Parameters.d_robot, Parameters.d_robot);
-                    }
-                    if ((X1 >= 0) && (Y1 >= 0))
-                    {
-                        preciseMapBmp.SetPixel(X1, Y1, Parameters.finishColor);
-                        pen = new Pen(Parameters.finishColor);
-                        graphics.DrawEllipse(pen, X1 - Parameters.r_scan, Y1 - Parameters.r_scan, Parameters.d_scan, Parameters.d_scan);
-                        graphics.DrawEllipse(pen, X1 - Parameters.r_robot, Y1 - Parameters.r_robot, Parameters.d_robot, Parameters.d_robot);
-                    }
-                    if ((X2 >= 0) && (Y2 >= 0))
-                    {
-                        preciseMapBmp.SetPixel(X2, Y2, Parameters.routeColor);
-                    }
-                }
-                catch (Exception ex) { }
-                mouseMoveMap = new PixelMap(preciseMapBmp);
-                mainForm.drawBitmapOnPictureBox1(preciseMapBmp);
             }
+        }
+
+        /// <summary>
+        /// отрисовать все три центра
+        /// отрисовать радиусы для scan0 и scan1
+        /// </summary>
+        /// <param name="preciseMapBmp"></param>
+        /// <param name="graphics"></param>
+        private void interfaceDrawing(Bitmap preciseMapBmp, Graphics graphics)
+        {
+            try
+            {
+                Pen pen;
+                int X0 = crosslinker.getXY0()[0];
+                int Y0 = crosslinker.getXY0()[1];
+                int X1 = crosslinker.getXY1()[0];
+                int Y1 = crosslinker.getXY1()[1];
+                int X2 = crosslinker.getXY2()[0];
+                int Y2 = crosslinker.getXY2()[1];
+                if ((X0 >= 0) && (Y0 >= 0))
+                {
+                    preciseMapBmp.SetPixel(X0, Y0, Parameters.startColor);
+                    pen = new Pen(Parameters.startColor);
+                    graphics.DrawEllipse(pen, X0 - Parameters.r_scan, Y0 - Parameters.r_scan, Parameters.d_scan, Parameters.d_scan);
+                    graphics.DrawEllipse(pen, X0 - Parameters.r_robot, Y0 - Parameters.r_robot, Parameters.d_robot, Parameters.d_robot);
+                }
+                if ((X1 >= 0) && (Y1 >= 0))
+                {
+                    preciseMapBmp.SetPixel(X1, Y1, Parameters.finishColor);
+                    pen = new Pen(Parameters.finishColor);
+                    graphics.DrawEllipse(pen, X1 - Parameters.r_scan, Y1 - Parameters.r_scan, Parameters.d_scan, Parameters.d_scan);
+                    graphics.DrawEllipse(pen, X1 - Parameters.r_robot, Y1 - Parameters.r_robot, Parameters.d_robot, Parameters.d_robot);
+                }
+                if ((X2 >= 0) && (Y2 >= 0))
+                {
+                    preciseMapBmp.SetPixel(X2, Y2, Parameters.routeColor);
+                }
+            }
+            catch (Exception ex) { }
+            mouseMoveMap = new PixelMap(preciseMapBmp);
+            mainForm.drawBitmapOnPictureBox1(preciseMapBmp);
         }
 
         /// <summary>
@@ -266,7 +328,7 @@ namespace MapCreation
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button1_Click(object sender, EventArgs e)
+        private void button1Crosslink_Click(object sender, EventArgs e)
         {
             if ((positionCounter == 0) && (crosslinker.getXY2()[0] >= 0))
             {
@@ -276,6 +338,100 @@ namespace MapCreation
             //    pictureBox1.Image = bmp; //TODO
                 drawCrosslinkedScans(real_coords[0], real_coords[1]);
                 label5.Text = "error: "+real_coords[2];
+            }
+        }
+
+        private void button2Scan0Center_Click(object sender, EventArgs e)
+        {
+            Bitmap preciseMapBmp = mainForm.environment.preciseMap.GetBitmap();
+            Graphics graphics = Graphics.FromImage(preciseMapBmp);
+            if (positionCounter == 0)
+            {
+                try
+                {
+                    String[] s = textBox1Scan0Center.Text.Split(',');
+                    if (s.Length == 2)
+                    {
+                        int X = Int32.Parse(s[0]);
+                        int Y = Int32.Parse(s[1]);
+                        if (mainForm.environment.canRobotStayOnThisPoint(X, Y))
+                        {
+                            crosslinker.setCenter0(X, Y);
+                            crosslinker.scan0 = mainForm.environment.getScan(X, Y, Parameters.startColor);
+                            MainForm.drawBitmapOnPictureBox(pictureBox2, crosslinker.scan0.getBitmap());
+                            positionCounter++;
+                            textBox1Scan0Center.Text = X + "," + Y;
+                            interfaceDrawing(preciseMapBmp, graphics);
+                        }
+                    }
+                }
+                catch (Exception ex) {}
+            }
+        }
+
+        private void button3Scan1Center_Click(object sender, EventArgs e)
+        {
+            Bitmap preciseMapBmp = mainForm.environment.preciseMap.GetBitmap();
+            Graphics graphics = Graphics.FromImage(preciseMapBmp);
+            Console.WriteLine("button3Scan1Center_Click");
+            if (positionCounter == 1)
+            {
+                Console.WriteLine("button3Scan1Center_Click positionCounter == 1");
+                try
+                {
+                    String[] s = textBox2Scan1Center.Text.Split(',');
+                    if (s.Length == 2)
+                    {
+                        Console.WriteLine("button3Scan1Center_Click s.Length == 2");
+                        uint X = UInt32.Parse(s[0]);
+                        uint Y = UInt32.Parse(s[1]);
+                        Console.WriteLine("button3Scan1Center_Click Parsed");
+                        if (mainForm.environment.canRobotStayOnThisPoint((int)X, (int)Y))
+                        {
+                            double l_rl2 = Parameters.getSquaredDistance(crosslinker.getXY0(), (int)X, (int)Y);
+                            if (l_rl2 <= Parameters.l_max2)
+                            {
+                                crosslinker.setCenter1((int)X, (int)Y);
+                                crosslinker.scan1 = mainForm.environment.getScan((int)X, (int)Y, Parameters.finishColor);
+                                MainForm.drawBitmapOnPictureBox(pictureBox3, crosslinker.scan1.getBitmap());
+                                positionCounter++;
+                                drawPieSupposedZone(preciseMapBmp);
+                                textBox2Scan1Center.Text = X + "," + Y;
+                                interfaceDrawing(preciseMapBmp, graphics);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex) { }
+            }
+        }
+
+        private void button4SupposedScan1Center_Click(object sender, EventArgs e)
+        {
+            Bitmap preciseMapBmp = mainForm.environment.preciseMap.GetBitmap();
+            Graphics graphics = Graphics.FromImage(preciseMapBmp);
+            if (positionCounter == 2)
+            {
+                try
+                {
+                    String[] s = textBox3SupposedScan1Center.Text.Split(',');
+                    if (s.Length == 2)
+                    {
+                        uint X = UInt32.Parse(s[0]);
+                        uint Y = UInt32.Parse(s[1]);
+                        if (crosslinker.isPointInSupposedZone((int)X, (int)Y))
+                        {
+                            if (mainForm.environment.canRobotStayOnThisPoint((int)X, (int)Y))
+                            {
+                                crosslinker.setCenter2((int)X, (int)Y);
+                                positionCounter = 0;
+                                textBox3SupposedScan1Center.Text = X + "," + Y;
+                                interfaceDrawing(preciseMapBmp, graphics);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex) { }
             }
         }
 
