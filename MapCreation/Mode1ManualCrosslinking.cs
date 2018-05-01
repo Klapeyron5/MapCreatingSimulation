@@ -216,55 +216,17 @@ namespace MapCreation
         {
             int X = e.X * mainForm.environment.preciseMap.Width / mainForm.getPictureBox1Size().Width;
             int Y = e.Y * mainForm.environment.preciseMap.Height / mainForm.getPictureBox1Size().Height;
-
-            if (mainForm.environment.canRobotStayOnThisPoint(X,Y))
+            switch (positionCounter)
             {
-                Bitmap preciseMapBmp = mainForm.environment.preciseMap.GetBitmap();
-                Graphics graphics = Graphics.FromImage(preciseMapBmp);
-                switch (positionCounter)
-                {
-                    case 0:
-                        {
-                            crosslinker.setCenter0(X, Y);
-                            crosslinker.scan0 = mainForm.environment.getScan(X, Y, Parameters.startColor);
-                            MainForm.drawBitmapOnPictureBox(pictureBox2, crosslinker.scan0.getBitmap());
-                            interfaceDrawing(preciseMapBmp,graphics);
-                            positionCounter++;
-                            textBox1Scan0Center.Text = X + "," + Y;
-                        }
-                        break;
-                    case 1:
-                        {
-                            double l_rl2 = Parameters.getSquaredDistance(crosslinker.getXY0(), X, Y);
-                            if (l_rl2 <= Parameters.l_max2)
-                            {
-                                crosslinker.setCenter1(X, Y);
-                                crosslinker.scan1 = mainForm.environment.getScan(X, Y, Parameters.finishColor);
-                                MainForm.drawBitmapOnPictureBox(pictureBox3, crosslinker.scan1.getBitmap());
-                                positionCounter++;
-                                drawPieSupposedZone(preciseMapBmp);
-                                interfaceDrawing(preciseMapBmp, graphics);
-                                textBox2Scan1Center.Text = X + "," + Y;
-                            }
-                        }
-                        break;
-                    case 2:
-                        {
-                            if (crosslinker.isPointInSupposedZone(X, Y))
-                            {
-                                crosslinker.setCenter2(X, Y);
-                                interfaceDrawing(preciseMapBmp, graphics);
-                                positionCounter = 0;
-                                textBox3SupposedScan1Center.Text = X + "," + Y;
-                            }
-                            else
-                            {
-                                drawPieSupposedZone(preciseMapBmp);
-                                interfaceDrawing(preciseMapBmp, graphics);
-                            }
-                        }
-                        break;
-                }
+                case 0:
+                    setScan0(X, Y);
+                    break;
+                case 1:
+                    setScan1(X, Y);
+                    break;
+                case 2:
+                    setSupposedScan1(X, Y);
+                    break;
             }
         }
 
@@ -343,95 +305,102 @@ namespace MapCreation
 
         private void button2Scan0Center_Click(object sender, EventArgs e)
         {
-            Bitmap preciseMapBmp = mainForm.environment.preciseMap.GetBitmap();
-            Graphics graphics = Graphics.FromImage(preciseMapBmp);
-            if (positionCounter == 0)
+            try
             {
-                try
+                String[] s = textBox1Scan0Center.Text.Split(',');
+                if (s.Length == 2)
                 {
-                    String[] s = textBox1Scan0Center.Text.Split(',');
-                    if (s.Length == 2)
-                    {
-                        int X = Int32.Parse(s[0]);
-                        int Y = Int32.Parse(s[1]);
-                        if (mainForm.environment.canRobotStayOnThisPoint(X, Y))
-                        {
-                            crosslinker.setCenter0(X, Y);
-                            crosslinker.scan0 = mainForm.environment.getScan(X, Y, Parameters.startColor);
-                            MainForm.drawBitmapOnPictureBox(pictureBox2, crosslinker.scan0.getBitmap());
-                            positionCounter++;
-                            textBox1Scan0Center.Text = X + "," + Y;
-                            interfaceDrawing(preciseMapBmp, graphics);
-                        }
-                    }
+                    uint X = UInt32.Parse(s[0]);
+                    uint Y = UInt32.Parse(s[1]);
+                    setScan0((int)X, (int)Y);
                 }
-                catch (Exception ex) {}
             }
+            catch (Exception ex) {}
         }
 
         private void button3Scan1Center_Click(object sender, EventArgs e)
         {
-            Bitmap preciseMapBmp = mainForm.environment.preciseMap.GetBitmap();
-            Graphics graphics = Graphics.FromImage(preciseMapBmp);
-            Console.WriteLine("button3Scan1Center_Click");
-            if (positionCounter == 1)
+            try
             {
-                Console.WriteLine("button3Scan1Center_Click positionCounter == 1");
-                try
+                String[] s = textBox2Scan1Center.Text.Split(',');
+                if (s.Length == 2)
                 {
-                    String[] s = textBox2Scan1Center.Text.Split(',');
-                    if (s.Length == 2)
-                    {
-                        Console.WriteLine("button3Scan1Center_Click s.Length == 2");
-                        uint X = UInt32.Parse(s[0]);
-                        uint Y = UInt32.Parse(s[1]);
-                        Console.WriteLine("button3Scan1Center_Click Parsed");
-                        if (mainForm.environment.canRobotStayOnThisPoint((int)X, (int)Y))
-                        {
-                            double l_rl2 = Parameters.getSquaredDistance(crosslinker.getXY0(), (int)X, (int)Y);
-                            if (l_rl2 <= Parameters.l_max2)
-                            {
-                                crosslinker.setCenter1((int)X, (int)Y);
-                                crosslinker.scan1 = mainForm.environment.getScan((int)X, (int)Y, Parameters.finishColor);
-                                MainForm.drawBitmapOnPictureBox(pictureBox3, crosslinker.scan1.getBitmap());
-                                positionCounter++;
-                                drawPieSupposedZone(preciseMapBmp);
-                                textBox2Scan1Center.Text = X + "," + Y;
-                                interfaceDrawing(preciseMapBmp, graphics);
-                            }
-                        }
-                    }
+                    uint X = UInt32.Parse(s[0]);
+                    uint Y = UInt32.Parse(s[1]);
+                    setScan1((int)X,(int)Y);
                 }
-                catch (Exception ex) { }
             }
+            catch (Exception ex) { }
         }
 
         private void button4SupposedScan1Center_Click(object sender, EventArgs e)
         {
-            Bitmap preciseMapBmp = mainForm.environment.preciseMap.GetBitmap();
-            Graphics graphics = Graphics.FromImage(preciseMapBmp);
-            if (positionCounter == 2)
+            String[] s = textBox3SupposedScan1Center.Text.Split(',');
+            if (s.Length == 2)
             {
-                try
+                uint X = UInt32.Parse(s[0]);
+                uint Y = UInt32.Parse(s[1]);
+                setSupposedScan1((int)X,(int)Y);
+            }
+        }
+
+        private void setScan0(int X, int Y)
+        {
+            if (positionCounter == 0)
+            {
+                Bitmap preciseMapBmp = mainForm.environment.preciseMap.GetBitmap();
+                Graphics graphics = Graphics.FromImage(preciseMapBmp);
+                if (mainForm.environment.canRobotStayOnThisPoint(X, Y))
                 {
-                    String[] s = textBox3SupposedScan1Center.Text.Split(',');
-                    if (s.Length == 2)
+                    crosslinker.setCenter0(X, Y);
+                    crosslinker.scan0 = mainForm.environment.getScan(X, Y, Parameters.startColor);
+                    MainForm.drawBitmapOnPictureBox(pictureBox2, crosslinker.scan0.getBitmap());
+                    positionCounter++;
+                    textBox1Scan0Center.Text = X + "," + Y;
+                    interfaceDrawing(preciseMapBmp, graphics);
+                }
+            }
+        }
+
+        private void setScan1(int X, int Y)
+        {
+            if (positionCounter == 1)
+            {
+                Bitmap preciseMapBmp = mainForm.environment.preciseMap.GetBitmap();
+                Graphics graphics = Graphics.FromImage(preciseMapBmp);
+                if (mainForm.environment.canRobotStayOnThisPoint(X,Y))
+                {
+                    double l_rl2 = Parameters.getSquaredDistance(crosslinker.getXY0(),X,Y);
+                    if (l_rl2 <= Parameters.l_max2)
                     {
-                        uint X = UInt32.Parse(s[0]);
-                        uint Y = UInt32.Parse(s[1]);
-                        if (crosslinker.isPointInSupposedZone((int)X, (int)Y))
-                        {
-                            if (mainForm.environment.canRobotStayOnThisPoint((int)X, (int)Y))
-                            {
-                                crosslinker.setCenter2((int)X, (int)Y);
-                                positionCounter = 0;
-                                textBox3SupposedScan1Center.Text = X + "," + Y;
-                                interfaceDrawing(preciseMapBmp, graphics);
-                            }
-                        }
+                        crosslinker.setCenter1(X,Y);
+                        crosslinker.scan1 = mainForm.environment.getScan(X,Y, Parameters.finishColor);
+                        MainForm.drawBitmapOnPictureBox(pictureBox3, crosslinker.scan1.getBitmap());
+                        positionCounter++;
+                        drawPieSupposedZone(preciseMapBmp);
+                        textBox2Scan1Center.Text = X + "," + Y;
+                        interfaceDrawing(preciseMapBmp, graphics);
                     }
                 }
-                catch (Exception ex) { }
+            }
+        }
+
+        private void setSupposedScan1(int X, int Y)
+        {
+            if (positionCounter == 2)
+            {
+                Bitmap preciseMapBmp = mainForm.environment.preciseMap.GetBitmap();
+                Graphics graphics = Graphics.FromImage(preciseMapBmp);
+                if (crosslinker.isPointInSupposedZone(X,Y))
+                {
+                    if (mainForm.environment.canRobotStayOnThisPoint(X,Y))
+                    {
+                        crosslinker.setCenter2(X,Y);
+                        positionCounter = 0;
+                        textBox3SupposedScan1Center.Text = X + "," + Y;
+                        interfaceDrawing(preciseMapBmp, graphics);
+                    }
+                }
             }
         }
 

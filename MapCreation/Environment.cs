@@ -90,7 +90,7 @@ namespace MapCreation
                                 flagRepeated = true;
                         if (!flagRepeated)
                         {
-                            r = rNoising3(ref r, ref rand);
+                            r = rNoising1(ref r, ref rand);
                             x = (int)Math.Round(r * Math.Cos(i * Parameters.step));
                             y = (int)Math.Round(r * Math.Sin(i * Parameters.step));
                             scan.xyScan.Add(new int[2] { x, y });
