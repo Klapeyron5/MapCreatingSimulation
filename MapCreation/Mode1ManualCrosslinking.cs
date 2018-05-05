@@ -252,14 +252,14 @@ namespace MapCreation
                     preciseMapBmp.SetPixel(X0, Y0, Parameters.startColor);
                     pen = new Pen(Parameters.startColor);
                     graphics.DrawEllipse(pen, X0 - Parameters.getR_scan(), Y0 - Parameters.getR_scan(), Parameters.getD_scan(), Parameters.getD_scan());
-                    graphics.DrawEllipse(pen, X0 - Parameters.r_robot, Y0 - Parameters.r_robot, Parameters.d_robot, Parameters.d_robot);
+                    graphics.DrawEllipse(pen, X0 - Parameters.getR_robot(), Y0 - Parameters.getR_robot(), Parameters.d_robot, Parameters.d_robot);
                 }
                 if ((X1 >= 0) && (Y1 >= 0))
                 {
                     preciseMapBmp.SetPixel(X1, Y1, Parameters.finishColor);
                     pen = new Pen(Parameters.finishColor);
                     graphics.DrawEllipse(pen, X1 - Parameters.getR_scan(), Y1 - Parameters.getR_scan(), Parameters.getD_scan(), Parameters.getD_scan());
-                    graphics.DrawEllipse(pen, X1 - Parameters.r_robot, Y1 - Parameters.r_robot, Parameters.d_robot, Parameters.d_robot);
+                    graphics.DrawEllipse(pen, X1 - Parameters.getR_robot(), Y1 - Parameters.getR_robot(), Parameters.d_robot, Parameters.d_robot);
                 }
                 if ((X2 >= 0) && (Y2 >= 0))
                 {
@@ -371,7 +371,7 @@ namespace MapCreation
                 if (mainForm.environment.canRobotStayOnThisPoint(X,Y))
                 {
                     double l_rl2 = Parameters.getSquaredDistance(crosslinker.getXY0(),X,Y);
-                    if (l_rl2 <= Parameters.l_max2)
+                    if (l_rl2 <= Parameters.getL_max2())
                     {
                         crosslinker.setCenter1(X,Y);
                         crosslinker.scan1 = mainForm.environment.getScan(X,Y, Parameters.finishColor);
@@ -439,7 +439,7 @@ namespace MapCreation
         {
             int X0 = crosslinker.getXY0()[0];
             int Y0 = crosslinker.getXY0()[1];
-            PixelMap scan01 = new PixelMap(Parameters.d_scan1 + Parameters.getR_scan(), Parameters.d_scan1 + Parameters.getR_scan(), 0, 0, 0);
+            PixelMap scan01 = new PixelMap(Parameters.getD_scan1() + Parameters.getR_scan(), Parameters.getD_scan1() + Parameters.getR_scan(), 0, 0, 0);
             int C = (Parameters.getD_scan() + Parameters.getR_scan()) / 2;
             for (int i = 0; i < crosslinker.scan0.xyScan.Count; i++)
                 scan01[crosslinker.scan0.xyScan[i][0] + C, crosslinker.scan0.xyScan[i][1] + C] = new Pixel(Parameters.startColor);

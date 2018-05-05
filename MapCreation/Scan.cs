@@ -33,7 +33,7 @@ namespace MapCreation
 
         public Scan()
         {
-            scanBmp = new PixelMap(Parameters.d_scan1, Parameters.d_scan1, 0, 0, 0);
+            scanBmp = new PixelMap(Parameters.getD_scan1(), Parameters.getD_scan1(), 0, 0, 0);
             setCenter(-1,-1);
         }
 

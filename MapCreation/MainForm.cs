@@ -60,7 +60,6 @@ namespace MapCreation
         private void button2_Click(object sender, EventArgs e)
         {
             Parameters.setR_scan(80);
-
             setMode1();
         }
 

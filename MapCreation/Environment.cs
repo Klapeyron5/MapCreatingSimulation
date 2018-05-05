@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace MapCreation
 {
@@ -73,11 +74,11 @@ namespace MapCreation
             bool flagRepeated; //Будет true, если точка уже сохранена в списке скана
 
             Random rand = new Random(System.DateTime.Now.Millisecond);
-
+            Stopwatch stopwatch = Stopwatch.StartNew();
             for (int i = 0; i < Parameters.n_phi; i++)
             {
                 flagR = false;
-                for (ushort r = 1; r < Parameters.getR_scan() + 1; r++)
+                for (ushort r = 1; r < Parameters.getR_scan1(); r++)
                 {
                     x = (int)Math.Round(r * Math.Cos(i * Parameters.step));
                     y = (int)Math.Round(r * Math.Sin(i * Parameters.step));
@@ -104,6 +105,8 @@ namespace MapCreation
                     scan.rByPhi[i] = 0;
             }
 
+            stopwatch.Stop();
+            Console.WriteLine("Time wasted: "+stopwatch.ElapsedMilliseconds);
             return scan;
         }
 
@@ -148,7 +151,7 @@ namespace MapCreation
                     {
                         try
                         {
-                            FillCircle(ref graphics, ref pen, ref brush, Parameters.r_robot, Parameters.d_robot, ref i, ref j);
+                            FillCircle(ref graphics, ref pen, ref brush, Parameters.getR_robot(), Parameters.d_robot, ref i, ref j);
                         }
                         catch (Exception ex) { }
                     }
