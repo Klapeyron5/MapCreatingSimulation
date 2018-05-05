@@ -220,11 +220,11 @@ namespace MapCreation
             double summ;
             double min;
             int optX = 0, optY = 0;
-            int C = (Parameters.d_scan + Parameters.r_scan) / 2;
+            int C = (Parameters.getD_scan() + Parameters.getR_scan()) / 2;
             List<int[]> errorZone = pieErrorZoneSearch(0,0,X2-X0,Y2-Y0);
             for(int k = 0; k < errorZone.Count; k++)
             {
-                    PixelMap map01 = new PixelMap(Parameters.d_scan1 + Parameters.r_scan, Parameters.d_scan1 + Parameters.r_scan, 0, 0, 0);
+                    PixelMap map01 = new PixelMap(Parameters.d_scan1 + Parameters.getR_scan(), Parameters.d_scan1 + Parameters.getR_scan(), 0, 0, 0);
                     List<int[]> irrelevantPoints0 = new List<int[]>();
                     List<int[]> irrelevantPoints1 = new List<int[]>();
                     int X = errorZone[k][0];
@@ -247,7 +247,7 @@ namespace MapCreation
                     {
                         //---------------------------------------scan1
                         flagR = false;
-                        for (ushort r = 1; r < Parameters.r_scan + 1; r++)
+                        for (ushort r = 1; r < Parameters.getR_scan() + 1; r++)
                         {
                             x1 = (int)Math.Round(r * Math.Cos(i * Parameters.step));
                             y1 = (int)Math.Round(r * Math.Sin(i * Parameters.step));
@@ -272,7 +272,7 @@ namespace MapCreation
                         }
                         //---------------------------------------scan0
                         flagR = false;
-                        for (ushort r = 1; r < Parameters.r_scan + 1; r++)
+                        for (ushort r = 1; r < Parameters.getR_scan() + 1; r++)
                         {
                             x1 = (int)Math.Round(r * Math.Cos(i * Parameters.step));
                             y1 = (int)Math.Round(r * Math.Sin(i * Parameters.step));

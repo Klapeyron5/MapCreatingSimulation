@@ -12,13 +12,12 @@ namespace MapCreation
     /// </summary>
     static class Parameters
     {
-
         //Simulation parameters
         //Все расстояния - это от центра пикселя до центра пикселя
         //Т.е. между ближайшими краями двух пикселей лежит (расстояние между этими пикселями-1) пикселей
         public const ushort n_phi = 250;
         public const ushort r_robot = 6;//6px = 25cm
-        public const ushort r_scan = 70;//70; //25cm*12=3m; 6px*12=72px ~ 70+1
+        private static int r_scan = 70;//70; //25cm*12=3m; 6px*12=72px ~ 70+1
         public const ushort l_max = 35; //1.5m
         public const ushort sgm_lmax = 3;//1; //3px = 12cm
         public const int sgm_psi_deg = 4;//2;//in degrees: 2*3.14/180*1.5m=0.05m  //0.046; //3*0.046=0.14rad (~20cm)
@@ -28,9 +27,9 @@ namespace MapCreation
         public const double step = 2 * Math.PI / n_phi; //для скана
 
         public const ushort d_robot = 2 * r_robot;
-        public const int r_scan2 = r_scan * r_scan;
-        public const ushort d_scan = 2 * r_scan;
-        public const ushort d_scan1 = d_scan + 1;
+        private static int r_scan2 = r_scan * r_scan;
+        private static int d_scan = 2 * r_scan;
+        public static int d_scan1 = d_scan + 1;
         public const ushort l_max2 = l_max * l_max;
 
         public static Color wallColor = Color.FromArgb(255, 255, 255);
@@ -107,5 +106,21 @@ namespace MapCreation
             //mainForm recreate current Mode
         }
 
+        public static void setR_scan(int r_scan)
+        {
+            Parameters.r_scan = r_scan;
+            Parameters.r_scan2 = r_scan * r_scan;
+            Parameters.d_scan = 2 * r_scan;
+        }
+
+        public static int getR_scan()
+        {
+            return r_scan;
+        }
+
+        public static int getD_scan()
+        {
+            return d_scan;
+        }
     }
 }

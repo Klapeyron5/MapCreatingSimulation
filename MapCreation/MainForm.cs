@@ -15,8 +15,8 @@ namespace MapCreation
             button1.MouseClick += button1_MouseClick;
             environment = new Environment(@"./Maps/PreciseMap1.png"); //default map
             updateEnvironmentProjection();
-            if (environment.isMapLoaded() == 1)
-                mode1ManualCrosslinking = new Mode1ManualCrosslinking(this);
+            setMode1();
+            
             /*    preciseMap = new PixelMap("C:\\Adocuments\\Library\\Clapeyron_ind\\task6 map creation\\PreciseMap1.png");
                 mouseMoveMap = new PixelMap(preciseMap);
                 preciseIndoorMap = getIndoorMap(preciseMap);
@@ -48,6 +48,21 @@ namespace MapCreation
         public Environment environment;
 
         private Mode1ManualCrosslinking mode1ManualCrosslinking;
+
+        private void setMode1()
+        {
+            if (mode1ManualCrosslinking != null)
+                mode1ManualCrosslinking.destroy();
+            if (environment.isMapLoaded() == 1)
+                mode1ManualCrosslinking = new Mode1ManualCrosslinking(this);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Parameters.setR_scan(80);
+
+            setMode1();
+        }
 
         /*   
              /// <summary>

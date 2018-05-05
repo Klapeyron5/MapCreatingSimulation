@@ -49,7 +49,7 @@ namespace MapCreation
             this.pictureBox2.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBox2.Location = new System.Drawing.Point(0, 32);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(141, 141);
+            this.pictureBox2.Size = new System.Drawing.Size(Parameters.getD_scan()+1, Parameters.getD_scan() + 1);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 11;
             this.pictureBox2.TabStop = false;
@@ -57,9 +57,9 @@ namespace MapCreation
             // pictureBox3
             // 
             this.pictureBox3.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.pictureBox3.Location = new System.Drawing.Point(0, 192+10);
+            this.pictureBox3.Location = new System.Drawing.Point(0, Parameters.getD_scan() + 52 +10);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(141, 141);
+            this.pictureBox3.Size = new System.Drawing.Size(Parameters.getD_scan() + 1, Parameters.getD_scan() + 1);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox3.TabIndex = 12;
             this.pictureBox3.TabStop = false;
@@ -67,9 +67,9 @@ namespace MapCreation
             // pictureBox4
             // 
             this.pictureBox4.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.pictureBox4.Location = new System.Drawing.Point(141+5, 32);
+            this.pictureBox4.Location = new System.Drawing.Point(Parameters.getD_scan() + 1 + 5, 32);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(211, 211);
+            this.pictureBox4.Size = new System.Drawing.Size(Parameters.getD_scan() + Parameters.getR_scan() + 1, Parameters.getD_scan() + Parameters.getR_scan() + 1);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox4.TabIndex = 13;
             this.pictureBox4.TabStop = false;
@@ -89,7 +89,7 @@ namespace MapCreation
             // 
             this.button3Scan1Center.AutoSize = true;
             this.button3Scan1Center.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.button3Scan1Center.Location = new System.Drawing.Point(0, 173+4);
+            this.button3Scan1Center.Location = new System.Drawing.Point(0, Parameters.getD_scan() + 36);
             this.button3Scan1Center.Name = "button3";
             this.button3Scan1Center.Size = new System.Drawing.Size(41, 13);
             this.button3Scan1Center.TabIndex = 16;
@@ -100,7 +100,7 @@ namespace MapCreation
             // 
             this.button4SupposedScan1Center.AutoSize = true;
             this.button4SupposedScan1Center.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.button4SupposedScan1Center.Location = new System.Drawing.Point(0, 203 + pictureBox3.Height);
+            this.button4SupposedScan1Center.Location = new System.Drawing.Point(0, pictureBox3.Location.Y + pictureBox3.Height + 2);
             this.button4SupposedScan1Center.Name = "button4";
             this.button4SupposedScan1Center.Size = new System.Drawing.Size(41, 13);
             this.button4SupposedScan1Center.TabIndex = 16;
@@ -111,7 +111,7 @@ namespace MapCreation
             // 
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label4.Location = new System.Drawing.Point(141 + 5, 9);
+            this.label4.Location = new System.Drawing.Point(pictureBox4.Location.X, 10);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(61, 13);
             this.label4.TabIndex = 17;
@@ -251,14 +251,14 @@ namespace MapCreation
                 {
                     preciseMapBmp.SetPixel(X0, Y0, Parameters.startColor);
                     pen = new Pen(Parameters.startColor);
-                    graphics.DrawEllipse(pen, X0 - Parameters.r_scan, Y0 - Parameters.r_scan, Parameters.d_scan, Parameters.d_scan);
+                    graphics.DrawEllipse(pen, X0 - Parameters.getR_scan(), Y0 - Parameters.getR_scan(), Parameters.getD_scan(), Parameters.getD_scan());
                     graphics.DrawEllipse(pen, X0 - Parameters.r_robot, Y0 - Parameters.r_robot, Parameters.d_robot, Parameters.d_robot);
                 }
                 if ((X1 >= 0) && (Y1 >= 0))
                 {
                     preciseMapBmp.SetPixel(X1, Y1, Parameters.finishColor);
                     pen = new Pen(Parameters.finishColor);
-                    graphics.DrawEllipse(pen, X1 - Parameters.r_scan, Y1 - Parameters.r_scan, Parameters.d_scan, Parameters.d_scan);
+                    graphics.DrawEllipse(pen, X1 - Parameters.getR_scan(), Y1 - Parameters.getR_scan(), Parameters.getD_scan(), Parameters.getD_scan());
                     graphics.DrawEllipse(pen, X1 - Parameters.r_robot, Y1 - Parameters.r_robot, Parameters.d_robot, Parameters.d_robot);
                 }
                 if ((X2 >= 0) && (Y2 >= 0))
@@ -439,8 +439,8 @@ namespace MapCreation
         {
             int X0 = crosslinker.getXY0()[0];
             int Y0 = crosslinker.getXY0()[1];
-            PixelMap scan01 = new PixelMap(Parameters.d_scan1 + Parameters.r_scan, Parameters.d_scan1 + Parameters.r_scan, 0, 0, 0);
-            int C = (Parameters.d_scan + Parameters.r_scan) / 2;
+            PixelMap scan01 = new PixelMap(Parameters.d_scan1 + Parameters.getR_scan(), Parameters.d_scan1 + Parameters.getR_scan(), 0, 0, 0);
+            int C = (Parameters.getD_scan() + Parameters.getR_scan()) / 2;
             for (int i = 0; i < crosslinker.scan0.xyScan.Count; i++)
                 scan01[crosslinker.scan0.xyScan[i][0] + C, crosslinker.scan0.xyScan[i][1] + C] = new Pixel(Parameters.startColor);
             for (int i = 0; i < crosslinker.scan1.xyScan.Count; i++)

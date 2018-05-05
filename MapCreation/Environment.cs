@@ -77,7 +77,7 @@ namespace MapCreation
             for (int i = 0; i < Parameters.n_phi; i++)
             {
                 flagR = false;
-                for (ushort r = 1; r < Parameters.r_scan + 1; r++)
+                for (ushort r = 1; r < Parameters.getR_scan() + 1; r++)
                 {
                     x = (int)Math.Round(r * Math.Cos(i * Parameters.step));
                     y = (int)Math.Round(r * Math.Sin(i * Parameters.step));
@@ -95,7 +95,7 @@ namespace MapCreation
                             y = (int)Math.Round(r * Math.Sin(i * Parameters.step));
                             scan.xyScan.Add(new int[2] { x, y });
                         }
-                        scan.scanBmp[x + Parameters.r_scan, y + Parameters.r_scan] = new Pixel(scanColor);
+                        scan.scanBmp[x + Parameters.getR_scan(), y + Parameters.getR_scan()] = new Pixel(scanColor);
                         flagR = true;
                         break;
                     }
