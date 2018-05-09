@@ -252,14 +252,14 @@ namespace MapCreation
                     preciseMapBmp.SetPixel(X0, Y0, Parameters.startColor);
                     pen = new Pen(Parameters.startColor);
                     graphics.DrawEllipse(pen, X0 - Parameters.getR_scan(), Y0 - Parameters.getR_scan(), Parameters.getD_scan(), Parameters.getD_scan());
-                    graphics.DrawEllipse(pen, X0 - Parameters.getR_robot(), Y0 - Parameters.getR_robot(), Parameters.d_robot, Parameters.d_robot);
+                    graphics.DrawEllipse(pen, X0 - Parameters.getR_robot(), Y0 - Parameters.getR_robot(), Parameters.getD_robot(), Parameters.getD_robot());
                 }
                 if ((X1 >= 0) && (Y1 >= 0))
                 {
                     preciseMapBmp.SetPixel(X1, Y1, Parameters.finishColor);
                     pen = new Pen(Parameters.finishColor);
                     graphics.DrawEllipse(pen, X1 - Parameters.getR_scan(), Y1 - Parameters.getR_scan(), Parameters.getD_scan(), Parameters.getD_scan());
-                    graphics.DrawEllipse(pen, X1 - Parameters.getR_robot(), Y1 - Parameters.getR_robot(), Parameters.d_robot, Parameters.d_robot);
+                    graphics.DrawEllipse(pen, X1 - Parameters.getR_robot(), Y1 - Parameters.getR_robot(), Parameters.getD_robot(), Parameters.getD_robot());
                 }
                 if ((X2 >= 0) && (Y2 >= 0))
                 {

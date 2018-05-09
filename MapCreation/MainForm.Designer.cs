@@ -172,12 +172,16 @@ namespace MapCreation
             // 
             resources.ApplyResources(this.numericUpDown1r_scan, "numericUpDown1");
             this.numericUpDown1r_scan.Name = "numericUpDown1";
+            numericUpDown1r_scan.Minimum = 0;
+            numericUpDown1r_scan.Maximum = 200;
             numericUpDown1r_scan.Value = Parameters.getR_scan();
             // 
             // numericUpDown2
             // 
             resources.ApplyResources(this.numericUpDown2r_robot, "numericUpDown2");
             this.numericUpDown2r_robot.Name = "numericUpDown2";
+            numericUpDown2r_robot.Minimum = 0;
+            numericUpDown2r_robot.Maximum = 200;
             numericUpDown2r_robot.Value = Parameters.getR_robot();
             // 
             // MainForm

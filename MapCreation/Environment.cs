@@ -151,7 +151,7 @@ namespace MapCreation
                     {
                         try
                         {
-                            FillCircle(ref graphics, ref pen, ref brush, Parameters.getR_robot(), Parameters.d_robot, ref i, ref j);
+                            FillCircle(ref graphics, ref pen, ref brush, Parameters.getR_robot(), Parameters.getD_robot(), ref i, ref j);
                         }
                         catch (Exception ex) { }
                     }
@@ -229,6 +229,11 @@ namespace MapCreation
                 }
             }
             return (ushort)(r + err);
+        }
+
+        public void recalculateIndoorMap()
+        {
+            preciseIndoorMap = calculateIndoorMap(preciseMap);
         }
     }
 }

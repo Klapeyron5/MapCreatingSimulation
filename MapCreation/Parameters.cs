@@ -16,7 +16,7 @@ namespace MapCreation
         //Все расстояния - это от центра пикселя до центра пикселя
         //Т.е. между ближайшими краями двух пикселей лежит (расстояние между этими пикселями-1) пикселей
         public const ushort n_phi = 250;
-        private const ushort r_robot = 6;//6px = 25cm
+        private static int r_robot = 6;//6px = 25cm
         private static int r_scan = 70;//70; //25cm*12=3m; 6px*12=72px ~ 70+1
         private static int l_max = r_scan/2; //1.5m
         public const ushort sgm_lmax = 3;//1; //3px = 12cm
@@ -26,7 +26,7 @@ namespace MapCreation
 
         public const double step = 2 * Math.PI / n_phi; //для скана
 
-        public const ushort d_robot = 2 * r_robot;
+        private static int d_robot = 2 * r_robot;
         private static int r_scan1 = r_scan + 1;
         private static int r_scan2 = r_scan * r_scan;
         private static int d_scan = 2 * r_scan;
@@ -118,6 +118,12 @@ namespace MapCreation
             Parameters.l_max = l_max* l_max;
         }
 
+        public static void setR_robot(int r_robot)
+        {
+            Parameters.r_robot = r_robot;
+            Parameters.d_robot = 2 * r_robot;
+        }
+
         public static int getR_scan()
         {
             return r_scan;
@@ -151,6 +157,11 @@ namespace MapCreation
         public static int getR_robot()
         {
             return r_robot;
+        }
+
+        public static int getD_robot()
+        {
+            return d_robot;
         }
     }
 }
