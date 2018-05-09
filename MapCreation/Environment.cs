@@ -59,6 +59,11 @@ namespace MapCreation
         private byte loaded;
 
         /// <summary>
+        /// Номер варианта зашумления радиуса со сканера. Больше номер - больше зашумление.
+        /// </summary>
+        private static byte r_scanNoiseMode = 1;
+
+        /// <summary>
         /// Возвращает скан с точной карты в заданных координатах
         /// </summary>
         /// <param name="X"></param>
@@ -91,7 +96,19 @@ namespace MapCreation
                                 flagRepeated = true;
                         if (!flagRepeated)
                         {
-                            r = rNoising1(ref r, ref rand);
+                            switch(r_scanNoiseMode)
+                            {
+                                case 1:
+                                    r = rNoising1(ref r, ref rand);
+                                    break;
+                                case 2:
+                                    r = rNoising2(ref r, ref rand);
+                                    break;
+                                case 3:
+                                    r = rNoising3(ref r, ref rand);
+                                    break;
+                            }
+
                             x = (int)Math.Round(r * Math.Cos(i * Parameters.getScan_step()));
                             y = (int)Math.Round(r * Math.Sin(i * Parameters.getScan_step()));
                             scan.xyScan.Add(new int[2] { x, y });
@@ -234,6 +251,16 @@ namespace MapCreation
         public void recalculateIndoorMap()
         {
             preciseIndoorMap = calculateIndoorMap(preciseMap);
+        }
+        
+        public static void setR_scanNoiseMode(byte r_scanNoiseMode)
+        {
+            Environment.r_scanNoiseMode = r_scanNoiseMode;
+        }
+
+        public static int getR_scanNoiseMode()
+        {
+            return r_scanNoiseMode;
         }
     }
 }

@@ -144,7 +144,7 @@ namespace MapCreation
             this.numericUpDown5scan_noise.Name = "numericUpDown5scan_noise";
             this.numericUpDown5scan_noise.Maximum = 3;
             this.numericUpDown5scan_noise.Minimum = 0;
-            this.numericUpDown5scan_noise.Value = 1;
+            this.numericUpDown5scan_noise.Value = Environment.getR_scanNoiseMode();
             // 
             // numericUpDown3sgm_lmax
             // 

@@ -59,13 +59,17 @@ namespace MapCreation
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Parameters.setR_scan((int)numericUpDown1r_scan.Value);
+            Parameters.setN_phi((int)numericUpDown6n_phi.Value);
             if (Parameters.getR_robot() != (int)numericUpDown2r_robot.Value)
             {
                 Parameters.setR_robot((int)numericUpDown2r_robot.Value);
                 environment.recalculateIndoorMap();
             }
-            
+            Parameters.setR_scan((int)numericUpDown1r_scan.Value);
+            Parameters.setSgm_lmax((int)numericUpDown3sgm_lmax.Value);
+            Parameters.setSgm_psi_deg((int)numericUpDown4sgm_psi.Value);
+            Environment.setR_scanNoiseMode((byte)numericUpDown5scan_noise.Value);
+
             setMode1();
         }
 
