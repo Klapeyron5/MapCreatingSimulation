@@ -19,9 +19,9 @@ namespace MapCreation
         private static int r_robot = 6;//6px = 25cm
         private static int r_scan = 70;//70; //25cm*12=3m; 6px*12=72px ~ 70+1
         private static int l_max = r_scan/2; //1.5m
-        public static int sgm_lmax = 3;//1; //3px = 12cm
-        public const int sgm_psi_deg = 4;//2;//in degrees: 2*3.14/180*1.5m=0.05m  //0.046; //3*0.046=0.14rad (~20cm)
-        public const double sgm_psi_rad = sgm_psi_deg * Math.PI / 180;
+        private static int sgm_lmax = 3;//1; //3px = 12cm
+        private static int sgm_psi_deg = 4;//2;//in degrees: 2*3.14/180*1.5m=0.05m  //0.046; //3*0.046=0.14rad (~20cm)
+        private static double sgm_psi_rad = sgm_psi_deg * Math.PI / 180;
         //    private const ushort sgm_r = 0; //D = f*h/px
 
         private static double step = 2 * Math.PI / n_phi; //для скана
@@ -177,6 +177,16 @@ namespace MapCreation
         public static double getScan_step()
         {
             return step;
+        }
+        
+        public static double getSgm_psi_rad()
+        {
+            return sgm_psi_rad;
+        }
+
+        public static int getSgm_psi_deg()
+        {
+            return sgm_psi_deg;
         }
     }
 }

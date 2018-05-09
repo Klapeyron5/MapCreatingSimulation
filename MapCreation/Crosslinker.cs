@@ -95,7 +95,7 @@ namespace MapCreation
             double psi_rad = Parameters.getAngleRadian(x1,y1,x2,y2);
 
             //половина стороны квадрата, в который точно вписан искомый сектор
-            int searchingSquareHalfSide = (int)Math.Ceiling(Math.Pow(Math.Pow(lplus3sgm * 3 * Parameters.sgm_psi_rad, 2) + Math.Pow(3 * Parameters.getSgm_l(l), 2), 0.5));
+            int searchingSquareHalfSide = (int)Math.Ceiling(Math.Pow(Math.Pow(lplus3sgm * 3 * Parameters.getSgm_psi_rad(), 2) + Math.Pow(3 * Parameters.getSgm_l(l), 2), 0.5));
 
             double l_rl2 = Parameters.getSquaredDistance(X0, Y0, X1, Y1);
             double l_rl = Math.Pow(l_rl2, 0.5);
@@ -132,19 +132,19 @@ namespace MapCreation
             
             if ((psi_rl_rad > Math.PI / 2) && (psi_sp_rad < -Math.PI / 2))
             {
-                if ((psi_sp_rad + 2 * Math.PI >= psi_rl_rad - 3 * Parameters.sgm_psi_rad) && (psi_sp_rad + 2 * Math.PI <= psi_rl_rad + 3 * Parameters.sgm_psi_rad)) angleFlag = true;
+                if ((psi_sp_rad + 2 * Math.PI >= psi_rl_rad - 3 * Parameters.getSgm_psi_rad()) && (psi_sp_rad + 2 * Math.PI <= psi_rl_rad + 3 * Parameters.getSgm_psi_rad())) angleFlag = true;
                 else angleFlag = false;
             }
             else
             {
                 if ((psi_rl_rad < -Math.PI / 2) && (psi_sp_rad > Math.PI / 2))
                 {
-                    if ((psi_sp_rad - 2 * Math.PI >= psi_rl_rad - 3 * Parameters.sgm_psi_rad) && (psi_sp_rad - 2 * Math.PI <= psi_rl_rad + 3 * Parameters.sgm_psi_rad)) angleFlag = true;
+                    if ((psi_sp_rad - 2 * Math.PI >= psi_rl_rad - 3 * Parameters.getSgm_psi_rad()) && (psi_sp_rad - 2 * Math.PI <= psi_rl_rad + 3 * Parameters.getSgm_psi_rad())) angleFlag = true;
                     else angleFlag = false;
                 }
                 else
                 {
-                    if ((psi_sp_rad >= psi_rl_rad - 3 * Parameters.sgm_psi_rad) && (psi_sp_rad <= psi_rl_rad + 3 * Parameters.sgm_psi_rad)) angleFlag = true;
+                    if ((psi_sp_rad >= psi_rl_rad - 3 * Parameters.getSgm_psi_rad()) && (psi_sp_rad <= psi_rl_rad + 3 * Parameters.getSgm_psi_rad())) angleFlag = true;
                 }
             }
             if (((l_sp >= l_rlMinus3sgm) && (l_sp <= l_rlPlus3sgm)) && angleFlag)
@@ -188,19 +188,19 @@ namespace MapCreation
             double l_rlMinus3sgm = l_rl - 3 * sgm_lrl;
             if ((psi_rl_rad > Math.PI / 2) && (psi_sp_rad < -Math.PI / 2))
             {
-                if ((psi_sp_rad + 2 * Math.PI >= psi_rl_rad - 3 * Parameters.sgm_psi_rad) && (psi_sp_rad + 2 * Math.PI <= psi_rl_rad + 3 * Parameters.sgm_psi_rad)) angleFlag = true;
+                if ((psi_sp_rad + 2 * Math.PI >= psi_rl_rad - 3 * Parameters.getSgm_psi_rad()) && (psi_sp_rad + 2 * Math.PI <= psi_rl_rad + 3 * Parameters.getSgm_psi_rad())) angleFlag = true;
                 else angleFlag = false;
             }
             else
             {
                 if ((psi_rl_rad < -Math.PI / 2) && (psi_sp_rad > Math.PI / 2))
                 {
-                    if ((psi_sp_rad - 2 * Math.PI >= psi_rl_rad - 3 * Parameters.sgm_psi_rad) && (psi_sp_rad - 2 * Math.PI <= psi_rl_rad + 3 * Parameters.sgm_psi_rad)) angleFlag = true;
+                    if ((psi_sp_rad - 2 * Math.PI >= psi_rl_rad - 3 * Parameters.getSgm_psi_rad()) && (psi_sp_rad - 2 * Math.PI <= psi_rl_rad + 3 * Parameters.getSgm_psi_rad())) angleFlag = true;
                     else angleFlag = false;
                 }
                 else
                 {
-                    if ((psi_sp_rad >= psi_rl_rad - 3 * Parameters.sgm_psi_rad) && (psi_sp_rad <= psi_rl_rad + 3 * Parameters.sgm_psi_rad)) angleFlag = true;
+                    if ((psi_sp_rad >= psi_rl_rad - 3 * Parameters.getSgm_psi_rad()) && (psi_sp_rad <= psi_rl_rad + 3 * Parameters.getSgm_psi_rad())) angleFlag = true;
                 }
             }
             if (((l_sp >= l_rlMinus3sgm) && (l_sp <= l_rlPlus3sgm)) && angleFlag)
