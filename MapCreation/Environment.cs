@@ -75,13 +75,13 @@ namespace MapCreation
 
             Random rand = new Random(System.DateTime.Now.Millisecond);
             Stopwatch stopwatch = Stopwatch.StartNew();
-            for (int i = 0; i < Parameters.n_phi; i++)
+            for (int i = 0; i < Parameters.getN_phi(); i++)
             {
                 flagR = false;
                 for (ushort r = 1; r < Parameters.getR_scan1(); r++)
                 {
-                    x = (int)Math.Round(r * Math.Cos(i * Parameters.step));
-                    y = (int)Math.Round(r * Math.Sin(i * Parameters.step));
+                    x = (int)Math.Round(r * Math.Cos(i * Parameters.getScan_step()));
+                    y = (int)Math.Round(r * Math.Sin(i * Parameters.getScan_step()));
                     if (preciseMap[x + X, y + Y].Color == Parameters.wallColor)
                     {
                         scan.rByPhi[i] = r;
@@ -92,8 +92,8 @@ namespace MapCreation
                         if (!flagRepeated)
                         {
                             r = rNoising1(ref r, ref rand);
-                            x = (int)Math.Round(r * Math.Cos(i * Parameters.step));
-                            y = (int)Math.Round(r * Math.Sin(i * Parameters.step));
+                            x = (int)Math.Round(r * Math.Cos(i * Parameters.getScan_step()));
+                            y = (int)Math.Round(r * Math.Sin(i * Parameters.getScan_step()));
                             scan.xyScan.Add(new int[2] { x, y });
                         }
                         scan.scanBmp[x + Parameters.getR_scan(), y + Parameters.getR_scan()] = new Pixel(scanColor);

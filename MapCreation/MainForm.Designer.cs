@@ -34,6 +34,19 @@ namespace MapCreation
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.numericUpDown4sgm_psi = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown5scan_noise = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown6n_phi = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown3sgm_lmax = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown2r_robot = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown1r_scan = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -42,20 +55,16 @@ namespace MapCreation
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.numericUpDown1r_scan = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown2r_robot = new System.Windows.Forms.NumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1r_scan)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4sgm_psi)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5scan_noise)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6n_phi)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3sgm_lmax)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2r_robot)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1r_scan)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -70,6 +79,119 @@ namespace MapCreation
             this.panel1.Controls.Add(this.radioButton1);
             resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Name = "panel1";
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.SystemColors.ScrollBar;
+            this.panel3.Controls.Add(this.label8);
+            this.panel3.Controls.Add(this.numericUpDown4sgm_psi);
+            this.panel3.Controls.Add(this.numericUpDown5scan_noise);
+            this.panel3.Controls.Add(this.numericUpDown6n_phi);
+            this.panel3.Controls.Add(this.numericUpDown3sgm_lmax);
+            this.panel3.Controls.Add(this.numericUpDown2r_robot);
+            this.panel3.Controls.Add(this.numericUpDown1r_scan);
+            this.panel3.Controls.Add(this.label7);
+            this.panel3.Controls.Add(this.label6);
+            this.panel3.Controls.Add(this.label5);
+            this.panel3.Controls.Add(this.label4);
+            this.panel3.Controls.Add(this.label3);
+            this.panel3.Controls.Add(this.label2);
+            this.panel3.Controls.Add(this.button2);
+            resources.ApplyResources(this.panel3, "panel3");
+            this.panel3.Name = "panel3";
+            // 
+            // numericUpDown6n_phi
+            // 
+            resources.ApplyResources(this.numericUpDown6n_phi, "numericUpDown6n_phi");
+            this.numericUpDown6n_phi.Name = "numericUpDown6n_phi";
+            numericUpDown6n_phi.Minimum = 10;
+            numericUpDown6n_phi.Maximum = 500;
+            numericUpDown6n_phi.Value = Parameters.getN_phi();
+            // 
+            // numericUpDown2r_robot
+            // 
+            resources.ApplyResources(this.numericUpDown2r_robot, "numericUpDown2r_robot");
+            this.numericUpDown2r_robot.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numericUpDown2r_robot.Name = "numericUpDown2r_robot";
+            this.numericUpDown2r_robot.Value = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            // 
+            // numericUpDown1r_scan
+            // 
+            resources.ApplyResources(this.numericUpDown1r_scan, "numericUpDown1r_scan");
+            this.numericUpDown1r_scan.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numericUpDown1r_scan.Name = "numericUpDown1r_scan";
+            this.numericUpDown1r_scan.Value = new decimal(new int[] {
+            70,
+            0,
+            0,
+            0});
+            // 
+            // numericUpDown3sgm_lmax
+            // 
+            resources.ApplyResources(this.numericUpDown3sgm_lmax, "numericUpDown3sgm_lmax");
+            this.numericUpDown3sgm_lmax.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDown3sgm_lmax.Name = "numericUpDown3sgm_lmax";
+            this.numericUpDown3sgm_lmax.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
+            // numericUpDown4sgm_psi
+            // 
+            resources.ApplyResources(this.numericUpDown4sgm_psi, "numericUpDown4sgm_psi");
+            this.numericUpDown4sgm_psi.Name = "numericUpDown4sgm_psi";
+            // 
+            // numericUpDown5scan_noise
+            // 
+            resources.ApplyResources(this.numericUpDown5scan_noise, "numericUpDown5scan_noise");
+            this.numericUpDown5scan_noise.Name = "numericUpDown5scan_noise";
+            // 
+            // label7
+            // 
+            resources.ApplyResources(this.label7, "label7");
+            this.label7.Name = "label7";
+            // 
+            // label6
+            // 
+            resources.ApplyResources(this.label6, "label6");
+            this.label6.Name = "label6";
+            // 
+            // label5
+            // 
+            resources.ApplyResources(this.label5, "label5");
+            this.label5.Name = "label5";
+            // 
+            // label4
+            // 
+            resources.ApplyResources(this.label4, "label4");
+            this.label4.Name = "label4";
+            // 
+            // label3
+            // 
+            resources.ApplyResources(this.label3, "label3");
+            this.label3.Name = "label3";
+            // 
+            // label2
+            // 
+            resources.ApplyResources(this.label2, "label2");
+            this.label2.Name = "label2";
             // 
             // button2
             // 
@@ -123,66 +245,11 @@ namespace MapCreation
             resources.ApplyResources(this.panel2, "panel2");
             this.panel2.Name = "panel2";
             // 
-            // panel3
+            // label8
             // 
-            this.panel3.BackColor = System.Drawing.SystemColors.ScrollBar;
-            this.panel3.Controls.Add(this.numericUpDown2r_robot);
-            this.panel3.Controls.Add(this.numericUpDown1r_scan);
-            this.panel3.Controls.Add(this.label7);
-            this.panel3.Controls.Add(this.label6);
-            this.panel3.Controls.Add(this.label5);
-            this.panel3.Controls.Add(this.label4);
-            this.panel3.Controls.Add(this.label3);
-            this.panel3.Controls.Add(this.label2);
-            this.panel3.Controls.Add(this.button2);
-            resources.ApplyResources(this.panel3, "panel3");
-            this.panel3.Name = "panel3";
-            // 
-            // label2
-            // 
-            resources.ApplyResources(this.label2, "label2");
-            this.label2.Name = "label2";
-            // 
-            // label3
-            // 
-            resources.ApplyResources(this.label3, "label3");
-            this.label3.Name = "label3";
-            // 
-            // label4
-            // 
-            resources.ApplyResources(this.label4, "label4");
-            this.label4.Name = "label4";
-            // 
-            // label5
-            // 
-            resources.ApplyResources(this.label5, "label5");
-            this.label5.Name = "label5";
-            // 
-            // label6
-            // 
-            resources.ApplyResources(this.label6, "label6");
-            this.label6.Name = "label6";
-            // 
-            // label7
-            // 
-            resources.ApplyResources(this.label7, "label7");
-            this.label7.Name = "label7";
-            // 
-            // numericUpDown1
-            // 
-            resources.ApplyResources(this.numericUpDown1r_scan, "numericUpDown1");
-            this.numericUpDown1r_scan.Name = "numericUpDown1";
-            numericUpDown1r_scan.Minimum = 0;
-            numericUpDown1r_scan.Maximum = 200;
-            numericUpDown1r_scan.Value = Parameters.getR_scan();
-            // 
-            // numericUpDown2
-            // 
-            resources.ApplyResources(this.numericUpDown2r_robot, "numericUpDown2");
-            this.numericUpDown2r_robot.Name = "numericUpDown2";
-            numericUpDown2r_robot.Minimum = 0;
-            numericUpDown2r_robot.Maximum = 200;
-            numericUpDown2r_robot.Value = Parameters.getR_robot();
+            resources.ApplyResources(this.label8, "label8");
+            this.label8.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label8.Name = "label8";
             // 
             // MainForm
             // 
@@ -195,11 +262,15 @@ namespace MapCreation
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1r_scan)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4sgm_psi)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5scan_noise)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6n_phi)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3sgm_lmax)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2r_robot)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1r_scan)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -346,6 +417,11 @@ namespace MapCreation
         private Label label2;
         private NumericUpDown numericUpDown2r_robot;
         private NumericUpDown numericUpDown1r_scan;
+        private NumericUpDown numericUpDown3sgm_lmax;
+        private NumericUpDown numericUpDown4sgm_psi;
+        private NumericUpDown numericUpDown5scan_noise;
+        private NumericUpDown numericUpDown6n_phi;
+        private Label label8;
     }
 }
 

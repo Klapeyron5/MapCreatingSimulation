@@ -117,49 +117,160 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="numericUpDown2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>83, 36</value>
-  </data>
-  <data name="numericUpDown2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>36, 20</value>
-  </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="numericUpDown2.TabIndex" type="System.Int32, mscorlib">
-    <value>25</value>
+  <data name="label8.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="&gt;&gt;numericUpDown2.Name" xml:space="preserve">
-    <value>numericUpDown2</value>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="label8.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 122</value>
   </data>
-  <data name="&gt;&gt;numericUpDown2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="label8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>56, 13</value>
   </data>
-  <data name="&gt;&gt;numericUpDown2.Parent" xml:space="preserve">
+  <data name="label8.TabIndex" type="System.Int32, mscorlib">
+    <value>26</value>
+  </data>
+  <data name="label8.Text" xml:space="preserve">
+    <value>1px = 4cm</value>
+  </data>
+  <data name="&gt;&gt;label8.Name" xml:space="preserve">
+    <value>label8</value>
+  </data>
+  <data name="&gt;&gt;label8.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label8.Parent" xml:space="preserve">
     <value>panel3</value>
   </data>
-  <data name="&gt;&gt;numericUpDown2.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;label8.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="numericUpDown1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>83, 12</value>
+  <data name="numericUpDown4sgm_psi.Location" type="System.Drawing.Point, System.Drawing">
+    <value>83, 83</value>
   </data>
-  <data name="numericUpDown1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>36, 20</value>
+  <data name="numericUpDown4sgm_psi.Size" type="System.Drawing.Size, System.Drawing">
+    <value>37, 20</value>
   </data>
-  <data name="numericUpDown1.TabIndex" type="System.Int32, mscorlib">
-    <value>24</value>
+  <data name="numericUpDown4sgm_psi.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
   </data>
-  <data name="&gt;&gt;numericUpDown1.Name" xml:space="preserve">
-    <value>numericUpDown1</value>
+  <data name="&gt;&gt;numericUpDown4sgm_psi.Name" xml:space="preserve">
+    <value>numericUpDown4sgm_psi</value>
   </data>
-  <data name="&gt;&gt;numericUpDown1.Type" xml:space="preserve">
+  <data name="&gt;&gt;numericUpDown4sgm_psi.Type" xml:space="preserve">
     <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;numericUpDown1.Parent" xml:space="preserve">
+  <data name="&gt;&gt;numericUpDown4sgm_psi.Parent" xml:space="preserve">
     <value>panel3</value>
   </data>
-  <data name="&gt;&gt;numericUpDown1.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;numericUpDown4sgm_psi.ZOrder" xml:space="preserve">
     <value>1</value>
+  </data>
+  <data name="numericUpDown5scan_noise.Location" type="System.Drawing.Point, System.Drawing">
+    <value>242, 3</value>
+  </data>
+  <data name="numericUpDown5scan_noise.Size" type="System.Drawing.Size, System.Drawing">
+    <value>38, 20</value>
+  </data>
+  <data name="numericUpDown5scan_noise.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown5scan_noise.Name" xml:space="preserve">
+    <value>numericUpDown5scan_noise</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown5scan_noise.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown5scan_noise.Parent" xml:space="preserve">
+    <value>panel3</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown5scan_noise.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="numericUpDown6n_phi.Location" type="System.Drawing.Point, System.Drawing">
+    <value>242, 29</value>
+  </data>
+  <data name="numericUpDown6n_phi.Size" type="System.Drawing.Size, System.Drawing">
+    <value>38, 20</value>
+  </data>
+  <data name="numericUpDown6n_phi.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown6n_phi.Name" xml:space="preserve">
+    <value>numericUpDown6n_phi</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown6n_phi.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown6n_phi.Parent" xml:space="preserve">
+    <value>panel3</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown6n_phi.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="numericUpDown3sgm_lmax.Location" type="System.Drawing.Point, System.Drawing">
+    <value>83, 55</value>
+  </data>
+  <data name="numericUpDown3sgm_lmax.Size" type="System.Drawing.Size, System.Drawing">
+    <value>37, 20</value>
+  </data>
+  <data name="numericUpDown3sgm_lmax.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown3sgm_lmax.Name" xml:space="preserve">
+    <value>numericUpDown3sgm_lmax</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown3sgm_lmax.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown3sgm_lmax.Parent" xml:space="preserve">
+    <value>panel3</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown3sgm_lmax.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="numericUpDown2r_robot.Location" type="System.Drawing.Point, System.Drawing">
+    <value>83, 29</value>
+  </data>
+  <data name="numericUpDown2r_robot.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 20</value>
+  </data>
+  <data name="numericUpDown2r_robot.TabIndex" type="System.Int32, mscorlib">
+    <value>25</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown2r_robot.Name" xml:space="preserve">
+    <value>numericUpDown2r_robot</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown2r_robot.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown2r_robot.Parent" xml:space="preserve">
+    <value>panel3</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown2r_robot.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="numericUpDown1r_scan.Location" type="System.Drawing.Point, System.Drawing">
+    <value>83, 3</value>
+  </data>
+  <data name="numericUpDown1r_scan.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 20</value>
+  </data>
+  <data name="numericUpDown1r_scan.TabIndex" type="System.Int32, mscorlib">
+    <value>24</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown1r_scan.Name" xml:space="preserve">
+    <value>numericUpDown1r_scan</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown1r_scan.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown1r_scan.Parent" xml:space="preserve">
+    <value>panel3</value>
+  </data>
+  <data name="&gt;&gt;numericUpDown1r_scan.ZOrder" xml:space="preserve">
+    <value>6</value>
   </data>
   <data name="label7.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -169,7 +280,7 @@
     <value>NoControl</value>
   </data>
   <data name="label7.Location" type="System.Drawing.Point, System.Drawing">
-    <value>16, 96</value>
+    <value>3, 83</value>
   </data>
   <data name="label7.Size" type="System.Drawing.Size, System.Drawing">
     <value>45, 13</value>
@@ -190,7 +301,7 @@
     <value>panel3</value>
   </data>
   <data name="&gt;&gt;label7.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>7</value>
   </data>
   <data name="label6.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -199,7 +310,7 @@
     <value>NoControl</value>
   </data>
   <data name="label6.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 83</value>
+    <value>3, 57</value>
   </data>
   <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
     <value>53, 13</value>
@@ -220,7 +331,7 @@
     <value>panel3</value>
   </data>
   <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>8</value>
   </data>
   <data name="label5.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -229,7 +340,7 @@
     <value>NoControl</value>
   </data>
   <data name="label5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 38</value>
+    <value>2, 31</value>
   </data>
   <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
     <value>40, 13</value>
@@ -250,7 +361,7 @@
     <value>panel3</value>
   </data>
   <data name="&gt;&gt;label5.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>9</value>
   </data>
   <data name="label4.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -259,7 +370,7 @@
     <value>NoControl</value>
   </data>
   <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>80, 109</value>
+    <value>159, 31</value>
   </data>
   <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
     <value>33, 13</value>
@@ -280,7 +391,7 @@
     <value>panel3</value>
   </data>
   <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>10</value>
   </data>
   <data name="label3.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -289,7 +400,7 @@
     <value>NoControl</value>
   </data>
   <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>16, 109</value>
+    <value>159, 5</value>
   </data>
   <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
     <value>58, 13</value>
@@ -310,13 +421,13 @@
     <value>panel3</value>
   </data>
   <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>11</value>
   </data>
   <data name="label2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 14</value>
+    <value>3, 5</value>
   </data>
   <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
     <value>39, 13</value>
@@ -337,7 +448,7 @@
     <value>panel3</value>
   </data>
   <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>12</value>
   </data>
   <data name="button2.Location" type="System.Drawing.Point, System.Drawing">
     <value>622, 109</value>
@@ -361,7 +472,7 @@
     <value>panel3</value>
   </data>
   <data name="&gt;&gt;button2.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>13</value>
   </data>
   <data name="panel3.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 810</value>

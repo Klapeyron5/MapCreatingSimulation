@@ -243,14 +243,14 @@ namespace MapCreation
                     bool flagRepeated; //Будет true, если точка уже сохранена в списке скана
                     int rPhi = -1;
 
-                    for (int i = 0; i < Parameters.n_phi; i++)
+                    for (int i = 0; i < Parameters.getN_phi(); i++)
                     {
                         //---------------------------------------scan1
                         flagR = false;
                         for (ushort r = 1; r < Parameters.getR_scan() + 1; r++)
                         {
-                            x1 = (int)Math.Round(r * Math.Cos(i * Parameters.step));
-                            y1 = (int)Math.Round(r * Math.Sin(i * Parameters.step));
+                            x1 = (int)Math.Round(r * Math.Cos(i * Parameters.getScan_step()));
+                            y1 = (int)Math.Round(r * Math.Sin(i * Parameters.getScan_step()));
                             if (map01[x1 + X + C, y1 + Y + C].Color == Parameters.wallColor)
                             {
                                 rPhi = r;
@@ -260,7 +260,7 @@ namespace MapCreation
                         }
                         if (!flagR)
                             rPhi = 0;
-                        if (rPhi == -1) Console.WriteLine("Scanning problems r == -1 on scan1, angle: " + i * Parameters.step / Math.PI * 180);
+                        if (rPhi == -1) Console.WriteLine("Scanning problems r == -1 on scan1, angle: " + i * Parameters.getScan_step() / Math.PI * 180);
                         if (scan1.rByPhi[i] != rPhi)
                         {
                             flagRepeated = false;
@@ -274,8 +274,8 @@ namespace MapCreation
                         flagR = false;
                         for (ushort r = 1; r < Parameters.getR_scan() + 1; r++)
                         {
-                            x1 = (int)Math.Round(r * Math.Cos(i * Parameters.step));
-                            y1 = (int)Math.Round(r * Math.Sin(i * Parameters.step));
+                            x1 = (int)Math.Round(r * Math.Cos(i * Parameters.getScan_step()));
+                            y1 = (int)Math.Round(r * Math.Sin(i * Parameters.getScan_step()));
                             if (map01[x1 + C, y1 + C].Color == Parameters.wallColor)
                             {
                                 rPhi = r;
@@ -285,7 +285,7 @@ namespace MapCreation
                         }
                         if (!flagR)
                             rPhi = 0;
-                        if (rPhi == -1) Console.WriteLine("Scanning problems r == -1 on scan0, angle: " + i * Parameters.step / Math.PI * 180);
+                        if (rPhi == -1) Console.WriteLine("Scanning problems r == -1 on scan0, angle: " + i * Parameters.getScan_step() / Math.PI * 180);
                         if (scan0.rByPhi[i] != rPhi)
                         {
                             flagRepeated = false;

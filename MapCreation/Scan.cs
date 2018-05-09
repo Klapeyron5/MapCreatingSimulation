@@ -12,7 +12,7 @@ namespace MapCreation
         /// <summary>
         /// Дискретная ф-я r(phi)
         /// </summary>
-        public ushort[] rByPhi = new ushort[Parameters.n_phi]; //TODO get set
+        public ushort[] rByPhi = new ushort[Parameters.getN_phi()]; //TODO get set
 
         /// <summary>
         /// Точки, принадлежащие скану в текущей пиксельной дискретности. Если две точки ф-и r(phi)

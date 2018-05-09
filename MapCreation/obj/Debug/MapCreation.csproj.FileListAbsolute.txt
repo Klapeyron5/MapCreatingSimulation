@@ -8,3 +8,13 @@ C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\o
 C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.exe
 C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.pdb
 C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.csprojResolveAssemblyReference.cache
+C:\Users\Klapeyron\Desktop\MapCreatingSimulation-master\MapCreatingSimulation-master\MapCreation\bin\Debug\MapCreation.exe.config
+C:\Users\Klapeyron\Desktop\MapCreatingSimulation-master\MapCreatingSimulation-master\MapCreation\bin\Debug\MapCreation.exe
+C:\Users\Klapeyron\Desktop\MapCreatingSimulation-master\MapCreatingSimulation-master\MapCreation\bin\Debug\MapCreation.pdb
+C:\Users\Klapeyron\Desktop\MapCreatingSimulation-master\MapCreatingSimulation-master\MapCreation\obj\Debug\MapCreation.csprojResolveAssemblyReference.cache
+C:\Users\Klapeyron\Desktop\MapCreatingSimulation-master\MapCreatingSimulation-master\MapCreation\obj\Debug\MapCreation.MainForm.resources
+C:\Users\Klapeyron\Desktop\MapCreatingSimulation-master\MapCreatingSimulation-master\MapCreation\obj\Debug\MapCreation.Properties.Resources.resources
+C:\Users\Klapeyron\Desktop\MapCreatingSimulation-master\MapCreatingSimulation-master\MapCreation\obj\Debug\MapCreation.csproj.GenerateResource.Cache
+C:\Users\Klapeyron\Desktop\MapCreatingSimulation-master\MapCreatingSimulation-master\MapCreation\obj\Debug\MapCreation.csproj.CoreCompileInputs.cache
+C:\Users\Klapeyron\Desktop\MapCreatingSimulation-master\MapCreatingSimulation-master\MapCreation\obj\Debug\MapCreation.exe
+C:\Users\Klapeyron\Desktop\MapCreatingSimulation-master\MapCreatingSimulation-master\MapCreation\obj\Debug\MapCreation.pdb
