@@ -58,6 +58,8 @@
     </Compile>
     <Compile Include="Mode.cs" />
     <Compile Include="Mode1ManualCrosslinking.cs" />
+    <Compile Include="Mode2ManualMapCreation.cs" />
+    <Compile Include="Mode3MapCreation.cs" />
     <Compile Include="Parameters.cs" />
     <Compile Include="Pixel.cs" />
     <Compile Include="PixelMap.cs" />

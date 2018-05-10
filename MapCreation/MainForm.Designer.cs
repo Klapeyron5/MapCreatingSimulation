@@ -216,6 +216,7 @@ namespace MapCreation
             this.radioButton3.Name = "radioButton3";
             this.radioButton3.TabStop = true;
             this.radioButton3.UseVisualStyleBackColor = true;
+            radioButton3.CheckedChanged += radioButton3_CheckedChanged;
             // 
             // radioButton2
             // 
@@ -223,6 +224,7 @@ namespace MapCreation
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.TabStop = true;
             this.radioButton2.UseVisualStyleBackColor = true;
+            radioButton2.CheckedChanged += radioButton2_CheckedChanged;
             // 
             // radioButton1
             // 
@@ -230,6 +232,8 @@ namespace MapCreation
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.TabStop = true;
             this.radioButton1.UseVisualStyleBackColor = true;
+            radioButton1.Checked = true;
+            radioButton1.CheckedChanged += radioButton1_CheckedChanged;
             // 
             // panel2
             // 
