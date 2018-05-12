@@ -160,6 +160,8 @@ namespace MapCreation
             Pen pen = new Pen(Parameters.wallColor);
             SolidBrush brush = new SolidBrush(Parameters.wallColor);
             Graphics graphics = Graphics.FromImage(preciseIndoorMapBmp);
+            int r = Parameters.getR_robot() + Parameters.getR_robot() / 2; //увеличенные размеры робота, для того, чтобы на угловых участках траектории сглаживание происходило без проблем
+            int d = Parameters.getD_robot() + Parameters.getR_robot();
             for (int i = 0; i < map.Width; i++)
             {
                 for (int j = 0; j < map.Height; j++)
@@ -168,7 +170,7 @@ namespace MapCreation
                     {
                         try
                         {
-                            FillCircle(ref graphics, ref pen, ref brush, Parameters.getR_robot(), Parameters.getD_robot(), ref i, ref j);
+                            FillCircle(ref graphics, ref pen, ref brush, r, d, ref i, ref j);
                         }
                         catch (Exception ex) { }
                     }

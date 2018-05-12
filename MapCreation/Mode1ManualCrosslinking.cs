@@ -185,9 +185,9 @@ namespace MapCreation
 
         public void destroy()
         {
-            mainForm.setPictureBox1MouseDownHandler(pictureBox1_MouseDown);
-            mainForm.setPictureBox1MouseMoveHandler(pictureBox1_MouseMove);
-            mainForm.clearPanel1();
+            mainForm.removePictureBox1MouseDownHandler(pictureBox1_MouseDown);
+            mainForm.removePictureBox1MouseMoveHandler(pictureBox1_MouseMove);
+            mainForm.clearPanel2();
         }
 
         private System.Windows.Forms.PictureBox pictureBox2;

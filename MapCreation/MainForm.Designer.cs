@@ -304,7 +304,7 @@ namespace MapCreation
         /// <summary>
         /// Освобождает panel1
         /// </summary>
-        public void clearPanel1()
+        public void clearPanel2()
         {
             panel1SuspendLayout();
             for (int i = 0; i < panel2.Controls.Count; i++)
@@ -394,6 +394,11 @@ namespace MapCreation
             }
             else
                 pictureBox.Image = bmp;
+        }
+
+        public Size getMainPictureBoxSize()
+        {
+            return pictureBox1.Size;
         }
 
         private Button button2;
