@@ -1,13 +1,3 @@
-C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\bin\Debug\MapCreation.exe.config
-C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\bin\Debug\MapCreation.exe
-C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\bin\Debug\MapCreation.pdb
-C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.MainForm.resources
-C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.Properties.Resources.resources
-C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.csproj.GenerateResource.Cache
-C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.csproj.CoreCompileInputs.cache
-C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.exe
-C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.pdb
-C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.csprojResolveAssemblyReference.cache
 C:\Users\Klapeyron\Desktop\MapCreatingSimulation-master\MapCreatingSimulation-master\MapCreation\bin\Debug\MapCreation.exe.config
 C:\Users\Klapeyron\Desktop\MapCreatingSimulation-master\MapCreatingSimulation-master\MapCreation\bin\Debug\MapCreation.exe
 C:\Users\Klapeyron\Desktop\MapCreatingSimulation-master\MapCreatingSimulation-master\MapCreation\bin\Debug\MapCreation.pdb
@@ -18,3 +8,12 @@ C:\Users\Klapeyron\Desktop\MapCreatingSimulation-master\MapCreatingSimulation-ma
 C:\Users\Klapeyron\Desktop\MapCreatingSimulation-master\MapCreatingSimulation-master\MapCreation\obj\Debug\MapCreation.csproj.CoreCompileInputs.cache
 C:\Users\Klapeyron\Desktop\MapCreatingSimulation-master\MapCreatingSimulation-master\MapCreation\obj\Debug\MapCreation.exe
 C:\Users\Klapeyron\Desktop\MapCreatingSimulation-master\MapCreatingSimulation-master\MapCreation\obj\Debug\MapCreation.pdb
+C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\bin\Debug\MapCreation.exe.config
+C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\bin\Debug\MapCreation.exe
+C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\bin\Debug\MapCreation.pdb
+C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.MainForm.resources
+C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.Properties.Resources.resources
+C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.csproj.GenerateResource.Cache
+C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.csproj.CoreCompileInputs.cache
+C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.exe
+C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.pdb

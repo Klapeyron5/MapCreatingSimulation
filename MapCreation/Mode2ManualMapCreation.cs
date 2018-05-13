@@ -23,6 +23,7 @@ namespace MapCreation
 
         public void initialize()
         {
+            mainForm.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyUp);
             pictureBox2 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             // 
@@ -63,6 +64,15 @@ namespace MapCreation
         /// </summary>
         private int positionCounter = -1;
 
+        private void MainForm_KeyUp(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine("ENTER");
+            if (e.KeyData == Keys.Enter)
+            {
+                Console.WriteLine("ENTER");
+            }
+        }
+
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             int X = e.X * mainForm.environment.preciseMap.Width / mainForm.getPictureBox1Size().Width;
@@ -91,6 +101,13 @@ namespace MapCreation
             currentRobotPosX = X;
             currentRobotPosY = Y;
             setScan0(X, Y);
+
+            //на предсказанную карту нанесем initial scan
+            for(int i = 0; i < crosslinker.scan0.xyScan.Count; i++)
+            {
+                predictedMap[crosslinker.scan0.xyScan[i][0]+X, crosslinker.scan0.xyScan[i][1]+Y] = new Pixel(Parameters.wallColor);
+            }
+            MainForm.drawBitmapOnPictureBox(pictureBox2, predictedMap.GetBitmap());
         }
 
         private void setScan0(int X, int Y)

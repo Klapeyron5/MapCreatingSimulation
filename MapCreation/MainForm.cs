@@ -16,6 +16,7 @@ namespace MapCreation
             environment = new Environment(@"./Maps/PreciseMap1.png"); //default map
             updateEnvironmentProjection();
             setMode1();
+            this.KeyPreview = true;
         }
 
         /// <summary>
