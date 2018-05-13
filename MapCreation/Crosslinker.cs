@@ -215,6 +215,8 @@ namespace MapCreation
         /// <returns>Возвращает массив int[3]: X,Y,error: координаты настоящего центра scan1 и квадрат расстояния от него до реального симуляционного центра scan1</returns>
         public int[] getRealCoords4()
         {
+            Console.WriteLine("crosslinkigg " + X0 + "," + Y0 + ";"
+                + X1 + "," + Y1 + ";" + X2 + "," + Y2);
             double minsum = 100000000;
             int limXY = 20;
             double summ;
@@ -222,6 +224,7 @@ namespace MapCreation
             int optX = 0, optY = 0;
             int C = (Parameters.getD_scan() + Parameters.getR_scan()) / 2;
             List<int[]> errorZone = pieErrorZoneSearch(0,0,X2-X0,Y2-Y0);
+            Console.WriteLine("errorZone.Count "+ errorZone.Count);
             for(int k = 0; k < errorZone.Count; k++)
             {
                     PixelMap map01 = new PixelMap(Parameters.getD_scan1() + Parameters.getR_scan(), Parameters.getD_scan1() + Parameters.getR_scan(), 0, 0, 0);
@@ -326,6 +329,7 @@ namespace MapCreation
                     }
             }
             int error = Parameters.getSquaredDistance(X1,Y1,X0+optX,Y0+optY);
+            Console.WriteLine("opts "+optX+","+optY);
             return new int[3] { X0 + optX, Y0 + optY, error };
         }
     }

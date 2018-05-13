@@ -34,23 +34,11 @@ namespace MapCreation
         public Scan()
         {
             scanBmp = new PixelMap(Parameters.getD_scan1(), Parameters.getD_scan1(), 0, 0, 0);
-            setCenter(-1,-1);
-        }
-
-        public Scan(int X, int Y):this()
-        {
-            setCenter(X,Y);
         }
 
         public Bitmap getBitmap()
         {
             return scanBmp.GetBitmap();
-        }
-
-        public void setCenter(int X, int Y)
-        {
-            this.X = X;
-            this.Y = Y;
         }
     }
 }

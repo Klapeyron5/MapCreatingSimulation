@@ -295,9 +295,6 @@ namespace MapCreation
             if ((positionCounter == 0) && (crosslinker.getXY2()[0] >= 0))
             {
                 int[] real_coords = crosslinker.getRealCoords4();
-            //    Bitmap bmp = new Bitmap(pictureBox1.Image);
-            //    bmp.SetPixel(real_coords[0], real_coords[1], predictionColor);
-            //    pictureBox1.Image = bmp; //TODO
                 drawCrosslinkedScans(real_coords[0], real_coords[1]);
                 label5.Text = "error: "+real_coords[2];
             }

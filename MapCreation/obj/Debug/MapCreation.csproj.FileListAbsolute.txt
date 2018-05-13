@@ -17,3 +17,4 @@ C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\o
 C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.csproj.CoreCompileInputs.cache
 C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.exe
 C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.pdb
+C:\Adocuments\Library\Clapeyron_ind\task6 map creation\MapCreation\MapCreation\obj\Debug\MapCreation.csprojResolveAssemblyReference.cache

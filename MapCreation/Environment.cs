@@ -79,7 +79,7 @@ namespace MapCreation
             bool flagRepeated; //Будет true, если точка уже сохранена в списке скана
 
             Random rand = new Random(System.DateTime.Now.Millisecond);
-            Stopwatch stopwatch = Stopwatch.StartNew();
+        //    Stopwatch stopwatch = Stopwatch.StartNew();
             for (int i = 0; i < Parameters.getN_phi(); i++)
             {
                 flagR = false;
@@ -122,8 +122,8 @@ namespace MapCreation
                     scan.rByPhi[i] = 0;
             }
 
-            stopwatch.Stop();
-            Console.WriteLine("Time wasted: "+stopwatch.ElapsedMilliseconds);
+         //   stopwatch.Stop();
+        //    Console.WriteLine("Time wasted: "+stopwatch.ElapsedMilliseconds);
             return scan;
         }
 

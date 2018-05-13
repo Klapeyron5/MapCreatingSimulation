@@ -44,6 +44,7 @@ namespace MapCreation
 
         public void destroy()
         {
+            mainForm.KeyUp -= MainForm_KeyUp;
             mainForm.clearPanel2();
         }
 
@@ -66,10 +67,30 @@ namespace MapCreation
 
         private void MainForm_KeyUp(object sender, KeyEventArgs e)
         {
-            Console.WriteLine("ENTER");
             if (e.KeyData == Keys.Enter)
             {
-                Console.WriteLine("ENTER");
+                if ((positionCounter == 0) && (crosslinker.getXY2()[0] >= 0))
+                {
+                    Console.WriteLine("crosslinking " + crosslinker.getXY0()[0] +","+ crosslinker.getXY0()[1] + ";" 
+                        + crosslinker.getXY1()[0] +","+crosslinker.getXY1()[1] + ";" + crosslinker.getXY2()[0]+","+crosslinker.getXY2()[1]);
+
+                    int[] real_coords = crosslinker.getRealCoords4();
+
+                    Console.WriteLine("real_coords are " + real_coords[0] + "," + real_coords[1]);
+                    //на предсказанную карту нанесем последний скан
+                    for (int i = 0; i < crosslinker.scan1.xyScan.Count; i++)
+                    {
+                        predictedMap[crosslinker.scan1.xyScan[i][0] + real_coords[0], crosslinker.scan1.xyScan[i][1] + real_coords[1]] = new Pixel(Parameters.wallColor);
+                    }
+                    MainForm.drawBitmapOnPictureBox(pictureBox2, predictedMap.GetBitmap());
+
+                    crosslinker.scan0 = crosslinker.scan1;
+                    crosslinker.setCenter1(-1,-1);
+                    crosslinker.setCenter0(real_coords[0],real_coords[1]);
+                    Bitmap preciseMapBmp = mainForm.environment.preciseMap.GetBitmap();
+                    Graphics graphics = Graphics.FromImage(preciseMapBmp);
+                    interfaceDrawing(preciseMapBmp, graphics);
+                }
             }
         }
 
@@ -80,55 +101,44 @@ namespace MapCreation
             switch (positionCounter)
             {
                 case -1:
-                    setInitialScan(X,Y);
+                    setInitialScan(X, Y);
                     break;
                 case 0:
-                    setScan0(X, Y);
-                    break;
-                case 1:
                     setScan1(X, Y);
                     break;
-                case 2:
+                case 1:
                     setSupposedScan1(X, Y);
                     break;
             }
         }
-
-
+        
         private void setInitialScan(int X, int Y)
         {
-            positionCounter = 0;
+            Console.WriteLine("Initial scan on " + X + "," + Y);
             currentRobotPosX = X;
             currentRobotPosY = Y;
-            setScan0(X, Y);
+
+            Bitmap preciseMapBmp = mainForm.environment.preciseMap.GetBitmap();
+            Graphics graphics = Graphics.FromImage(preciseMapBmp);
+            if (mainForm.environment.canRobotStayOnThisPoint(X, Y))
+            {
+                crosslinker.setCenter0(X, Y);
+                crosslinker.scan0 = mainForm.environment.getScan(X, Y, Parameters.startColor);
+                positionCounter++;
+                interfaceDrawing(preciseMapBmp, graphics);
+            }
 
             //на предсказанную карту нанесем initial scan
-            for(int i = 0; i < crosslinker.scan0.xyScan.Count; i++)
+            for (int i = 0; i < crosslinker.scan0.xyScan.Count; i++)
             {
                 predictedMap[crosslinker.scan0.xyScan[i][0]+X, crosslinker.scan0.xyScan[i][1]+Y] = new Pixel(Parameters.wallColor);
             }
             MainForm.drawBitmapOnPictureBox(pictureBox2, predictedMap.GetBitmap());
         }
 
-        private void setScan0(int X, int Y)
-        {
-            if (positionCounter == 0)
-            {
-                Bitmap preciseMapBmp = mainForm.environment.preciseMap.GetBitmap();
-                Graphics graphics = Graphics.FromImage(preciseMapBmp);
-                if (mainForm.environment.canRobotStayOnThisPoint(X, Y))
-                {
-                    crosslinker.setCenter0(X, Y);
-                    crosslinker.scan0 = mainForm.environment.getScan(X, Y, Parameters.startColor);
-                    positionCounter++;
-                    interfaceDrawing(preciseMapBmp, graphics);
-                }
-            }
-        }
-
         private void setScan1(int X, int Y)
         {
-            if (positionCounter == 1)
+            if (positionCounter == 0)
             {
                 Bitmap preciseMapBmp = mainForm.environment.preciseMap.GetBitmap();
                 Graphics graphics = Graphics.FromImage(preciseMapBmp);
@@ -137,6 +147,7 @@ namespace MapCreation
                     double l_rl2 = Parameters.getSquaredDistance(crosslinker.getXY0(), X, Y);
                     if (l_rl2 <= Parameters.getL_max2())
                     {
+                        Console.WriteLine("First scan on " + X + "," + Y);
                         crosslinker.setCenter1(X, Y);
                         crosslinker.scan1 = mainForm.environment.getScan(X, Y, Parameters.finishColor);
                         positionCounter++;
@@ -149,7 +160,7 @@ namespace MapCreation
 
         private void setSupposedScan1(int X, int Y)
         {
-            if (positionCounter == 2)
+            if (positionCounter == 1)
             {
                 Bitmap preciseMapBmp = mainForm.environment.preciseMap.GetBitmap();
                 Graphics graphics = Graphics.FromImage(preciseMapBmp);
@@ -157,6 +168,7 @@ namespace MapCreation
                 {
                     if (mainForm.environment.canRobotStayOnThisPoint(X, Y))
                     {
+                        Console.WriteLine("Supposed center is " + X + "," + Y);
                         crosslinker.setCenter2(X, Y);
                         positionCounter = 0;
                         interfaceDrawing(preciseMapBmp, graphics);
