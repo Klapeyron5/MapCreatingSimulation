@@ -84,9 +84,9 @@ namespace MapCreation
                     }
                     MainForm.drawBitmapOnPictureBox(pictureBox2, predictedMap.GetBitmap());
 
-                    crosslinker.scan0 = crosslinker.scan1;
+                    crosslinker.setCenter0(real_coords[0], real_coords[1]);
+                    crosslinker.scan0 = new Scan(crosslinker.scan1);
                     crosslinker.setCenter1(-1,-1);
-                    crosslinker.setCenter0(real_coords[0],real_coords[1]);
                     Bitmap preciseMapBmp = mainForm.environment.preciseMap.GetBitmap();
                     Graphics graphics = Graphics.FromImage(preciseMapBmp);
                     interfaceDrawing(preciseMapBmp, graphics);

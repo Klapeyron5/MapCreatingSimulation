@@ -22,11 +22,6 @@ namespace MapCreation
         public List<int[]> xyScan = new List<int[]>();
 
         /// <summary>
-        /// Центра скана в абсолютных координатах.
-        /// </summary>
-        private int X, Y;
-
-        /// <summary>
         /// Рисунок скана.
         /// </summary>
         public PixelMap scanBmp;
@@ -36,9 +31,25 @@ namespace MapCreation
             scanBmp = new PixelMap(Parameters.getD_scan1(), Parameters.getD_scan1(), 0, 0, 0);
         }
 
+        public Scan(Scan scan)
+        {
+            this.xyScan = new List<int[]>(scan.getXYScan());
+            this.rByPhi = scan.getRbyPhi();
+        }
+
         public Bitmap getBitmap()
         {
             return scanBmp.GetBitmap();
+        }
+
+        public ushort[] getRbyPhi()
+        {
+            return rByPhi;
+        }
+
+        public List<int[]> getXYScan()
+        {
+            return xyScan;
         }
     }
 }
