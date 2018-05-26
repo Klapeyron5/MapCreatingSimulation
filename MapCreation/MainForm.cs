@@ -47,8 +47,11 @@ namespace MapCreation
         private Mode2ManualMapCreation mode2ManualMapCreation;
         private Mode3MapCreation mode3MapCreation;
 
+        private byte currentMode = 0;
+
         private void setMode1()
         {
+            currentMode = 1;
             disposeModes();
             if (environment.isMapLoaded() == 1)
                 mode1ManualCrosslinking = new Mode1ManualCrosslinking(this);
@@ -56,6 +59,7 @@ namespace MapCreation
 
         private void setMode2()
         {
+            currentMode = 2;
             disposeModes();
             if (environment.isMapLoaded() == 1)
                 mode2ManualMapCreation = new Mode2ManualMapCreation(this);
@@ -63,6 +67,7 @@ namespace MapCreation
 
         private void setMode3()
         {
+            currentMode = 3;
             disposeModes();
             if (environment.isMapLoaded() == 1)
                 mode3MapCreation = new Mode3MapCreation(this);
@@ -91,7 +96,18 @@ namespace MapCreation
             Parameters.setSgm_psi_deg((int)numericUpDown4sgm_psi.Value);
             Environment.setR_scanNoiseMode((byte)numericUpDown5scan_noise.Value);
 
-            setMode1();
+            switch(currentMode)
+            {
+                case 1:
+                    setMode1();
+                    break;
+                case 2:
+                    setMode2();
+                    break;
+                case 3:
+                    setMode3();
+                    break;
+            }
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)

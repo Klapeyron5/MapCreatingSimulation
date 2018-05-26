@@ -60,6 +60,9 @@ namespace MapCreation
         private int currentRobotPosX = 0;
         private int currentRobotPosY = 0;
 
+        private int currentErrorX = 0;
+        private int currentErrorY = 0;
+
         /// <summary>
         /// Счетчик номера клика (в цикле из трех)
         /// </summary>
@@ -71,9 +74,6 @@ namespace MapCreation
             {
                 if ((positionCounter == 0) && (crosslinker.getXY2()[0] >= 0))
                 {
-                    Console.WriteLine("crosslinking " + crosslinker.getXY0()[0] +","+ crosslinker.getXY0()[1] + ";" 
-                        + crosslinker.getXY1()[0] +","+crosslinker.getXY1()[1] + ";" + crosslinker.getXY2()[0]+","+crosslinker.getXY2()[1]);
-
                     int[] real_coords = crosslinker.getRealCoords4();
 
                     Console.WriteLine("real_coords are " + real_coords[0] + "," + real_coords[1]);
@@ -83,7 +83,11 @@ namespace MapCreation
                         predictedMap[crosslinker.scan1.xyScan[i][0] + real_coords[0], crosslinker.scan1.xyScan[i][1] + real_coords[1]] = new Pixel(Parameters.wallColor);
                     }
                     MainForm.drawBitmapOnPictureBox(pictureBox2, predictedMap.GetBitmap());
-
+                    
+                    currentRobotPosX = crosslinker.getXY1()[0];
+                    currentRobotPosY = crosslinker.getXY1()[1];
+                    currentErrorX = currentRobotPosX - real_coords[0];
+                    currentErrorY = currentRobotPosY - real_coords[1];
                     crosslinker.setCenter0(real_coords[0], real_coords[1]);
                     crosslinker.scan0 = new Scan(crosslinker.scan1);
                     crosslinker.setCenter1(-1,-1);
@@ -115,13 +119,13 @@ namespace MapCreation
         private void setInitialScan(int X, int Y)
         {
             Console.WriteLine("Initial scan on " + X + "," + Y);
-            currentRobotPosX = X;
-            currentRobotPosY = Y;
 
             Bitmap preciseMapBmp = mainForm.environment.preciseMap.GetBitmap();
             Graphics graphics = Graphics.FromImage(preciseMapBmp);
             if (mainForm.environment.canRobotStayOnThisPoint(X, Y))
             {
+                currentRobotPosX = X;
+                currentRobotPosY = Y;
                 crosslinker.setCenter0(X, Y);
                 crosslinker.scan0 = mainForm.environment.getScan(X, Y, Parameters.startColor);
                 positionCounter++;
@@ -144,11 +148,11 @@ namespace MapCreation
                 Graphics graphics = Graphics.FromImage(preciseMapBmp);
                 if (mainForm.environment.canRobotStayOnThisPoint(X, Y))
                 {
-                    double l_rl2 = Parameters.getSquaredDistance(crosslinker.getXY0(), X, Y);
+                    double l_rl2 = Parameters.getSquaredDistance(currentRobotPosX,currentRobotPosY, X, Y);
                     if (l_rl2 <= Parameters.getL_max2())
                     {
                         Console.WriteLine("First scan on " + X + "," + Y);
-                        crosslinker.setCenter1(X, Y);
+                        crosslinker.setCenter1(X-currentErrorX, Y-currentErrorY);
                         crosslinker.scan1 = mainForm.environment.getScan(X, Y, Parameters.finishColor);
                         positionCounter++;
                         drawPieSupposedZone(preciseMapBmp);
@@ -202,8 +206,8 @@ namespace MapCreation
             try
             {
                 Pen pen;
-                int X0 = crosslinker.getXY0()[0];
-                int Y0 = crosslinker.getXY0()[1];
+                int X0 = currentRobotPosX;
+                int Y0 = currentRobotPosY;
                 int X1 = crosslinker.getXY1()[0];
                 int Y1 = crosslinker.getXY1()[1];
                 int X2 = crosslinker.getXY2()[0];
