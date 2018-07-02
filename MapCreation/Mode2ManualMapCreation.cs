@@ -25,6 +25,7 @@ namespace MapCreation
         {
             mainForm.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyUp);
             pictureBox2 = new System.Windows.Forms.PictureBox();
+            labelCoords = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             // 
             // pictureBox1
@@ -37,8 +38,19 @@ namespace MapCreation
             pictureBox2.TabIndex = 1;
             pictureBox2.TabStop = false;
             mainForm.setPictureBox1MouseDownHandler(new MouseEventHandler(pictureBox1_MouseDown));
+            // 
+            // labelCoords
+            // 
+            labelCoords.AutoSize = true;
+            labelCoords.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            labelCoords.Location = new System.Drawing.Point(pictureBox2.Location.X, pictureBox2.Location.Y + pictureBox2.Height + 4);
+            labelCoords.Name = "labelCoords";
+            labelCoords.Size = new System.Drawing.Size(61, 13);
+            labelCoords.TabIndex = 17;
+            labelCoords.Text = "Coords:";
 
             mainForm.addComponentToPanel1(pictureBox2);
+            mainForm.addComponentToPanel1(labelCoords);
             ((System.ComponentModel.ISupportInitialize)(pictureBox2)).EndInit();
         }
 
@@ -49,6 +61,7 @@ namespace MapCreation
         }
 
         private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.Label labelCoords;
 
         private PixelMap predictedMap;
 
@@ -68,6 +81,11 @@ namespace MapCreation
         /// </summary>
         private int positionCounter = -1;
 
+        /// <summary>
+        /// Сшивка по нажатию клавиши Enter
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainForm_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)
@@ -88,6 +106,11 @@ namespace MapCreation
                     currentRobotPosY = crosslinker.getXY1()[1];
                     currentErrorX = currentRobotPosX - real_coords[0];
                     currentErrorY = currentRobotPosY - real_coords[1];
+
+                    labelCoords.Text = "Real coords: " + currentRobotPosX + "," + currentRobotPosY + "\n" + 
+                        "Supp coords: " + real_coords[0] + "," + real_coords[1] + "\n" + 
+                        "Error: " + Math.Pow(currentErrorX*currentErrorX + currentErrorY*currentErrorY,0.5);
+
                     crosslinker.setCenter0(real_coords[0], real_coords[1]);
                     crosslinker.scan0 = new Scan(crosslinker.scan1);
                     crosslinker.setCenter1(-1,-1);
