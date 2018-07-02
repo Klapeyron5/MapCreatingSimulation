@@ -32,7 +32,7 @@ namespace MapCreation
             this.button3Scan1Center = new System.Windows.Forms.Button();
             this.button4SupposedScan1Center = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.labelError = new System.Windows.Forms.Label();
             this.textBox1Scan0Center = new System.Windows.Forms.TextBox();
             this.textBox2Scan1Center = new System.Windows.Forms.TextBox();
             this.textBox3SupposedScan1Center = new System.Windows.Forms.TextBox();
@@ -119,13 +119,13 @@ namespace MapCreation
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label5.Location = new System.Drawing.Point(pictureBox4.Location.X, pictureBox4.Location.Y + pictureBox4.Height + 4);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(61, 13);
-            this.label5.TabIndex = 17;
-            this.label5.Text = "error: ";
+            this.labelError.AutoSize = true;
+            this.labelError.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.labelError.Location = new System.Drawing.Point(pictureBox4.Location.X, pictureBox4.Location.Y + pictureBox4.Height + 4);
+            this.labelError.Name = "label5";
+            this.labelError.Size = new System.Drawing.Size(61, 13);
+            this.labelError.TabIndex = 17;
+            this.labelError.Text = "error: ";
             // 
             // textBox1
             // 
@@ -166,7 +166,7 @@ namespace MapCreation
             mainForm.BackColor = System.Drawing.SystemColors.ActiveCaption;
             mainForm.ClientSize = new System.Drawing.Size(1454, 873);
             mainForm.addComponentToPanel1(button1Crosslink);
-            mainForm.addComponentToPanel1(this.label5);
+            mainForm.addComponentToPanel1(this.labelError);
             mainForm.addComponentToPanel1(this.label4);
             mainForm.addComponentToPanel1(this.button4SupposedScan1Center);
             mainForm.addComponentToPanel1(this.button3Scan1Center);
@@ -197,7 +197,7 @@ namespace MapCreation
         private System.Windows.Forms.Button button3Scan1Center;
         private System.Windows.Forms.Button button4SupposedScan1Center;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label labelError;
         private System.Windows.Forms.TextBox textBox1Scan0Center;
         private System.Windows.Forms.TextBox textBox2Scan1Center;
         private System.Windows.Forms.TextBox textBox3SupposedScan1Center;
@@ -296,7 +296,7 @@ namespace MapCreation
             {
                 int[] real_coords = crosslinker.getRealCoords4();
                 drawCrosslinkedScans(real_coords[0], real_coords[1]);
-                label5.Text = "error: "+real_coords[2];
+                labelError.Text = "error: "+Math.Pow(real_coords[2],0.5) + "\n"+"err cone points: "+real_coords[3]+"\n"+"Min sum points: "+real_coords[4];
             }
         }
 
@@ -436,6 +436,10 @@ namespace MapCreation
         {
             int X0 = crosslinker.getXY0()[0];
             int Y0 = crosslinker.getXY0()[1];
+            //
+        //    int X2 = crosslinker.getXY2()[0];
+        //    int Y2 = crosslinker.getXY2()[1];
+            //
             PixelMap scan01 = new PixelMap(Parameters.getD_scan1() + Parameters.getR_scan(), Parameters.getD_scan1() + Parameters.getR_scan(), 0, 0, 0);
             int C = (Parameters.getD_scan() + Parameters.getR_scan()) / 2;
             for (int i = 0; i < crosslinker.scan0.xyScan.Count; i++)

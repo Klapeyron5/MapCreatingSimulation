@@ -13,7 +13,7 @@ namespace MapCreation
         {
             InitializeComponent();
             button1.MouseClick += button1_MouseClick;
-            environment = new Environment(@"./Maps/PreciseMap1.png"); //default map
+            environment = new Environment(@"./Maps/PreciseMap2.png"); //default map
             updateEnvironmentProjection();
             setMode1();
             this.KeyPreview = true;

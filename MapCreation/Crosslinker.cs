@@ -224,117 +224,124 @@ namespace MapCreation
             int optX = 0, optY = 0;
             int C = (Parameters.getD_scan() + Parameters.getR_scan()) / 2;
             List<int[]> errorZone = pieErrorZoneSearch(0,0,X2-X0,Y2-Y0);
-        //    Console.WriteLine("errorZone.Count "+ errorZone.Count);
+            //    Console.WriteLine("errorZone.Count "+ errorZone.Count);
+            int numberOfMinPoints = 0; //количество точек с одинаковыми минимальными значениями функционала ошибки //TODO
             for(int k = 0; k < errorZone.Count; k++)
             {
-                    PixelMap map01 = new PixelMap(Parameters.getD_scan1() + Parameters.getR_scan(), Parameters.getD_scan1() + Parameters.getR_scan(), 0, 0, 0);
-                    List<int[]> irrelevantPoints0 = new List<int[]>();
-                    List<int[]> irrelevantPoints1 = new List<int[]>();
-                    int X = errorZone[k][0];
-                    int Y = errorZone[k][1];
-                    for (int i = 0; i < scan0.xyScan.Count; i++)
-                    {
-                        map01[scan0.xyScan[i][0] + C, scan0.xyScan[i][1] + C] = new Pixel(Parameters.wallColor);
-                    }
-                    for (int i = 0; i < scan1.xyScan.Count; i++)
-                    {
-                        map01[scan1.xyScan[i][0] + X + C, scan1.xyScan[i][1] + Y + C] = new Pixel(Parameters.wallColor);
-                    }
-                    int y1 = new int();
-                    int x1 = new int();
-                    bool flagR; //Будет true, если на текущем угле сканирования видно препятствие, иначе false и радиус от текущего угла будет равен нулю
-                    bool flagRepeated; //Будет true, если точка уже сохранена в списке скана
-                    int rPhi = -1;
+                PixelMap map01 = new PixelMap(Parameters.getD_scan1() + Parameters.getR_scan(), Parameters.getD_scan1() + Parameters.getR_scan(), 0, 0, 0);
+                List<int[]> irrelevantPoints0 = new List<int[]>();
+                List<int[]> irrelevantPoints1 = new List<int[]>();
+                int X = errorZone[k][0];
+                int Y = errorZone[k][1];
+                for (int i = 0; i < scan0.xyScan.Count; i++)
+                {
+                    map01[scan0.xyScan[i][0] + C, scan0.xyScan[i][1] + C] = new Pixel(Parameters.wallColor);
+                }
+                for (int i = 0; i < scan1.xyScan.Count; i++)
+                {
+                    map01[scan1.xyScan[i][0] + X + C, scan1.xyScan[i][1] + Y + C] = new Pixel(Parameters.wallColor);
+                }
+                int y1 = new int();
+                int x1 = new int();
+                bool flagR; //Будет true, если на текущем угле сканирования видно препятствие, иначе false и радиус от текущего угла будет равен нулю
+                bool flagRepeated; //Будет true, если точка уже сохранена в списке скана
+                int rPhi = -1;
 
-                    for (int i = 0; i < Parameters.getN_phi(); i++)
+                for (int i = 0; i < Parameters.getN_phi(); i++)
+                {
+                    //---------------------------------------scan1
+                    flagR = false;
+                    for (ushort r = 1; r < Parameters.getR_scan() + 1; r++)
                     {
-                        //---------------------------------------scan1
-                        flagR = false;
-                        for (ushort r = 1; r < Parameters.getR_scan() + 1; r++)
+                        x1 = (int)Math.Round(r * Math.Cos(i * Parameters.getScan_step()));
+                        y1 = (int)Math.Round(r * Math.Sin(i * Parameters.getScan_step()));
+                        if (map01[x1 + X + C, y1 + Y + C].Color == Parameters.wallColor)
                         {
-                            x1 = (int)Math.Round(r * Math.Cos(i * Parameters.getScan_step()));
-                            y1 = (int)Math.Round(r * Math.Sin(i * Parameters.getScan_step()));
-                            if (map01[x1 + X + C, y1 + Y + C].Color == Parameters.wallColor)
-                            {
-                                rPhi = r;
-                                flagR = true;
-                                break;
-                            }
-                        }
-                        if (!flagR)
-                            rPhi = 0;
-                        if (rPhi == -1) Console.WriteLine("Scanning problems r == -1 on scan1, angle: " + i * Parameters.getScan_step() / Math.PI * 180);
-                        if (scan1.rByPhi[i] != rPhi)
-                        {
-                            flagRepeated = false;
-                            for (int j = 0; j < irrelevantPoints1.Count; j++)
-                                if ((irrelevantPoints1[j][0] == x1) && (irrelevantPoints1[j][1] == y1))
-                                    flagRepeated = true;
-                            if (!flagRepeated)
-                                irrelevantPoints1.Add(new int[2] { x1, y1 });
-                        }
-                        //---------------------------------------scan0
-                        flagR = false;
-                        for (ushort r = 1; r < Parameters.getR_scan() + 1; r++)
-                        {
-                            x1 = (int)Math.Round(r * Math.Cos(i * Parameters.getScan_step()));
-                            y1 = (int)Math.Round(r * Math.Sin(i * Parameters.getScan_step()));
-                            if (map01[x1 + C, y1 + C].Color == Parameters.wallColor)
-                            {
-                                rPhi = r;
-                                flagR = true;
-                                break;
-                            }
-                        }
-                        if (!flagR)
-                            rPhi = 0;
-                        if (rPhi == -1) Console.WriteLine("Scanning problems r == -1 on scan0, angle: " + i * Parameters.getScan_step() / Math.PI * 180);
-                        if (scan0.rByPhi[i] != rPhi)
-                        {
-                            flagRepeated = false;
-                            for (int j = 0; j < irrelevantPoints0.Count; j++)
-                                if ((irrelevantPoints0[j][0] == x1) && (irrelevantPoints0[j][1] == y1))
-                                    flagRepeated = true;
-                            if (!flagRepeated)
-                                irrelevantPoints0.Add(new int[2] { x1, y1 });
+                            rPhi = r;
+                            flagR = true;
+                            break;
                         }
                     }
+                    if (!flagR)
+                        rPhi = 0;
+                    if (rPhi == -1) Console.WriteLine("Scanning problems r == -1 on scan1, angle: " + i * Parameters.getScan_step() / Math.PI * 180);
+                    if (scan1.rByPhi[i] != rPhi)
+                    {
+                        flagRepeated = false;
+                        for (int j = 0; j < irrelevantPoints1.Count; j++)
+                            if ((irrelevantPoints1[j][0] == x1) && (irrelevantPoints1[j][1] == y1))
+                                flagRepeated = true;
+                        if (!flagRepeated)
+                            irrelevantPoints1.Add(new int[2] { x1, y1 });
+                    }
+                    //---------------------------------------scan0
+                    flagR = false;
+                    for (ushort r = 1; r < Parameters.getR_scan() + 1; r++)
+                    {
+                        x1 = (int)Math.Round(r * Math.Cos(i * Parameters.getScan_step()));
+                        y1 = (int)Math.Round(r * Math.Sin(i * Parameters.getScan_step()));
+                        if (map01[x1 + C, y1 + C].Color == Parameters.wallColor)
+                        {
+                            rPhi = r;
+                            flagR = true;
+                            break;
+                        }
+                    }
+                    if (!flagR)
+                        rPhi = 0;
+                    if (rPhi == -1) Console.WriteLine("Scanning problems r == -1 on scan0, angle: " + i * Parameters.getScan_step() / Math.PI * 180);
+                    if (scan0.rByPhi[i] != rPhi)
+                    {
+                        flagRepeated = false;
+                        for (int j = 0; j < irrelevantPoints0.Count; j++)
+                            if ((irrelevantPoints0[j][0] == x1) && (irrelevantPoints0[j][1] == y1))
+                                flagRepeated = true;
+                        if (!flagRepeated)
+                            irrelevantPoints0.Add(new int[2] { x1, y1 });
+                    }
+                }
 
-                    summ = 0;
-                    for (int i = 0; i < irrelevantPoints1.Count; i++)
+                summ = 0;
+                for (int i = 0; i < irrelevantPoints1.Count; i++)
+                {
+                    min = 1000000;
+                    for (int j = 0; j < scan1.xyScan.Count; j++)
                     {
-                        min = 1000000;
-                        for (int j = 0; j < scan1.xyScan.Count; j++)
-                        {
-                            if (min > Parameters.getSquaredDistance(irrelevantPoints1[i][0], irrelevantPoints1[i][1], scan1.xyScan[j][0], scan1.xyScan[j][1]))
-                                min = Parameters.getSquaredDistance(irrelevantPoints1[i][0], irrelevantPoints1[i][1], scan1.xyScan[j][0], scan1.xyScan[j][1]);
-                        }
-                        summ += min;
+                        if (min > Parameters.getSquaredDistance(irrelevantPoints1[i][0], irrelevantPoints1[i][1], scan1.xyScan[j][0], scan1.xyScan[j][1]))
+                            min = Parameters.getSquaredDistance(irrelevantPoints1[i][0], irrelevantPoints1[i][1], scan1.xyScan[j][0], scan1.xyScan[j][1]);
                     }
-                    for (int i = 0; i < irrelevantPoints0.Count; i++)
+                    summ += min;
+                }
+                for (int i = 0; i < irrelevantPoints0.Count; i++)
+                {
+                    min = 1000000;
+                    for (int j = 0; j < scan0.xyScan.Count; j++)
                     {
-                        min = 1000000;
-                        for (int j = 0; j < scan0.xyScan.Count; j++)
-                        {
-                            if (min > Parameters.getSquaredDistance(irrelevantPoints0[i][0], irrelevantPoints0[i][1], scan0.xyScan[j][0], scan0.xyScan[j][1]))
-                                min = Parameters.getSquaredDistance(irrelevantPoints0[i][0], irrelevantPoints0[i][1], scan0.xyScan[j][0], scan0.xyScan[j][1]);
-                        }
-                        summ += min;
+                        if (min > Parameters.getSquaredDistance(irrelevantPoints0[i][0], irrelevantPoints0[i][1], scan0.xyScan[j][0], scan0.xyScan[j][1]))
+                            min = Parameters.getSquaredDistance(irrelevantPoints0[i][0], irrelevantPoints0[i][1], scan0.xyScan[j][0], scan0.xyScan[j][1]);
                     }
-                    if (minsum > summ)
-                    {
-                        minsum = summ;
-                        optX = X;
-                        optY = Y;
-                    }
+                    summ += min;
+                }
+                if (minsum > summ)
+                {
+                    minsum = summ;
+                    optX = X;
+                    optY = Y;
+                    numberOfMinPoints = 0; //TODO
+                }
+                if (summ == minsum) //TODO
+                {
+                    numberOfMinPoints++;
+                }
             }
-            int error = Parameters.getSquaredDistance(X1,Y1,X0+optX,Y0+optY);
+            int errorSquredDistance = Parameters.getSquaredDistance(X1,Y1,X0+optX,Y0+optY); //квадрат раастояния от реального положения до предсказанного
+            //
         //    Console.WriteLine("opts "+optX+","+optY);
-            if (error != 0)
+            if (errorSquredDistance != 0) //TODO
             {
                 Console.WriteLine("Don't match--------------------------------------");
             }
-            return new int[3] { X0 + optX, Y0 + optY, error };
+            return new int[5] { X0 + optX, Y0 + optY, errorSquredDistance, errorZone.Count(), numberOfMinPoints }; //TODO
         }
     }
 }
